@@ -104,6 +104,9 @@ function getOptionsStore() {
 }
 
 function getCurrentStore() {
-    return getOptionsStore().filter(x => x.version === VERSION)[0];
+    const store = getOptionsStore();
+    if (store) {
+        return store.filter(x => x.version === VERSION)[0];
+    }
 }
 
