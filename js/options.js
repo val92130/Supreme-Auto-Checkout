@@ -14,6 +14,11 @@ $(document).ready(() => {
             field.val(option !== undefined ? option.value : "");
         }
     }
+
+    checkValidFields(optionsForm);
+    fields.change(function() {
+        checkValidFields($('#options-form'));
+    });
     optionsForm.submit(function(e) {
         const optionsStore = [];
         for(var i = 0; i < fields.length; i++) {
@@ -46,15 +51,34 @@ $(document).ready(() => {
                     setOptionsStore(stores);
                 }
             } catch(e) {
-                console.error('Error while saving options in storage, reinitializing local storage');
+                error('Error while saving options in storage, reinitializing local storage');
                 resetOptionsStore();
             }
         } else {
             setOptionsStore([{ version: VERSION, options: optionsStore }]);
         }
+        success('Configuration saved', 'success');
         e.preventDefault();
     });
 });
+
+function checkValidFields(form) {
+    const fields = form.find(':input');
+
+    for(var i = 0; i < fields.length; i++) {
+        const field = fields[i];
+        const valid = field.checkValidity();
+        const parent = $(field).parents('.form-group');
+        if (parent.hasClass('has-success')) {
+            parent.removeClass('has-success');
+        }
+        if (parent.hasClass('has-danger')) {
+            parent.removeClass('has-danger');
+        }
+        
+        $(field).parents('.form-group').addClass('has-' + (valid ? 'success' : 'danger'));
+    }
+}
 
 function resetOptionsStore() {
     localStorage.options = JSON.stringify([]);
@@ -64,7 +88,7 @@ function setOptionsStore(val) {
     try {
         localStorage.options = JSON.stringify(val);
     } catch (e) {
-        console.error('Error while saving options in storage, reinitializing local storage');
+        error('Error while saving options in storage, reinitializing local storage');
         resetOptionsStore();
     }
 }
@@ -74,7 +98,7 @@ function getOptionsStore() {
         try {
             return JSON.parse(localStorage.options);
         } catch(e) {
-            console.error('Error while reading options store');
+            error('Error while reading options store');
         }
     }
 }
