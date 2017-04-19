@@ -13,30 +13,147 @@
             <h1>Configuration</h1>
             <form id="options-form">
                 <div class="form-group row">
-                    <label for="firstname" class="col-2 col-form-label">Firstname</label>
+                    <label for="billing-name" class="col-2 col-form-label">Billing Name</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" data-value="firstname" id="firstname" required>
-                    </div>
-                </div>
-                
-                <div class="form-group row">
-                    <label for="lastname" class="col-2 col-form-label">Lastname</label>
-                    <div class="col-10">
-                        <input class="form-control" type="text" data-value="lastname" id="lastname" required>
+                        <input class="form-control" type="text" data-map="billing_name" id="billing-name" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="email" class="col-2 col-form-label">Email</label>
                     <div class="col-10">
-                        <input class="form-control" type="email" data-value="email" id="email" required>
+                        <input class="form-control" type="email" data-map="order_email" id="email" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="phone" class="col-2 col-form-label">Phone</label>
                     <div class="col-10">
-                        <input class="form-control" type="tel" data-value="phone" id="phone" required>
+                        <input class="form-control" type="tel" data-map="order_tel" id="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="address" class="col-2 col-form-label">Address</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" data-map="bo" id="address" required>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="city" class="col-2 col-form-label">City</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" data-map="order_billing_city" id="city" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="zip" class="col-2 col-form-label">Zip</label>
+                    <div class="col-2">
+                        <input class="form-control" type="text" data-map="order_billing_zip" id="zip" required>
+                    </div>
+
+                    <label for="country" class="col-form-label">Country</label>
+                    <div class="col-6">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="country" data-map="order_billing_country">
+                            <option value="GB">UK</option>
+                            <option value="NB">UK (N. IRELAND)</option>
+                            <option value="">-</option>
+                            <option value="AT">AUSTRIA</option>
+                            <option value="BY">BELARUS</option>
+                            <option value="BE">BELGIUM</option>
+                            <option value="BG">BULGARIA</option>
+                            <option value="HR">CROATIA</option>
+                            <option value="CZ">CZECH REPUBLIC</option>
+                            <option value="DK">DENMARK</option>
+                            <option value="EE">ESTONIA</option>
+                            <option value="FI">FINLAND</option>
+                            <option value="FR">FRANCE</option>
+                            <option value="DE">GERMANY</option>
+                            <option value="GR">GREECE</option>
+                            <option value="HU">HUNGARY</option>
+                            <option value="IS">ICELAND</option>
+                            <option value="IE">IRELAND</option>
+                            <option value="IT">ITALY</option>
+                            <option value="LV">LATVIA</option>
+                            <option value="LT">LITHUANIA</option>
+                            <option value="LU">LUXEMBOURG</option>
+                            <option value="MC">MONACO</option>
+                            <option value="NL">NETHERLANDS</option>
+                            <option value="NO">NORWAY</option>
+                            <option value="PL">POLAND</option>
+                            <option value="PT">PORTUGAL</option>
+                            <option value="RO">ROMANIA</option>
+                            <option value="RU">RUSSIA</option>
+                            <option value="SK">SLOVAKIA</option>
+                            <option value="SI">SLOVENIA</option>
+                            <option value="ES">SPAIN</option>
+                            <option value="SE">SWEDEN</option>
+                            <option value="CH">SWITZERLAND</option>
+                            <option value="TR">TURKEY</option>
+                        </select>                        
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="credit_card_type" class="col-2 col-form-label">Card Type</label>
+                    <div class="col-10">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_type" data-map="credit_card_type">
+                            <option value="visa">Visa</option>
+                            <option value="american_express">American Express</option>
+                            <option value="master">Mastercard</option>
+                            <option value="solo">Solo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="card_number" class="col-2 col-form-label">Credit Card Number</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" data-map="cnb" id="card_number" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-2 col-form-label">Expiry</label>
+                    <div class="col-2">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_month" data-map="credit_card_month" required>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_year" data-map="credit_card_year" required>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="ccv" class="col-2 col-form-label">CCV</label>
+                    <div class="col-2">
+                        <input class="form-control" type="text" data-map="vval" id="ccv" maxlength="4" size="4" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
