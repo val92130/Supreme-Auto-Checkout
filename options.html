@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>MyBot</title>
-    <script type="text/javascript" src="js/tether.min.js"></script>    
-    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>    
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>    
+    <title>Bot configuration</title>
+    <script type="text/javascript" src="js/tether.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container">
         <div class="main">
-            <h1 class="text-center">Configuration</h1>
+            <h1 class="text-center">Supreme Bot Configuration</h1>
+            <h3>Billing configuration</h3>
             <hr/>
-            <form id="options-form">
+            <form id="options-form" data-form="options">
                 <div class="form-group row">
                     <label for="billing-name" class="col-2 col-form-label">Billing Name</label>
                     <div class="col-10">
@@ -93,10 +96,10 @@
                             <option value="SE">SWEDEN</option>
                             <option value="CH">SWITZERLAND</option>
                             <option value="TR">TURKEY</option>
-                        </select>                        
+                        </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group row">
                     <label for="credit_card_type" class="col-2 col-form-label">Card Type</label>
                     <div class="col-10">
@@ -157,12 +160,85 @@
                         <input class="form-control" type="text" data-map="vval" id="ccv" maxlength="4" size="4" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+
+            <br/>
+            <h3>Sizing configuration</h3>
+            <hr/>
+
+            <form data-form="sizings">
+                <div class="form-group row">
+                    <label for="sizing-accessories" class="col-2 col-form-label">Accessories</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-accessories" data-map="accessories">
+                            <option value="S/M">S/M</option><option value="L/XL">L/XL</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sizing-t-shirts" class="col-2 col-form-label">T-shirts</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-t-shirts" data-map="tshirts">
+                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sizing-pants" class="col-2 col-form-label">Pants</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-pants" data-map="pants">
+                            <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sizing-sweatshirts" class="col-2 col-form-label">Sweatshirts</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-sweatshirts" data-map="sweatshirts">
+                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sizing-tops-sweaters" class="col-2 col-form-label">Tops/Sweaters</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-tops-sweaters" data-map="tops">
+                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sizing-shirts" class="col-2 col-form-label">Shirts</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shirts" data-map="shirts">
+                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sizing-jackets" class="col-2 col-form-label">Jackets</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-jackets" data-map="jackets">
+                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+                <hr>
             </form>
         </div>
     </div>
-    <script type="text/javascript" src="js/notify.min.js"></script>        
-    <script type="text/javascript" src="js/utils.js"></script>        
-    <script type="text/javascript" src="js/options.js"></script>    
+    <script type="text/javascript" src="js/notify.min.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/options.js"></script>
 </body>
+
 </html>

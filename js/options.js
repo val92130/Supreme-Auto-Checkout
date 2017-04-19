@@ -1,12 +1,23 @@
 const VERSION = "0.2";
 
 $(document).ready(() => {
-    const optionsForm = $('#options-form');
-    const currentStore = getCurrentStore();
-    const fields = optionsForm.find(':input');
+    const forms = $('form');
+    for (var form of forms) {
+        const name = $(form).attr('data-form');
+        if (name === undefined) {
+            continue;
+        }
+        processForm($(form), name);
+    }
+});
+
+
+function processForm(form, name) {
+    const currentStore = getCurrentStore(name);
+    const fields = form.find(':input');
 
     if (currentStore !== undefined) {
-        for(var i = 0; i < fields.length; i++) {
+        for (var i = 0; i < fields.length; i++) {
             const field = $(fields[i]);
             const dataMap = field.attr('data-map');
             const option = currentStore.options.filter(o => o.key === dataMap)[0];
@@ -15,13 +26,14 @@ $(document).ready(() => {
         }
     }
 
-    checkValidFields(optionsForm);
+    checkValidFields(form);
     fields.change(function() {
-        checkValidFields($('#options-form'));
+        checkValidFields(form);
     });
-    optionsForm.submit(function(e) {
+
+    form.submit(function(e) {
         const optionsStore = [];
-        for(var i = 0; i < fields.length; i++) {
+        for (var i = 0; i < fields.length; i++) {
             const field = $(fields[i]);
             const dataMap = field.attr('data-map');
             if (dataMap !== undefined) {
@@ -30,83 +42,81 @@ $(document).ready(() => {
                     storeData = {};
                     optionsStore.push(storeData);
                 }
-                storeData.key = dataMap;                
+                storeData.key = dataMap;
                 storeData.value = field.val();
             }
         }
 
-        if (localStorage.options) {
+        if (localStorage[name]) {
             // already has a store saved
             try {
-                var stores = getOptionsStore();
+                var stores = getStore(name);
                 var currentVersionStore = stores.filter(x => x.version === VERSION)[0];
                 if (currentVersionStore === undefined) {
                     // No store for the current version
-                    setOptionsStore([{
+                    setStoreValues([{
                         version: VERSION,
                         options: optionsStore
-                    }, ...stores]);
+                    }, ...stores], name);
                 } else {
                     currentVersionStore.options = optionsStore;
-                    setOptionsStore(stores);
+                    setStoreValues(stores, name);
                 }
-            } catch(e) {
+            } catch (e) {
                 error('Error while saving options in storage, reinitializing local storage');
-                resetOptionsStore();
+                resetStoreValues(name);
             }
         } else {
-            setOptionsStore([{ version: VERSION, options: optionsStore }]);
+            setStoreValues([{ version: VERSION, options: optionsStore }], name);
         }
         success('Configuration saved', 'success');
         e.preventDefault();
     });
-});
+}
 
 function checkValidFields(form) {
     const fields = form.find(':input');
 
-    for(var i = 0; i < fields.length; i++) {
+    for (var i = 0; i < fields.length; i++) {
         const field = fields[i];
         const valid = field.checkValidity();
         const parent = $(field).parents('.form-group');
-        if (parent.hasClass('has-success')) {
-            parent.removeClass('has-success');
-        }
         if (parent.hasClass('has-danger')) {
             parent.removeClass('has-danger');
         }
-        
-        $(field).parents('.form-group').addClass('has-' + (valid ? 'success' : 'danger'));
+
+        if (!valid) {
+            $(field).parents('.form-group').addClass('has-danger');
+        }
     }
 }
 
-function resetOptionsStore() {
-    localStorage.options = JSON.stringify([]);
+function resetStoreValues(storeName) {
+    localStorage[storeName] = JSON.stringify([]);
 }
 
-function setOptionsStore(val) {
+function setStoreValues(val, storeName) {
     try {
-        localStorage.options = JSON.stringify(val);
+        localStorage[storeName] = JSON.stringify(val);
     } catch (e) {
         error('Error while saving options in storage, reinitializing local storage');
         resetOptionsStore();
     }
 }
 
-function getOptionsStore() {
-    if (localStorage.options) {
+function getStore(name) {
+    if (localStorage[name]) {
         try {
-            return JSON.parse(localStorage.options);
-        } catch(e) {
+            return JSON.parse(localStorage[name]);
+        } catch (e) {
             error('Error while reading options store');
         }
     }
 }
 
-function getCurrentStore() {
-    const store = getOptionsStore();
+function getCurrentStore(storeName) {
+    const store = getStore(storeName);
     if (store) {
         return store.filter(x => x.version === VERSION)[0];
     }
 }
-
