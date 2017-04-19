@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Simple bot",
+  "description": "A simple bot",
+  "version": "0.1",
+
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "activeTab",
+    "contentSettings",
+    "cookies",
+    "storage"
+  ]
+}

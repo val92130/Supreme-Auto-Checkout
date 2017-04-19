@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyBot</title>
+    <script type="text/javascript" src="js/tether.min.js"></script>    
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>    
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>    
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main">
+            <h1>Configuration</h1>
+            <form id="options-form">
+                <div class="form-group row">
+                    <label for="firstname" class="col-2 col-form-label">Firstname</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" data-value="firstname" id="firstname" required>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="lastname" class="col-2 col-form-label">Lastname</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" data-value="lastname" id="lastname" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="email" class="col-2 col-form-label">Email</label>
+                    <div class="col-10">
+                        <input class="form-control" type="email" data-value="email" id="email" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="phone" class="col-2 col-form-label">Phone</label>
+                    <div class="col-10">
+                        <input class="form-control" type="tel" data-value="phone" id="phone" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/options.js"></script>    
+</body>
+</html>
