@@ -15,12 +15,11 @@ function processForm(form, name) {
     getStore(name)
         .then((currentStore) => {
             const fields = form.find(':input');
-            console.log(currentStore);
             if (currentStore !== undefined) {
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
-                    const option = currentStore.options.filter(o => o.key === dataMap)[0];
+                    const option = currentStore.filter(o => o.key === dataMap)[0];
 
                     field.val(option !== undefined ? option.value : "");
                 }
@@ -37,16 +36,10 @@ function processForm(form, name) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
                     if (dataMap !== undefined) {
-                        var storeData = optionsStore.filter(x => x.key === dataMap)[0];
-                        if (storeData === undefined) {
-                            storeData = {};
-                            optionsStore.push(storeData);
-                        }
-                        storeData.key = dataMap;
-                        storeData.value = field.val();
+                        storeData = { key: dataMap, value: field.val() };
+                        optionsStore.push(storeData);
                     }
                 }
-                console.log(optionsStore);
                 createOrUpdateStore(name, optionsStore)
                     .then(() => {
                         success('Configuration saved', 'success');

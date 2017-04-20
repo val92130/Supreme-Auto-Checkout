@@ -15,7 +15,12 @@ function setStoreValues(val, storeName) {
 function getStore(name) {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get(name, (items) => {
-            resolve(items);
+            if (_.isEmpty(items)) {
+                resolve(undefined);
+            } else {
+                console.log(items[name]);
+                resolve(items[name]);
+            }
         });
     });
 }
