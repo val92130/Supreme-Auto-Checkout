@@ -1,18 +1,24 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "Simple bot",
-  "description": "A simple bot",
-  "version": "0.1",
-
-  "browser_action": {
-    "default_popup": "popup.html"
-  },
-  "options_page": "options.html",
-  "permissions": [
-    "activeTab",
-    "contentSettings",
-    "cookies",
-    "storage"
-  ]
+    "name": "Simple bot",
+    "description": "A simple bot",
+    "version": "0.1",
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "options_page": "options.html",
+    "permissions": [
+        "activeTab",
+        "contentSettings",
+        "cookies",
+        "storage",
+        "webNavigation"
+    ],
+    "content_scripts": [{
+        "matches": [
+            "*://supremenewyork.com/*"
+        ],
+        "js": ["js/storage.js", "js/addToCart.js"]
+    }]
 }
