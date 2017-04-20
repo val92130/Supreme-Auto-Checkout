@@ -17,7 +17,7 @@
     ],
     "content_scripts": [{
         "matches": [
-            "*://supremenewyork.com/*"
+            "*://*.supremenewyork.com/*"
         ],
         "js": ["js/storage.js", "js/addToCart.js"]
     }]

@@ -20,8 +20,11 @@ function processForm(form, name) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
                     const option = currentStore.filter(o => o.key === dataMap)[0];
-
-                    field.val(option !== undefined ? option.value : "");
+                    if (field.is(':checkbox')) {
+                        field.prop('checked', option.value);
+                    } else {
+                        field.val(option !== undefined ? option.value : "");                        
+                    }
                 }
             }
 
@@ -35,12 +38,13 @@ function processForm(form, name) {
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
+                    const fieldVal = field.is(':checkbox') ? field.prop('checked') : field.val();
                     if (dataMap !== undefined) {
-                        storeData = { key: dataMap, value: field.val() };
+                        storeData = { key: dataMap, value: fieldVal };
                         optionsStore.push(storeData);
                     }
                 }
-                createOrUpdateStore(name, optionsStore)
+                setStoreValue(optionsStore, name)
                     .then(() => {
                         success('Configuration saved', 'success');
                     });

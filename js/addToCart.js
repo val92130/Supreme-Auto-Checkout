@@ -1,2 +1,4 @@
-
-console.log(getStore('options'));
+getStore('options')
+    .then((store) => {
+        console.log(store);
+    });

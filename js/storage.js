@@ -2,7 +2,7 @@ function resetStoreValues(storeName) {
     return setStoreValues([], storeName);
 }
 
-function setStoreValues(val, storeName) {
+function setStoreValue(val, storeName) {
     return new Promise((resolve, reject) => {
         const obj = {};
         obj[storeName] = val;
@@ -15,10 +15,9 @@ function setStoreValues(val, storeName) {
 function getStore(name) {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get(name, (items) => {
-            if (_.isEmpty(items)) {
+            if (!Object.keys(items).length) {
                 resolve(undefined);
             } else {
-                console.log(items[name]);
                 resolve(items[name]);
             }
         });
@@ -27,6 +26,6 @@ function getStore(name) {
 
 function createOrUpdateStore(storeName, values) {
     return new Promise((resolve, reject) => {
-        return resolve(setStoreValues(values, storeName));
+        return resolve(setStoreValue(values, storeName));
     });
 }
