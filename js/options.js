@@ -1,4 +1,3 @@
-
 $(document).ready(() => {
     const forms = $('form');
     for (var form of forms) {
@@ -19,11 +18,11 @@ function processForm(form, name) {
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
-                    const option = currentStore.filter(o => o.key === dataMap)[0];
+                    const option = currentStore[dataMap];
                     if (field.is(':checkbox')) {
-                        field.prop('checked', option.value);
+                        field.prop('checked', option);
                     } else {
-                        field.val(option !== undefined ? option.value : "");                        
+                        field.val(option !== undefined ? option : "");
                     }
                 }
             }
@@ -34,14 +33,13 @@ function processForm(form, name) {
             });
 
             form.submit(function(e) {
-                const optionsStore = [];
+                const optionsStore = {};
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
                     const fieldVal = field.is(':checkbox') ? field.prop('checked') : field.val();
                     if (dataMap !== undefined) {
-                        storeData = { key: dataMap, value: fieldVal };
-                        optionsStore.push(storeData);
+                        optionsStore[dataMap] = fieldVal;
                     }
                 }
                 setStoreValue(optionsStore, name)
@@ -51,7 +49,7 @@ function processForm(form, name) {
                 e.preventDefault();
             });
         });
-    
+
 }
 
 function checkValidFields(form) {

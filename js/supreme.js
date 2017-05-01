@@ -1,0 +1,4 @@
+getStore('billing')
+    .then((store) => {
+
+    });

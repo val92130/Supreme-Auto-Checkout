@@ -5,7 +5,7 @@
     "description": "A simple bot",
     "version": "0.1",
     "browser_action": {
-        "default_popup": "popup.html"
+        "default_popup": "options.html"
     },
     "options_page": "options.html",
     "permissions": [
@@ -16,9 +16,22 @@
         "webNavigation"
     ],
     "content_scripts": [{
-        "matches": [
-            "*://*.supremenewyork.com/*"
-        ],
-        "js": ["js/storage.js", "js/addToCart.js"]
-    }]
+            "matches": [
+                "*://*.supremenewyork.com/*"
+            ],
+            "js": ["js/storage.js", "js/supreme.js"]
+        },
+        {
+            "matches": [
+                "*://*.supremenewyork.com/checkout"
+            ],
+            "js": ["js/storage.js", "js/jquery-3.2.1.min.js", "js/checkout.js"]
+        },
+        {
+            "matches": [
+                "*://*.supremenewyork.com/shop/cart"
+            ],
+            "js": ["js/storage.js", "js/cart.js"]
+        }
+    ]
 }
