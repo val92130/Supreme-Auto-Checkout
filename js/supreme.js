@@ -1,3 +1,12 @@
+const notificationBar = document.createElement("div");
+document.body.prepend(notificationBar);
+notificationBar.style.width = '100%';
+notificationBar.style.textAlign = 'center';
+notificationBar.style.backgroundColor = '#cbffcd';
+notificationBar.style.lineHeight = '50px';
+notificationBar.style.height = '50px';
+notificationBar.style.fontSize = 'xx-large';
+
 (() => {
     var currentPage = window.location.href;
     setInterval(function() {
@@ -9,6 +18,24 @@
     onPageChange(currentPage);
 })();
 
+
+function setNotificationBarText(text) {
+    notificationBar.innerText = text;
+}
+
+function timeout(fn, ms, actionName) {
+    const now = new Date();
+    let interval = setInterval(() => {
+        const d = new Date();
+        const diff = (d.getTime() - now.getTime());
+        setNotificationBarText((actionName || 'Action') + ' in : ' + ((ms - diff) / 1000));
+    }, 100);
+    setTimeout(() => {
+        clearInterval(interval);
+        setNotificationBarText('Done');
+        fn();
+    }, ms);
+}
 
 function processLinks() {
     let hrefs = $('body a');
@@ -22,6 +49,7 @@ function processLinks() {
 function onPageChange(location) {
     processLinks();
     getStores(['preferences', 'sizings', 'billing']).then((stores) => {
+        setNotificationBarText('Waiting... Autocheckout ' + (stores[0].autocheckout ? 'enabled' : 'disabled'));
         if (!stores[0].autocheckout) return;
         if (isProductPage()) {
             processProduct(stores[0]);
@@ -35,9 +63,9 @@ function onPageChange(location) {
 
 function processCart(preferencesStore) {
     const delay = preferencesStore['delay_go_checkout'] || 100;
-    setTimeout(() => {
+    timeout(() => {
         document.location.href = '/checkout';
-    }, delay);
+    }, delay, 'Going to checkout');
 }
 
 function processCheckout(preferencesStore, billingStore) {
@@ -47,9 +75,9 @@ function processCheckout(preferencesStore, billingStore) {
         $('#' + key).val(value);
         $("input[name='order[terms]']").val(1);
     }
-    setTimeout(() => {
+    timeout(() => {
         $('#checkout_form').submit();
-    }, checkoutDelay);
+    }, checkoutDelay, 'Checking out');
 }
 
 function processProduct(preferencesStore) {
@@ -69,9 +97,9 @@ function processProduct(preferencesStore) {
                     targetOption.selected = true;
                 }
                 submitBtn.click();
-                setTimeout(() => {
+                timeout(() => {
                     window.location.href = '/shop/cart/';
-                }, atcDelay);
+                }, atcDelay, 'Adding to cart');
             }
         });
 }
