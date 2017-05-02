@@ -2,7 +2,8 @@ const defaultOptions = {
     "preferences": {
         "delay_checkout": 1500,
         "delay_atc": 200,
-        "delay_go_checkout": 100
+        "delay_go_checkout": 100,
+        "autocheckout": false
     }
 };
 
@@ -23,16 +24,14 @@ function processForm(form, name) {
     getStore(name)
         .then((currentStore) => {
             const fields = form.find(':input');
-            if (currentStore !== undefined) {
-                for (var i = 0; i < fields.length; i++) {
-                    const field = $(fields[i]);
-                    const dataMap = field.attr('data-map');
-                    const option = currentStore[dataMap] || opts[dataMap];
-                    if (field.is(':checkbox')) {
-                        field.prop('checked', option);
-                    } else {
-                        field.val(option !== undefined ? option : "");
-                    }
+            for (var i = 0; i < fields.length; i++) {
+                const field = $(fields[i]);
+                const dataMap = field.attr('data-map');
+                const option = currentStore ? currentStore[dataMap] : opts[dataMap];
+                if (field.is(':checkbox')) {
+                    field.prop('checked', option);
+                } else {
+                    field.val(option !== undefined ? option : "");
                 }
             }
 

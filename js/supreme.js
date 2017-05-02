@@ -68,6 +68,11 @@ function processLinks() {
 function onPageChange(location) {
     processLinks();
     getStores(['preferences', 'sizings', 'billing']).then((stores) => {
+        // if stores are not configured yet..
+        if (stores.some(x => x === undefined)) {
+            setNotificationBarText('Bot not yet configured');
+            return;
+        }
         setNotificationBarText('Waiting... Autocheckout ' + (stores[0].autocheckout ? 'enabled' : 'disabled'));
         if (!stores[0].autocheckout) return;
 

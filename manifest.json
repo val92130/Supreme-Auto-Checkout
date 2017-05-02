@@ -5,7 +5,8 @@
     "description": "A simple bot",
     "version": "0.1",
     "browser_action": {
-        "default_popup": "options.html"
+        "default_popup": "options.html",
+        "default_icon": "icon.png"
     },
     "options_page": "options.html",
     "permissions": [
