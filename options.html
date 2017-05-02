@@ -3,24 +3,46 @@
 
 <head>
     <title>Bot configuration</title>
-    <script type="text/javascript" src="js/tether.min.js"></script>
-    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/lib/tether.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" style="min-width: 600px;">
         <div class="main">
             <h1 class="text-center">Supreme Bot Configuration</h1>
             <h3>Preferences</h3>
             <hr/>
 
-            <form class="form-inline" data-form="preferences">
-                <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
-                    <input class="form-check-input" type="checkbox" data-map="autocheckout"> Autocheckout
-                </label>
+            <form data-form="preferences">
+                <div class="form-group row">
+                    <label for="autocheckout" class="col-2 col-form-label">Autocheckout</label>
+                    <div class="col-2">
+                        <input id="autocheckout" class="form-control" type="checkbox" data-map="autocheckout">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="delay-checkout" class="col-2 col-form-label">Checkout delay (ms)</label>
+                    <div class="col-4">
+                        <input min=0 class="form-control" type="number" data-map="delay_checkout" id="delay-checkout">
+                    </div>
+                </div>
 
+                <div class="form-group row">
+                    <label for="delay-atc" class="col-2 col-form-label">Add to cart delay (ms)</label>
+                    <div class="col-4">
+                        <input min=0 class="form-control" type="number" data-map="delay_atc" id="delay-atc">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="delay-go-checkout" class="col-2 col-form-label">Proceed to checkout delay (ms)</label>
+                    <div class="col-4">
+                        <input class="form-control" type="number" data-map="delay_go_checkout" id="delay-go-checkout">
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
 
@@ -30,9 +52,9 @@
 
             <form id="options-form" data-form="billing">
                 <div class="form-group row">
-                    <label for="billing-name" class="col-2 col-form-label">Billing Name</label>
+                    <label for="billing-name" class="col-2 col-form-label">Firstname + Lastname</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" data-map="order_billing_name" id="billing-name" required>
+                        <input class="form-control" pattern="(\w+)(\s)(\w+)" type="text" data-map="order_billing_name" id="billing-name" required>
                     </div>
                 </div>
 
@@ -209,6 +231,15 @@
                 </div>
 
                 <div class="form-group row">
+                    <label for="sizing-shorts" class="col-2 col-form-label">Shorts</label>
+                    <div class="col-8">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shorts" data-map="shorts">
+                            <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label for="sizing-sweatshirts" class="col-2 col-form-label">Sweatshirts</label>
                     <div class="col-8">
                         <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-sweatshirts" data-map="sweatshirts">
@@ -249,7 +280,7 @@
             </form>
         </div>
     </div>
-    <script type="text/javascript" src="js/notify.min.js"></script>
+    <script type="text/javascript" src="js/lib/notify.min.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/storage.js"></script>
     <script type="text/javascript" src="js/options.js"></script>

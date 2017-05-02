@@ -24,6 +24,10 @@ function getStore(name) {
     });
 }
 
+function getStores(names) {
+    return Promise.all(names.map(x => getStore(x)));
+}
+
 function createOrUpdateStore(storeName, values) {
     return new Promise((resolve, reject) => {
         return resolve(setStoreValue(values, storeName));

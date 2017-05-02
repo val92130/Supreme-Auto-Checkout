@@ -1,3 +1,11 @@
+const defaultOptions = {
+    "preferences": {
+        "delay_checkout": 1500,
+        "delay_atc": 200,
+        "delay_go_checkout": 100
+    }
+};
+
 $(document).ready(() => {
     const forms = $('form');
     for (var form of forms) {
@@ -11,6 +19,7 @@ $(document).ready(() => {
 
 
 function processForm(form, name) {
+    const opts = defaultOptions[name] || {};
     getStore(name)
         .then((currentStore) => {
             const fields = form.find(':input');
@@ -18,7 +27,7 @@ function processForm(form, name) {
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
-                    const option = currentStore[dataMap];
+                    const option = currentStore[dataMap] || opts[dataMap];
                     if (field.is(':checkbox')) {
                         field.prop('checked', option);
                     } else {
@@ -37,8 +46,11 @@ function processForm(form, name) {
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
                     const dataMap = field.attr('data-map');
-                    const fieldVal = field.is(':checkbox') ? field.prop('checked') : field.val();
+                    let fieldVal = field.is(':checkbox') ? field.prop('checked') : field.val();
                     if (dataMap !== undefined) {
+                        if (fieldVal === undefined || fieldVal === '') {
+                            fieldVal = opts[dataMap];
+                        }
                         optionsStore[dataMap] = fieldVal;
                     }
                 }
@@ -54,7 +66,7 @@ function processForm(form, name) {
 
 function checkValidFields(form) {
     const fields = form.find(':input');
-
+    let isValid = true;
     for (var i = 0; i < fields.length; i++) {
         const field = fields[i];
         const valid = field.checkValidity();
@@ -64,7 +76,9 @@ function checkValidFields(form) {
         }
 
         if (!valid) {
+            isValid = false;
             $(field).parents('.form-group').addClass('has-danger');
         }
     }
+    return isValid;
 }

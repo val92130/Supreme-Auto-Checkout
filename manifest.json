@@ -13,25 +13,13 @@
         "contentSettings",
         "cookies",
         "storage",
-        "webNavigation"
+        "webNavigation",
+        "tabs"
     ],
     "content_scripts": [{
-            "matches": [
-                "*://*.supremenewyork.com/*"
-            ],
-            "js": ["js/storage.js", "js/supreme.js"]
-        },
-        {
-            "matches": [
-                "*://*.supremenewyork.com/checkout"
-            ],
-            "js": ["js/storage.js", "js/jquery-3.2.1.min.js", "js/checkout.js"]
-        },
-        {
-            "matches": [
-                "*://*.supremenewyork.com/shop/cart"
-            ],
-            "js": ["js/storage.js", "js/cart.js"]
-        }
-    ]
+        "matches": [
+            "*://*.supremenewyork.com/*"
+        ],
+        "js": ["js/storage.js", "js/lib/jquery-3.2.1.min.js", "js/supreme.js"]
+    }]
 }
