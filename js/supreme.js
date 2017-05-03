@@ -92,7 +92,7 @@ function onPageChange(location) {
  * @param  {Object} preferencesStore Object that stores the preference options
  */
 function processCart(preferencesStore) {
-    const delay = preferencesStore['delay_go_checkout'] || 100;
+    const delay = preferencesStore['delay_go_checkout'];
     timeout(() => {
         document.location.href = '/checkout';
     }, delay, 'Going to checkout');
@@ -105,7 +105,7 @@ function processCart(preferencesStore) {
  * @param  {Object} billingStore Object that stores the billings options
  */
 function processCheckout(preferencesStore, billingStore) {
-    const checkoutDelay = preferencesStore['delay_checkout'] || 1500;
+    const checkoutDelay = preferencesStore['delay_checkout'];
     for (let key of Object.keys(billingStore)) {
         const value = billingStore[key];
         $('#' + key).val(value);
@@ -134,7 +134,7 @@ function processProduct(preferencesStore) {
                 if (!targetOption) {
                     targetOption = sizesOptions[0];
                 }
-                let atcDelay = preferencesStore['delay_atc'] || 500;
+                let atcDelay = preferencesStore['delay_atc'];
                 if (targetOption !== undefined) {
                     targetOption.selected = true;
                 }
