@@ -77,7 +77,7 @@ function onPageChange(location) {
         if (!stores[0].autocheckout) return;
 
         if (isProductPage()) {
-            processProduct(stores[0]);
+            processProduct(stores[0], stores[1]);
         } else if (isCart()) {
             processCart(stores[0]);
         } else if (isCheckout()) {
@@ -122,28 +122,36 @@ function processCheckout(preferencesStore, billingStore) {
  * based on the user's preferences and then it will add the item to cart
  * @param  {Object} preferencesStore Object that stores the preference options
  */
-function processProduct(preferencesStore) {
-    getStore('sizings')
-        .then((store) => {
-            if (!isSoldOut()) {
-                let submitBtn = $('input[name=commit]');
-                let productCategory = getProductCategory();
-                let sizesOptions = getSizesOptions();
-                let categorySize = store[productCategory];
-                let targetOption = sizesOptions.filter(x => x.text === categorySize)[0];
-                if (!targetOption) {
-                    targetOption = sizesOptions[0];
-                }
-                let atcDelay = preferencesStore['delay_atc'];
-                if (targetOption !== undefined) {
-                    targetOption.selected = true;
-                }
-                submitBtn.click();
-                timeout(() => {
-                    window.location.href = '/shop/cart/';
-                }, atcDelay, 'Adding to cart');
+function processProduct(preferencesStore, sizingStore) {
+    if (!isSoldOut()) {
+        let submitBtn = $('input[name=commit]');
+        let productCategory = getProductCategory();
+        let sizesOptions = getSizesOptions();
+        let categorySize = sizingStore[productCategory];
+        
+        let targetOption = sizesOptions.filter(x => {
+            const productSize = x.text.toLowerCase();
+            const splitted = productSize.split('/');
+            if (!isNaN(productSize)) {
+                return productSize === categorySize.toLowerCase();
             }
-        });
+            return productSize === categorySize.toLowerCase() || productSize[0] === categorySize[0].toLowerCase()
+              || (splitted[1] ? splitted[1][0] === categorySize[0].toLowerCase() : false);
+        })[0];
+
+        // If no matching size was found, take the first size available
+        if (targetOption === undefined) {
+            targetOption = sizesOptions[0];
+        }
+        let atcDelay = preferencesStore['delay_atc'];
+        if (targetOption !== undefined) {
+            targetOption.selected = true;
+        }
+        submitBtn.click();
+        timeout(() => {
+            window.location.href = '/shop/cart/';
+        }, atcDelay, 'Adding to cart');
+    }
 }
 
 /**
