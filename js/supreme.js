@@ -129,7 +129,7 @@ function processProduct(preferencesStore, sizingStore) {
         let sizesOptions = getSizesOptions();
         let categorySize = sizingStore[productCategory];
         
-        let targetOption = sizesOptions.filter(x => {
+        let targetOption = categorySize !== undefined ? sizesOptions.filter(x => {
             const productSize = x.text.toLowerCase();
             const splitted = productSize.split('/');
             if (!isNaN(productSize)) {
@@ -137,12 +137,13 @@ function processProduct(preferencesStore, sizingStore) {
             }
             return productSize === categorySize.toLowerCase() || productSize[0] === categorySize[0].toLowerCase()
               || (splitted[1] ? splitted[1][0] === categorySize[0].toLowerCase() : false);
-        })[0];
+        })[0] : sizesOptions[0];
 
         // If no matching size was found, take the first size available
         if (targetOption === undefined) {
             targetOption = sizesOptions[0];
         }
+        
         let atcDelay = preferencesStore['delay_atc'];
         if (targetOption !== undefined) {
             targetOption.selected = true;
