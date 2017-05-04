@@ -26,12 +26,12 @@ function processForm(form, name) {
             const fields = form.find(':input');
             for (var i = 0; i < fields.length; i++) {
                 const field = $(fields[i]);
-                const dataMap = field.attr('data-map');
-                const option = currentStore ? currentStore[dataMap] : opts[dataMap];
+                const optName = field.attr('name');
+                const option = currentStore ? currentStore[optName] : opts[optName];
                 if (field.is(':checkbox')) {
                     field.prop('checked', option);
-                } else {
-                    field.val(option !== undefined ? option : "");
+                } else if (option !== undefined) {
+                    field.val(option);
                 }
             }
 
@@ -44,13 +44,13 @@ function processForm(form, name) {
                 const optionsStore = {};
                 for (var i = 0; i < fields.length; i++) {
                     const field = $(fields[i]);
-                    const dataMap = field.attr('data-map');
+                    const optName = field.attr('name');
                     let fieldVal = field.is(':checkbox') ? field.prop('checked') : field.val();
-                    if (dataMap !== undefined) {
+                    if (optName !== undefined) {
                         if (fieldVal === undefined || fieldVal === '') {
-                            fieldVal = opts[dataMap];
+                            fieldVal = opts[optName];
                         }
-                        optionsStore[dataMap] = fieldVal;
+                        optionsStore[optName] = fieldVal;
                     }
                 }
                 setStoreValue(optionsStore, name)

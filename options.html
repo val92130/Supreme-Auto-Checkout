@@ -20,47 +20,47 @@
                 <div class="form-group row">
                     <label for="autocheckout" class="col-2 col-form-label">Auto Checkout</label>
                     <div class="col-2">
-                        <input id="autocheckout" class="form-control" type="checkbox" data-map="autocheckout">
+                        <input id="autocheckout" class="form-control" type="checkbox" name="autocheckout">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="autopay" class="col-2 col-form-label">Auto Payment</label>
                     <div class="col-2">
-                        <input id="autopay" class="form-control" type="checkbox" data-map="autopay">
+                        <input id="autopay" class="form-control" type="checkbox" name="autopay">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="delay-checkout" class="col-2 col-form-label">Checkout delay (ms)</label>
                     <div class="col-4">
-                        <input min=0 class="form-control" type="number" data-map="delay_checkout" id="delay-checkout">
+                        <input min=0 class="form-control" type="number" name="delay_checkout" id="delay-checkout">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="delay-atc" class="col-2 col-form-label">Add to cart delay (ms)</label>
                     <div class="col-4">
-                        <input min=0 class="form-control" type="number" data-map="delay_atc" id="delay-atc">
+                        <input min=0 class="form-control" type="number" name="delay_atc" id="delay-atc">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="delay-go-checkout" class="col-2 col-form-label">Proceed to checkout delay (ms)</label>
                     <div class="col-4">
-                        <input class="form-control" type="number" data-map="delay_go_checkout" id="delay-go-checkout">
+                        <input class="form-control" type="number" name="delay_go_checkout" id="delay-go-checkout">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="max-price" class="col-2 col-form-label">Max product price</label>
                     <div class="col-4">
-                        <input min=0 class="form-control" type="number" data-map="max_price" id="max-price">
+                        <input min=0 class="form-control" type="number" name="max_price" id="max-price">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="min-price" class="col-2 col-form-label">Min product price</label>
                     <div class="col-4">
-                        <input min=0 class="form-control" type="number" data-map="min_price" id="min-price">
+                        <input min=0 class="form-control" type="number" name="min_price" id="min-price">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
@@ -74,28 +74,28 @@
                 <div class="form-group row">
                     <label for="billing-name" class="col-2 col-form-label">Firstname + Lastname</label>
                     <div class="col-10">
-                        <input class="form-control" pattern="(\w+)(\s)(\w+)" type="text" data-map="order_billing_name" id="billing-name" required>
+                        <input class="form-control" pattern="(\w+)(\s)(\w+)" type="text" name="order_billing_name" id="billing-name" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="email" class="col-2 col-form-label">Email</label>
                     <div class="col-10">
-                        <input class="form-control" type="email" data-map="order_email" id="email" required>
+                        <input class="form-control" type="email" name="order_email" id="email" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="phone" class="col-2 col-form-label">Phone</label>
                     <div class="col-10">
-                        <input class="form-control" type="tel" data-map="order_tel" id="phone" required>
+                        <input class="form-control" type="tel" name="order_tel" id="phone" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="address" class="col-2 col-form-label">Address</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" data-map="bo" id="address" required>
+                        <input class="form-control" type="text" name="bo" id="address" required>
                     </div>
                 </div>
 
@@ -103,19 +103,19 @@
                 <div class="form-group row">
                     <label for="city" class="col-2 col-form-label">City</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" data-map="order_billing_city" id="city" required>
+                        <input class="form-control" type="text" name="order_billing_city" id="city" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="zip" class="col-2 col-form-label">Zip</label>
                     <div class="col-2">
-                        <input class="form-control" type="text" data-map="order_billing_zip" id="zip" required>
+                        <input class="form-control" type="text" name="order_billing_zip" id="zip" required>
                     </div>
 
                     <label for="country" class="col-form-label">Country</label>
                     <div class="col-6">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="country" data-map="order_billing_country">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="country" name="order_billing_country">
                             <option value="GB">UK</option>
                             <option value="NB">UK (N. IRELAND)</option>
                             <option value="">-</option>
@@ -158,7 +158,7 @@
                 <div class="form-group row">
                     <label for="credit_card_type" class="col-2 col-form-label">Card Type</label>
                     <div class="col-10">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_type" data-map="credit_card_type">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_type" name="credit_card_type">
                             <option value="visa">Visa</option>
                             <option value="american_express">American Express</option>
                             <option value="master">Mastercard</option>
@@ -170,14 +170,14 @@
                 <div class="form-group row">
                     <label for="card_number" class="col-2 col-form-label">Credit Card Number</label>
                     <div class="col-10">
-                        <input class="form-control" type="text" data-map="cnb" id="card_number" required>
+                        <input class="form-control" type="text" name="cnb" id="card_number" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-2 col-form-label">Expiry</label>
                     <div class="col-2">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_month" data-map="credit_card_month" required>
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_month" name="credit_card_month" required>
                             <option value="01">01</option>
                             <option value="02">02</option>
                             <option value="03">03</option>
@@ -193,7 +193,7 @@
                         </select>
                     </div>
                     <div class="col-2">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_year" data-map="credit_card_year" required>
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_year" name="credit_card_year" required>
                             <option value="2017">2017</option>
                             <option value="2018">2018</option>
                             <option value="2019">2019</option>
@@ -212,7 +212,7 @@
                 <div class="form-group row">
                     <label for="ccv" class="col-2 col-form-label">CCV</label>
                     <div class="col-2">
-                        <input class="form-control" type="text" data-map="vval" id="ccv" maxlength="4" size="4" required>
+                        <input class="form-control" type="text" name="vval" id="ccv" maxlength="4" size="4" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
@@ -226,7 +226,7 @@
                 <div class="form-group row">
                     <label for="sizing-accessories" class="col-2 col-form-label">Accessories</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-accessories" data-map="accessories">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-accessories" name="accessories" required>
                             <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
                         </select>
                     </div>
@@ -235,7 +235,7 @@
                 <div class="form-group row">
                     <label for="sizing-t-shirts" class="col-2 col-form-label">T-shirts</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-t-shirts" data-map="t-shirts">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-t-shirts" name="t-shirts" required>
                             <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
                         </select>
                     </div>
@@ -244,7 +244,7 @@
                 <div class="form-group row">
                     <label for="sizing-pants" class="col-2 col-form-label">Pants</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-pants" data-map="pants">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-pants" name="pants" required>
                             <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
                         </select>
                     </div>
@@ -253,7 +253,7 @@
                 <div class="form-group row">
                     <label for="sizing-shorts" class="col-2 col-form-label">Shorts</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shorts" data-map="shorts">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shorts" name="shorts" required>
                             <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
                         </select>
                     </div>
@@ -262,7 +262,7 @@
                 <div class="form-group row">
                     <label for="sizing-sweatshirts" class="col-2 col-form-label">Sweatshirts</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-sweatshirts" data-map="sweatshirts">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-sweatshirts" name="sweatshirts" required>
                             <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
                         </select>
                     </div>
@@ -271,7 +271,7 @@
                 <div class="form-group row">
                     <label for="sizing-tops-sweaters" class="col-2 col-form-label">Tops/Sweaters</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-tops-sweaters" data-map="tops">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-tops-sweaters" name="tops" required>
                             <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
                         </select>
                     </div>
@@ -280,7 +280,7 @@
                 <div class="form-group row">
                     <label for="sizing-shirts" class="col-2 col-form-label">Shirts</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shirts" data-map="shirts">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shirts" name="shirts" required>
                             <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
                         </select>
                     </div>
@@ -289,7 +289,7 @@
                 <div class="form-group row">
                     <label for="sizing-jackets" class="col-2 col-form-label">Jackets</label>
                     <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-jackets" data-map="jackets">
+                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-jackets" name="jackets" required>
                             <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
                         </select>
                     </div>
