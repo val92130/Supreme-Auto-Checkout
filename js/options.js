@@ -16,28 +16,6 @@ $(document).ready(() => {
         }
         processForm($(form), name);
     }
-    const tabs = $('#menu-tabs a');
-
-    function setActiveTab(tabValue) {
-        for (let tab of tabs) {
-            const tabVal = $(tab).attr('data-link-form');
-            const form = $('form[data-form='+tabVal+']').first();
-            if (form !== undefined) {
-                form.css('display', 'none');
-            }
-            $(tab).removeClass('active');
-        }
-        $('a[data-link-form='+tabValue+']').first().addClass('active');
-        $('form[data-form='+tabValue+']').first().css('display', 'inherit');
-    }
-
-    tabs.click(function() {
-        const selectedTab = $(this);
-        const tabValue = selectedTab.attr('data-link-form');
-        setActiveTab(tabValue);
-    });
-
-    setActiveTab('preferences');
 });
 
 

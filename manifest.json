@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
 
-    "name": "Simple bot",
-    "description": "A simple bot",
+    "name": "SupremeOATC",
+    "description": "Supreme Open-Source add to cart bot",
     "version": "0.1",
     "browser_action": {
         "default_popup": "options.html",
@@ -14,8 +14,7 @@
         "contentSettings",
         "cookies",
         "storage",
-        "webNavigation",
-        "tabs"
+        "webNavigation"
     ],
     "content_scripts": [{
         "matches": [

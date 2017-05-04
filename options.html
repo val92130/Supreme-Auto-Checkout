@@ -7,304 +7,319 @@
     <script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-</head>
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet"></head>
 
 <body>
     <div class="container" style="min-width: 600px;">
         <div class="main">
             <h1 class="text-center">Supreme Bot Configuration</h1>
+            <br/>
 
-            <ul class="nav nav-tabs" id="menu-tabs">
+            <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" data-link-form="preferences">Preferences</a>
+                    <a class="nav-link active" data-toggle="tab" href="#preferences-tab" role="tab">Preferences</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-link-form="billing">Billing</a>
+                    <a class="nav-link" data-toggle="tab" href="#billing-tab" role="tab">Billing</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-link-form="sizings">Sizes</a>
+                    <a class="nav-link" data-toggle="tab" href="#sizings-tab" role="tab">Sizes</a>
                 </li>
             </ul>
 
             <br/>
-            <form data-form="preferences">
-                <div class="form-group row">
-                    <label for="autocheckout" class="col-2 col-form-label">Auto Checkout</label>
-                    <div class="col-2">
-                        <input id="autocheckout" class="form-control" type="checkbox" name="autocheckout">
-                    </div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="preferences-tab" role="tabpanel">
+                    <form data-form="preferences">
+                        <div class="form-group row">
+                            <label for="autocheckout" class="col-4 col-form-label">Auto Checkout</label>
+                            <div class="col-4">
+                                <input id="autocheckout" class="form-control" type="checkbox" name="autocheckout">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="autopay" class="col-4 col-form-label">Auto Payment</label>
+                            <div class="col-4">
+                                <input id="autopay" class="form-control" type="checkbox" name="autopay">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="delay-checkout" class="col-4 col-form-label">Checkout delay (ms)</label>
+                            <div class="col-4">
+                                <input min=0 class="form-control" type="number" name="delay_checkout" id="delay-checkout">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="delay-atc" class="col-4 col-form-label">Add to cart delay (ms)</label>
+                            <div class="col-4">
+                                <input min=0 class="form-control" type="number" name="delay_atc" id="delay-atc">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="delay-go-checkout" class="col-4 col-form-label">Proceed to checkout delay (ms)</label>
+                            <div class="col-4">
+                                <input class="form-control" type="number" name="delay_go_checkout" id="delay-go-checkout">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="max-price" class="col-4 col-form-label">Max product price</label>
+                            <div class="col-4">
+                                <input min=0 class="form-control" type="number" name="max_price" id="max-price">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="min-price" class="col-4 col-form-label">Min product price</label>
+                            <div class="col-4">
+                                <input min=0 class="form-control" type="number" name="min_price" id="min-price">
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary save-btn">Save</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group row">
-                    <label for="autopay" class="col-2 col-form-label">Auto Payment</label>
-                    <div class="col-2">
-                        <input id="autopay" class="form-control" type="checkbox" name="autopay">
-                    </div>
+                <div class="tab-pane" id="billing-tab" role="tabpanel">
+                    <form id="options-form" data-form="billing">
+                        <div class="form-group row">
+                            <label for="billing-name" class="col-4 col-form-label">Firstname + Lastname</label>
+                            <div class="col-8">
+                                <input class="form-control" pattern="(\w+)(\s)(\w+)" type="text" name="order_billing_name" id="billing-name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="email" class="col-4 col-form-label">Email</label>
+                            <div class="col-8">
+                                <input class="form-control" type="email" name="order_email" id="email" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="phone" class="col-4 col-form-label">Phone</label>
+                            <div class="col-8">
+                                <input class="form-control" type="tel" name="order_tel" id="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="address" class="col-4 col-form-label">Address</label>
+                            <div class="col-8">
+                                <input class="form-control" type="text" name="bo" id="address" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="city" class="col-4 col-form-label">City</label>
+                            <div class="col-8">
+                                <input class="form-control" type="text" name="order_billing_city" id="city" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="country" class="col-4 col-form-label">Country</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="country" name="order_billing_country">
+                                    <option value="GB">UK</option>
+                                    <option value="NB">UK (N. IRELAND)</option>
+                                    <option value="">-</option>
+                                    <option value="AT">AUSTRIA</option>
+                                    <option value="BY">BELARUS</option>
+                                    <option value="BE">BELGIUM</option>
+                                    <option value="BG">BULGARIA</option>
+                                    <option value="HR">CROATIA</option>
+                                    <option value="CZ">CZECH REPUBLIC</option>
+                                    <option value="DK">DENMARK</option>
+                                    <option value="EE">ESTONIA</option>
+                                    <option value="FI">FINLAND</option>
+                                    <option value="FR">FRANCE</option>
+                                    <option value="DE">GERMANY</option>
+                                    <option value="GR">GREECE</option>
+                                    <option value="HU">HUNGARY</option>
+                                    <option value="IS">ICELAND</option>
+                                    <option value="IE">IRELAND</option>
+                                    <option value="IT">ITALY</option>
+                                    <option value="LV">LATVIA</option>
+                                    <option value="LT">LITHUANIA</option>
+                                    <option value="LU">LUXEMBOURG</option>
+                                    <option value="MC">MONACO</option>
+                                    <option value="NL">NETHERLANDS</option>
+                                    <option value="NO">NORWAY</option>
+                                    <option value="PL">POLAND</option>
+                                    <option value="PT">PORTUGAL</option>
+                                    <option value="RO">ROMANIA</option>
+                                    <option value="RU">RUSSIA</option>
+                                    <option value="SK">SLOVAKIA</option>
+                                    <option value="SI">SLOVENIA</option>
+                                    <option value="ES">SPAIN</option>
+                                    <option value="SE">SWEDEN</option>
+                                    <option value="CH">SWITZERLAND</option>
+                                    <option value="TR">TURKEY</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="zip" class="col-4 col-form-label">Zip</label>
+                            <div class="col-2">
+                                <input class="form-control" type="text" name="order_billing_zip" id="zip" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="credit_card_type" class="col-4 col-form-label">Card Type</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_type" name="credit_card_type">
+                                    <option value="visa">Visa</option>
+                                    <option value="american_express">American Express</option>
+                                    <option value="master">Mastercard</option>
+                                    <option value="solo">Solo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="card_number" class="col-4 col-form-label">Credit Card Number</label>
+                            <div class="col-8">
+                                <input class="form-control" type="text" name="cnb" id="card_number" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">Expiry</label>
+                            <div class="col-2">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_month" name="credit_card_month" required>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_year" name="credit_card_year" required>
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="ccv" class="col-4 col-form-label">CCV</label>
+                            <div class="col-2">
+                                <input class="form-control" type="text" name="vval" id="ccv" maxlength="4" size="4" required>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary save-btn">Save</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group row">
-                    <label for="delay-checkout" class="col-2 col-form-label">Checkout delay (ms)</label>
-                    <div class="col-4">
-                        <input min=0 class="form-control" type="number" name="delay_checkout" id="delay-checkout">
-                    </div>
+                <div class="tab-pane" id="sizings-tab" role="tabpanel">
+                    <form data-form="sizings">
+                        <div class="form-group row">
+                            <label for="sizing-accessories" class="col-4 col-form-label">Accessories</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-accessories" name="accessories" required>
+                                    <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-t-shirts" class="col-4 col-form-label">T-shirts</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-t-shirts" name="t-shirts" required>
+                                    <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-pants" class="col-4 col-form-label">Pants</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-pants" name="pants" required>
+                                    <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-shorts" class="col-4 col-form-label">Shorts</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shorts" name="shorts" required>
+                                    <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-sweatshirts" class="col-4 col-form-label">Sweatshirts</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-sweatshirts" name="sweatshirts" required>
+                                    <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-tops-sweaters" class="col-4 col-form-label">Tops/Sweaters</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-tops-sweaters" name="tops" required>
+                                    <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-shirts" class="col-4 col-form-label">Shirts</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shirts" name="shirts" required>
+                                    <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="sizing-jackets" class="col-4 col-form-label">Jackets</label>
+                            <div class="col-8">
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-jackets" name="jackets" required>
+                                    <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary save-btn">Save</button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="form-group row">
-                    <label for="delay-atc" class="col-2 col-form-label">Add to cart delay (ms)</label>
-                    <div class="col-4">
-                        <input min=0 class="form-control" type="number" name="delay_atc" id="delay-atc">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="delay-go-checkout" class="col-2 col-form-label">Proceed to checkout delay (ms)</label>
-                    <div class="col-4">
-                        <input class="form-control" type="number" name="delay_go_checkout" id="delay-go-checkout">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="max-price" class="col-2 col-form-label">Max product price</label>
-                    <div class="col-4">
-                        <input min=0 class="form-control" type="number" name="max_price" id="max-price">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="min-price" class="col-2 col-form-label">Min product price</label>
-                    <div class="col-4">
-                        <input min=0 class="form-control" type="number" name="min_price" id="min-price">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-
-            <br/>
-
-            <form id="options-form" data-form="billing">
-                <div class="form-group row">
-                    <label for="billing-name" class="col-2 col-form-label">Firstname + Lastname</label>
-                    <div class="col-10">
-                        <input class="form-control" pattern="(\w+)(\s)(\w+)" type="text" name="order_billing_name" id="billing-name" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="email" class="col-2 col-form-label">Email</label>
-                    <div class="col-10">
-                        <input class="form-control" type="email" name="order_email" id="email" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="phone" class="col-2 col-form-label">Phone</label>
-                    <div class="col-10">
-                        <input class="form-control" type="tel" name="order_tel" id="phone" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="address" class="col-2 col-form-label">Address</label>
-                    <div class="col-10">
-                        <input class="form-control" type="text" name="bo" id="address" required>
-                    </div>
-                </div>
-
-
-                <div class="form-group row">
-                    <label for="city" class="col-2 col-form-label">City</label>
-                    <div class="col-10">
-                        <input class="form-control" type="text" name="order_billing_city" id="city" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="zip" class="col-2 col-form-label">Zip</label>
-                    <div class="col-2">
-                        <input class="form-control" type="text" name="order_billing_zip" id="zip" required>
-                    </div>
-
-                    <label for="country" class="col-form-label">Country</label>
-                    <div class="col-6">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="country" name="order_billing_country">
-                            <option value="GB">UK</option>
-                            <option value="NB">UK (N. IRELAND)</option>
-                            <option value="">-</option>
-                            <option value="AT">AUSTRIA</option>
-                            <option value="BY">BELARUS</option>
-                            <option value="BE">BELGIUM</option>
-                            <option value="BG">BULGARIA</option>
-                            <option value="HR">CROATIA</option>
-                            <option value="CZ">CZECH REPUBLIC</option>
-                            <option value="DK">DENMARK</option>
-                            <option value="EE">ESTONIA</option>
-                            <option value="FI">FINLAND</option>
-                            <option value="FR">FRANCE</option>
-                            <option value="DE">GERMANY</option>
-                            <option value="GR">GREECE</option>
-                            <option value="HU">HUNGARY</option>
-                            <option value="IS">ICELAND</option>
-                            <option value="IE">IRELAND</option>
-                            <option value="IT">ITALY</option>
-                            <option value="LV">LATVIA</option>
-                            <option value="LT">LITHUANIA</option>
-                            <option value="LU">LUXEMBOURG</option>
-                            <option value="MC">MONACO</option>
-                            <option value="NL">NETHERLANDS</option>
-                            <option value="NO">NORWAY</option>
-                            <option value="PL">POLAND</option>
-                            <option value="PT">PORTUGAL</option>
-                            <option value="RO">ROMANIA</option>
-                            <option value="RU">RUSSIA</option>
-                            <option value="SK">SLOVAKIA</option>
-                            <option value="SI">SLOVENIA</option>
-                            <option value="ES">SPAIN</option>
-                            <option value="SE">SWEDEN</option>
-                            <option value="CH">SWITZERLAND</option>
-                            <option value="TR">TURKEY</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="credit_card_type" class="col-2 col-form-label">Card Type</label>
-                    <div class="col-10">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_type" name="credit_card_type">
-                            <option value="visa">Visa</option>
-                            <option value="american_express">American Express</option>
-                            <option value="master">Mastercard</option>
-                            <option value="solo">Solo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="card_number" class="col-2 col-form-label">Credit Card Number</label>
-                    <div class="col-10">
-                        <input class="form-control" type="text" name="cnb" id="card_number" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-2 col-form-label">Expiry</label>
-                    <div class="col-2">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_month" name="credit_card_month" required>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select>
-                    </div>
-                    <div class="col-2">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="credit_card_year" name="credit_card_year" required>
-                            <option value="2017">2017</option>
-                            <option value="2018">2018</option>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="ccv" class="col-2 col-form-label">CCV</label>
-                    <div class="col-2">
-                        <input class="form-control" type="text" name="vval" id="ccv" maxlength="4" size="4" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-
-            <br/>
-
-            <form data-form="sizings">
-                <div class="form-group row">
-                    <label for="sizing-accessories" class="col-2 col-form-label">Accessories</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-accessories" name="accessories" required>
-                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-t-shirts" class="col-2 col-form-label">T-shirts</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-t-shirts" name="t-shirts" required>
-                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-pants" class="col-2 col-form-label">Pants</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-pants" name="pants" required>
-                            <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-shorts" class="col-2 col-form-label">Shorts</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shorts" name="shorts" required>
-                            <option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-sweatshirts" class="col-2 col-form-label">Sweatshirts</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-sweatshirts" name="sweatshirts" required>
-                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-tops-sweaters" class="col-2 col-form-label">Tops/Sweaters</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-tops-sweaters" name="tops" required>
-                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-shirts" class="col-2 col-form-label">Shirts</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-shirts" name="shirts" required>
-                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="sizing-jackets" class="col-2 col-form-label">Jackets</label>
-                    <div class="col-8">
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sizing-jackets" name="jackets" required>
-                            <option value="Small">Small</option><option value="Medium">Medium</option><option value="Large">Large</option><option value="XLarge">XLarge</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Save</button>
-                <hr>
-            </form>
+            </div>
         </div>
     </div>
     <script type="text/javascript" src="js/lib/notify.min.js"></script>
