@@ -13,9 +13,20 @@
     <div class="container" style="min-width: 600px;">
         <div class="main">
             <h1 class="text-center">Supreme Bot Configuration</h1>
-            <h3>Preferences</h3>
-            <hr/>
 
+            <ul class="nav nav-tabs" id="menu-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-link-form="preferences">Preferences</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-link-form="billing">Billing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-link-form="sizings">Sizes</a>
+                </li>
+            </ul>
+
+            <br/>
             <form data-form="preferences">
                 <div class="form-group row">
                     <label for="autocheckout" class="col-2 col-form-label">Auto Checkout</label>
@@ -67,8 +78,6 @@
             </form>
 
             <br/>
-            <h3>Billing configuration</h3>
-            <hr/>
 
             <form id="options-form" data-form="billing">
                 <div class="form-group row">
@@ -219,8 +228,6 @@
             </form>
 
             <br/>
-            <h3>Sizing configuration</h3>
-            <hr/>
 
             <form data-form="sizings">
                 <div class="form-group row">
