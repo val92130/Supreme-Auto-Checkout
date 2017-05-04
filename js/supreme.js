@@ -106,13 +106,14 @@ function processCart(preferencesStore) {
  */
 function processCheckout(preferencesStore, billingStore) {
     const checkoutDelay = preferencesStore['delay_checkout'];
+    $("input[name='order[terms]']").trigger('click');
+
     for (let key of Object.keys(billingStore)) {
         const value = billingStore[key];
         $('#' + key).val(value);
-        $("input[name='order[terms]']").val(1);
     }
     timeout(() => {
-        $('#checkout_form').submit();
+        $('input[name=commit]').trigger('click');
     }, checkoutDelay, 'Checking out');
 }
 
