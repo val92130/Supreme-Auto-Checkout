@@ -1,31 +1,36 @@
-// Creation of the notification bar
-const notificationBar = document.createElement("div");
-document.body.prepend(notificationBar);
-notificationBar.style.width = '100%';
-notificationBar.style.textAlign = 'center';
-notificationBar.style.backgroundColor = '#cbffcd';
-notificationBar.style.lineHeight = '50px';
-notificationBar.style.height = '50px';
-notificationBar.style.fontSize = 'xx-large';
-
 // Checks for page change by repetidly checking the current page location and tracking change
 (() => {
     var currentPage = window.location.href;
     setInterval(function() {
         if (currentPage != window.location.href) {
             currentPage = window.location.href;
-            onPageChange(currentPage);
+            setTimeout(() => onPageChange(), 100);
         }
+        updateNotificationBar();
     }, 50);
-    onPageChange(currentPage);
+    updateNotificationBar();
+    onPageChange();
 })();
+
+function updateNotificationBar() {
+    if ($('#sup-notif-bar').length >= 1) return;
+    let notificationBar = document.createElement("div");
+    document.body.prepend(notificationBar);
+    notificationBar.style.width = '100%';
+    notificationBar.style.textAlign = 'center';
+    notificationBar.style.backgroundColor = '#cbffcd';
+    notificationBar.style.lineHeight = '50px';
+    notificationBar.style.height = '50px';
+    notificationBar.style.fontSize = 'medium';
+    notificationBar.id = "sup-notif-bar";
+}
 
 /**
  * Sets top notification bar text
  * @param  {} text The new text for the notification bar
  */
 function setNotificationBarText(text) {
-    notificationBar.innerText = text;
+    $('#sup-notif-bar').text(text);
 }
 
 /**
@@ -36,26 +41,47 @@ function setNotificationBarText(text) {
  */
 function timeout(fn, ms, actionName) {
     const now = new Date();
+    let shouldAbort = false;
+    let currentLocation = document.location.href;
+
     let interval = setInterval(() => {
+        if (currentLocation !== document.location.href) {
+            shouldAbort = true;
+            clearInterval(interval);
+            return;
+        }
         const d = new Date();
         const diff = (d.getTime() - now.getTime());
         setNotificationBarText((actionName || 'Action') + ' in : ' + ((ms - diff) / 1000));
     }, 100);
+
     setTimeout(() => {
         clearInterval(interval);
+        if (shouldAbort || currentLocation !== document.location.href) {
+            return;
+        }
         setNotificationBarText('Done');
         fn();
     }, ms);
 }
 
 /**
- * Attach an event on all links of the page to reload the page instead of loading in ajax
+ * Attach an event on product links of the page to reload the page instead of loading in ajax
  */
 function processLinks() {
-    let hrefs = $('body a');
+    let hrefs = $('body .inner-article a');
     for (let href of hrefs) {
-        $(href).on('click', function() {
+        $(href).on('click', function(e) {
             window.location.href = this.href;
+            if (!e)
+                e = window.event;
+
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            else {
+                e.cancelBubble = true;
+            }
         });
     }
 }
@@ -65,7 +91,7 @@ function processLinks() {
  * This function is called whenever a new page change occurs
  * @param  {String} location new location of the page
  */
-function onPageChange(location) {
+function onPageChange() {
     processLinks();
     getStores(['preferences', 'sizings', 'billing']).then((stores) => {
         // if stores are not configured yet..
@@ -73,7 +99,9 @@ function onPageChange(location) {
             setNotificationBarText('Bot not yet configured');
             return;
         }
-        setNotificationBarText('Waiting... Autocheckout ' + (stores[0].autocheckout ? 'enabled' : 'disabled'));
+        const autocheckout = stores[0].autocheckout;
+        const autopay = stores[0].autopay;
+        setNotificationBarText('Autocheckout ' + (autocheckout ? 'enabled' : 'disabled') + ', Autopay ' + (autopay ? 'enabled' : 'disabled'));
         if (!stores[0].autocheckout) return;
 
         if (isProductPage()) {
@@ -112,6 +140,9 @@ function processCheckout(preferencesStore, billingStore) {
         const value = billingStore[key];
         $('#' + key).val(value);
     }
+    if (!preferencesStore.autopay) {
+        return;
+    }
     timeout(() => {
         $('input[name=commit]').trigger('click');
     }, checkoutDelay, 'Checking out');
@@ -149,9 +180,12 @@ function processProduct(preferencesStore, sizingStore) {
         if (targetOption !== undefined) {
             targetOption.selected = true;
         }
-        submitBtn.click();
+
         timeout(() => {
-            window.location.href = '/shop/cart/';
+            submitBtn.click();
+            timeout(() => {
+                window.location.href = '/shop/cart/';
+            }, 100);
         }, atcDelay, 'Adding to cart');
     }
 }
