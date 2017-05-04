@@ -156,6 +156,27 @@ function processCheckout(preferencesStore, billingStore) {
  */
 function processProduct(preferencesStore, sizingStore) {
     if (!isSoldOut()) {
+        let maxPrice = preferencesStore.max_price;
+        let minPrice = preferencesStore.min_price;
+
+        console.log(maxPrice, minPrice);
+        let itemPrice = $('span[itemprop=price]').first().html();
+
+        if (itemPrice !== undefined) {
+            let price = itemPrice.replace(/\D/g,'');
+            if (!isNaN(price)) {
+                if (maxPrice !== undefined && price > maxPrice) {
+                    setNotificationBarText("Product price is too high, not checking out");
+                    return;
+                }
+
+                if (minPrice !== undefined && price < minPrice) {
+                    setNotificationBarText("Product price is too low, not checking out");
+                    return;
+                }
+            }
+        }
+
         let submitBtn = $('input[name=commit]');
         let productCategory = getProductCategory();
         let sizesOptions = getSizesOptions();
