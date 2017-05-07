@@ -6,7 +6,7 @@ function setStoreValue(val, storeName) {
     return new Promise((resolve, reject) => {
         const obj = {};
         obj[storeName] = val;
-        chrome.storage.sync.set(obj, () => {
+        chrome.storage.local.set(obj, () => {
             resolve();
         });
     });
@@ -14,7 +14,7 @@ function setStoreValue(val, storeName) {
 
 function getStore(name) {
     return new Promise((resolve, reject) => {
-        chrome.storage.sync.get(name, (items) => {
+        chrome.storage.local.get(name, (items) => {
             if (!Object.keys(items).length) {
                 resolve(undefined);
             } else {
