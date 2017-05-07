@@ -165,8 +165,6 @@ function processProduct(preferencesStore, sizingStore) {
     if (!isSoldOut()) {
         let maxPrice = preferencesStore.max_price;
         let minPrice = preferencesStore.min_price;
-
-        console.log(maxPrice, minPrice);
         let itemPrice = document.querySelector('[itemprop=price]');
 
         if (itemPrice !== null) {

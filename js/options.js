@@ -8,6 +8,7 @@ const defaultOptions = {
 };
 
 (() => {
+    $.material.init();
     const forms = document.getElementsByTagName('form');
     for (var form of forms) {
         const name = form.getAttribute('data-form');

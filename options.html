@@ -7,15 +7,19 @@
     <script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-material-design.min.css">
+    <link rel="stylesheet" type="text/css" href="css/ripples.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet"></head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    <script src="js/lib/ripples.min.js"></script>
+    <script src="js/lib/material.min.js"></script>
+</head>
 
 <body>
     <div class="container" style="min-width: 600px;">
-        <div class="main">
-            <h1 class="text-center">Supreme Bot Configuration</h1>
-            <br/>
-
+        <h1 class="text-center">Supreme Bot Configuration</h1>
+        <br/>
+        <div class="well">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#preferences-tab" role="tab">Preferences</a>
@@ -36,14 +40,23 @@
                         <div class="form-group row">
                             <label for="autocheckout" class="col-4 col-form-label">Auto Checkout</label>
                             <div class="col-4">
-                                <input id="autocheckout" class="form-control" type="checkbox" name="autocheckout">
+                                <div class="togglebutton">
+                                    <label>
+                                        <input name="autocheckout" type="checkbox" id="autocheckout">
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="autopay" class="col-4 col-form-label">Auto Payment</label>
                             <div class="col-4">
-                                <input id="autopay" class="form-control" type="checkbox" name="autopay">
+                                <div class="togglebutton">
+                                    <label>
+                                        <input name="autopay" type="checkbox" id="autopay">
+                                    </label>
+                                </div>
                             </div>
+
                         </div>
                         <div class="form-group row">
                             <label for="delay-checkout" class="col-4 col-form-label">Checkout delay (ms)</label>
@@ -81,7 +94,7 @@
                         </div>
                         <hr/>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary save-btn">Save</button>
+                            <button type="submit" class="btn btn-raised btn-success save-btn">Save</button>
                         </div>
                     </form>
                 </div>
@@ -235,7 +248,7 @@
                         </div>
                         <hr/>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary save-btn">Save</button>
+                            <button type="submit" class="btn btn-raised btn-success save-btn">Save</button>
                         </div>
                     </form>
                 </div>
@@ -315,7 +328,7 @@
 
                         <hr/>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary save-btn">Save</button>
+                            <button type="submit" class="btn btn-raised btn-success save-btn">Save</button>
                         </div>
                     </form>
                 </div>
