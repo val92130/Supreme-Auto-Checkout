@@ -2,20 +2,19 @@
 (() => {
     var currentPage = window.location.href;
     setInterval(function() {
+        updateNotificationBar();
         if (currentPage != window.location.href) {
             currentPage = window.location.href;
             setTimeout(() => onPageChange(), 100);
         }
-        updateNotificationBar();
     }, 50);
     updateNotificationBar();
     onPageChange();
 })();
 
 function updateNotificationBar() {
-    if ($('#sup-notif-bar').length >= 1) return;
+    if (document.getElementById('sup-notif-bar')) return;
     let notificationBar = document.createElement("div");
-    document.body.prepend(notificationBar);
     notificationBar.style.width = '100%';
     notificationBar.style.textAlign = 'center';
     notificationBar.style.backgroundColor = '#cbffcd';
@@ -23,6 +22,7 @@ function updateNotificationBar() {
     notificationBar.style.height = '50px';
     notificationBar.style.fontSize = 'medium';
     notificationBar.id = "sup-notif-bar";
+    document.body.prepend(notificationBar);
 }
 
 /**
@@ -30,7 +30,10 @@ function updateNotificationBar() {
  * @param  {} text The new text for the notification bar
  */
 function setNotificationBarText(text) {
-    $('#sup-notif-bar').text(text);
+    let bar = document.getElementById('sup-notif-bar');
+    if (bar) {
+        bar.textContent = text;
+    }
 }
 
 /**
@@ -69,9 +72,13 @@ function timeout(fn, ms, actionName) {
  * Attach an event on product links of the page to reload the page instead of loading in ajax
  */
 function processLinks() {
-    let hrefs = $('body .inner-article a');
-    for (let href of hrefs) {
-        $(href).on('click', function(e) {
+    let innerArticles = document.getElementsByClassName('inner-article');
+    if (!innerArticles) return;
+
+    const links = document.querySelectorAll('.inner-article a');
+    for (let link of links) {
+
+        link.addEventListener('click', function(e) {
             window.location.href = this.href;
             if (!e)
                 e = window.event;
@@ -134,17 +141,16 @@ function processCart(preferencesStore) {
  */
 function processCheckout(preferencesStore, billingStore) {
     const checkoutDelay = preferencesStore['delay_checkout'];
-    $("input[name='order[terms]']").trigger('click');
+    document.getElementsByName('order[terms]')[0].click();
 
     for (let key of Object.keys(billingStore)) {
-        const value = billingStore[key];
-        $('#' + key).val(value);
+        document.getElementById(key).value = billingStore[key];
     }
     if (!preferencesStore.autopay) {
         return;
     }
     timeout(() => {
-        $('input[name=commit]').trigger('click');
+        document.getElementsByName('commit')[0].click();
     }, checkoutDelay, 'Checking out');
 }
 
@@ -153,6 +159,7 @@ function processCheckout(preferencesStore, billingStore) {
  * try to figure out if the product is sold out or not, and if not, it will find the best available size
  * based on the user's preferences and then it will add the item to cart
  * @param  {Object} preferencesStore Object that stores the preference options
+ * @param  {Object} sizingStore Object that stores the sizings options
  */
 function processProduct(preferencesStore, sizingStore) {
     if (!isSoldOut()) {
@@ -160,10 +167,10 @@ function processProduct(preferencesStore, sizingStore) {
         let minPrice = preferencesStore.min_price;
 
         console.log(maxPrice, minPrice);
-        let itemPrice = $('span[itemprop=price]').first().html();
+        let itemPrice = document.querySelector('[itemprop=price]');
 
-        if (itemPrice !== undefined) {
-            let price = itemPrice.replace(/\D/g,'');
+        if (itemPrice !== null) {
+            let price = itemPrice.innerHTML.replace(/\D/g,'');
             if (!isNaN(price)) {
                 if (maxPrice !== undefined && price > maxPrice) {
                     setNotificationBarText("Product price is too high, not checking out");
@@ -177,11 +184,11 @@ function processProduct(preferencesStore, sizingStore) {
             }
         }
 
-        let submitBtn = $('input[name=commit]');
+        let submitBtn = document.querySelector('[name=commit]');
         let productCategory = getProductCategory();
         let sizesOptions = getSizesOptions();
         let categorySize = sizingStore[productCategory];
-        
+
         let targetOption = categorySize !== undefined ? sizesOptions.filter(x => {
             const productSize = x.text.toLowerCase();
             const splitted = productSize.split('/');
@@ -193,14 +200,12 @@ function processProduct(preferencesStore, sizingStore) {
         })[0] : sizesOptions[0];
 
         // If no matching size was found, take the first size available
-        if (targetOption === undefined) {
+        if (!targetOption) {
             targetOption = sizesOptions[0];
         }
-        
+
         let atcDelay = preferencesStore['delay_atc'];
-        if (targetOption !== undefined) {
-            targetOption.selected = true;
-        }
+        targetOption.selected = true;
 
         timeout(() => {
             submitBtn.click();
@@ -247,7 +252,7 @@ function getProductCategory() {
  * @return {Boolean}
  */
 function isSoldOut() {
-    return $('input[name=commit]').length === 0;
+    return document.querySelector('input[name=commit]') === null;
 }
 
 /**
