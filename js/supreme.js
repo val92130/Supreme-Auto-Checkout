@@ -146,12 +146,11 @@ function processCheckout(preferencesStore, billingStore) {
     for (let key of Object.keys(billingStore)) {
         document.getElementById(key).value = billingStore[key];
     }
-    if (!preferencesStore.autopay) {
-        return;
+    if (preferencesStore.autopay) {
+        timeout(() => {
+            document.getElementsByName('commit')[0].click();
+        }, checkoutDelay, 'Checking out');
     }
-    timeout(() => {
-        document.getElementsByName('commit')[0].click();
-    }, checkoutDelay, 'Checking out');
 }
 
 /**
@@ -187,20 +186,7 @@ function processProduct(preferencesStore, sizingStore) {
         let sizesOptions = getSizesOptions();
         let categorySize = sizingStore[productCategory];
 
-        let targetOption = categorySize !== undefined ? sizesOptions.filter(x => {
-            const productSize = x.text.toLowerCase();
-            const splitted = productSize.split('/');
-            if (!isNaN(productSize)) {
-                return productSize === categorySize.toLowerCase();
-            }
-            return productSize === categorySize.toLowerCase() || productSize[0] === categorySize[0].toLowerCase()
-              || (splitted[1] ? splitted[1][0] === categorySize[0].toLowerCase() : false);
-        })[0] : sizesOptions[0];
-
-        // If no matching size was found, take the first size available
-        if (!targetOption) {
-            targetOption = sizesOptions[0];
-        }
+        let targetOption = sizesOptions.find(x => sizeMatch(categorySize, x.text)) || sizesOptions[0];
 
         let atcDelay = preferencesStore['delay_atc'];
         targetOption.selected = true;
@@ -212,6 +198,25 @@ function processProduct(preferencesStore, sizingStore) {
             }, 100);
         }, atcDelay, 'Adding to cart');
     }
+}
+
+function sizeMatch(sizeA, sizeB) {
+    sizeA = sizeA.toString().toLowerCase();
+    sizeB = sizeB.toString().toLowerCase();
+
+    if (!sizeB || !sizeA) return false;
+
+    if (sizeA === sizeB) {
+        return true;
+    }
+
+    if (!isNaN(sizeA) || !isNaN(sizeB)) return false;
+
+    // Match sizes like 'S/M';
+    const splitA = sizeA.split('/');
+    const splitB = sizeB.split('/');
+
+    return splitA.some(x => sizeB[0] === x[0]) || splitB.some(x => sizeA[0] === x[0]);
 }
 
 /**
