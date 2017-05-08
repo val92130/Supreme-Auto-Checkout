@@ -170,12 +170,12 @@ function processProduct(preferencesStore, sizingStore) {
             let price = itemPrice.innerHTML.replace(/\D/g,'');
             if (!isNaN(price)) {
                 if (maxPrice !== undefined && price > maxPrice) {
-                    setNotificationBarText("Product price is too high, not checking out");
+                    setNotificationBarText('Product price is too high, not checking out');
                     return;
                 }
 
                 if (minPrice !== undefined && price < minPrice) {
-                    setNotificationBarText("Product price is too low, not checking out");
+                    setNotificationBarText('Product price is too low, not checking out');
                     return;
                 }
             }
@@ -186,7 +186,15 @@ function processProduct(preferencesStore, sizingStore) {
         let sizesOptions = getSizesOptions();
         let categorySize = sizingStore[productCategory];
 
-        let targetOption = sizesOptions.find(x => sizeMatch(categorySize, x.text)) || sizesOptions[0];
+        let targetOption = sizesOptions.find(x => sizeMatch(categorySize, x.text));
+
+        if (!targetOption) {
+            if (preferencesStore.nopickanysize) {
+                setNotificationBarText('The desired size is not available');
+                return;
+            }
+            targetOption = sizesOptions[0];
+        }
 
         let atcDelay = preferencesStore['delay_atc'];
         targetOption.selected = true;
