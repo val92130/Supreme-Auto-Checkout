@@ -7,3 +7,12 @@
     text-align: center;
     margin-bottom: 2%;
 }
+
+.form-group {
+     padding-bottom: auto;
+     margin: auto;
+ }
+
+.well {
+    padding: 0 !important;
+}
