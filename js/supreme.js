@@ -146,6 +146,13 @@ function processCheckout(preferencesStore, billingStore) {
     for (let key of Object.keys(billingStore)) {
         document.getElementById(key).value = billingStore[key];
     }
+
+    if (preferencesStore.bypasscaptcha) {
+        let captcha = document.querySelector('.g-recaptcha');
+        if (captcha) {
+            captcha.remove();
+        }
+    }
     if (preferencesStore.autopay) {
         timeout(() => {
             document.getElementsByName('commit')[0].click();
