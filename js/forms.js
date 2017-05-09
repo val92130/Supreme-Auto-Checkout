@@ -1,0 +1,72 @@
+const preferencesForm = {
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "type": "object",
+  "properties": {
+    "autoCheckout": {
+      "type": "boolean",
+      "title": "Auto Checkout",
+      "description": "If enabled, the product will be automatically added to your cart and will proceed to the checkout page",
+      "default": false,
+      "required": true,
+    },
+    "autoPay": {
+      "type": "boolean",
+      "title": "Auto Payment",
+      "description": "Will automatically submit the checkout form when on the checkout page",
+      "default": false,
+      "required": true,
+    },
+    "strictSize": {
+      "type": "boolean",
+      "title": "Strict size choice",
+      "description": "If enabled, the bot will NOT add a product to the cart if your desired size isn't available",
+      "default": false,
+      "required": true,
+    },
+    "captchaBypass": {
+      "type": "boolean",
+      "title": "Bypass Captcha (beta)",
+      "description": "If enabled, the bot will try to bypass the captcha by removing it from the checkout page, not guaranteed to work",
+      "default": false,
+      "required": true,
+    },
+    "addToCartDelay": {
+      "type": "integer",
+      "title": "Add to cart delay (ms)",
+      "description": "Delay before adding the product to the cart if autocheckout is enabled",
+      "minimum": 1,
+      "default": 300,
+      "required": true,
+    },
+    "goToCheckoutDelay": {
+      "type": "integer",
+      "title": "Proceed to checkout delay (ms)",
+      "description": "Delay before going to checkout once the product is added to the cart",
+      "minimum": 1,
+      "default": 200,
+      "required": true,
+    },
+    "checkoutDelay": {
+      "type": "integer",
+      "title": "Checkout delay (ms)",
+      "description": "Delay before submitting the payment once on the payment page",
+      "minimum": 1,
+      "default": 1500,
+      "required": true,
+    },
+    "maxPrice": {
+      "type": "integer",
+      "title": "Maximum product price",
+      "description": "Maximum product price, the product will not be added to the cart if it is higher than this price",
+      "minimum": 0,
+      "required": false,
+    },
+    "minPrice": {
+      "type": "integer",
+      "title": "Minimum product price",
+      "description": "Minimum product price, the product will not be added to the cart if it is lower than this price",
+      "minimum": 0,
+      "required": false,
+    },
+  }
+};

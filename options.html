@@ -7,12 +7,14 @@
     <script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap-material-design.min.css">
     <link rel="stylesheet" type="text/css" href="css/ripples.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link rel="stylesheet" type="text/css" href="css/json-forms.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <script src="js/lib/ripples.min.js"></script>
     <script src="js/lib/material.min.js"></script>
+    <script src="js/lib/json-forms.min.js"></script>
+    <script src="js/lib/json-forms-bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -34,82 +36,8 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <div class="tab-pane active" id="preferences-tab" role="tabpanel">
-                    <form data-form="preferences">
-                        <div class="form-group row">
-                            <label for="autocheckout" class="col-4 col-form-label">Auto Checkout</label>
-                            <div class="col-4">
-                                <div class="togglebutton">
-                                    <label>
-                                        <input name="autocheckout" type="checkbox" id="autocheckout">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="autopay" class="col-4 col-form-label">Auto Payment</label>
-                            <div class="col-4">
-                                <div class="togglebutton">
-                                    <label>
-                                        <input name="autopay" type="checkbox" id="autopay">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="nopickanysize" class="col-4 col-form-label">Strict size choice</label>
-                            <div class="col-4">
-                                <div class="togglebutton">
-                                    <label>
-                                        <input name="nopickanysize" type="checkbox" id="nopickanysize">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="bypasscaptcha" class="col-4 col-form-label">Bypass captcha (beta)</label>
-                            <div class="col-4">
-                                <div class="togglebutton">
-                                    <label>
-                                        <input name="bypasscaptcha" type="checkbox" id="bypasscaptcha">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="delay-atc" class="col-4 col-form-label">Add to cart delay (ms)</label>
-                            <div class="col-4">
-                                <input min=0 class="form-control" type="number" name="delay_atc" id="delay-atc">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="delay-go-checkout" class="col-4 col-form-label">Proceed to checkout delay (ms)</label>
-                            <div class="col-4">
-                                <input class="form-control" type="number" name="delay_go_checkout" id="delay-go-checkout">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="delay-checkout" class="col-4 col-form-label">Checkout delay (ms)</label>
-                            <div class="col-4">
-                                <input min=0 class="form-control" type="number" name="delay_checkout" id="delay-checkout">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="max-price" class="col-4 col-form-label">Max product price</label>
-                            <div class="col-4">
-                                <input min=0 class="form-control" type="number" name="max_price" id="max-price">
-                            </div>
-                        </div>
+                    <form id="preferences-form">
 
-                        <div class="form-group row">
-                            <label for="min-price" class="col-4 col-form-label">Min product price</label>
-                            <div class="col-4">
-                                <input min=0 class="form-control" type="number" name="min_price" id="min-price">
-                            </div>
-                        </div>
-                        <hr/>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-raised btn-success save-btn">Save</button>
-                        </div>
                     </form>
                 </div>
                 <div class="tab-pane" id="billing-tab" role="tabpanel">
@@ -352,6 +280,8 @@
     <script type="text/javascript" src="js/lib/notify.min.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/storage.js"></script>
+    <script type="text/javascript" src="js/forms.js"></script>
+    <script type="text/javascript" src="js/formbuilder.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
 </body>
 
