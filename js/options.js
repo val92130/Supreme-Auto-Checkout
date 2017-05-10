@@ -51,3 +51,5 @@ function createPanes(forms, container) {
   }
   container.appendChild(tabContainer);
 }
+
+$.material.init();

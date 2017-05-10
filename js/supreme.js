@@ -77,7 +77,6 @@ function processLinks() {
 
     const links = document.querySelectorAll('.inner-article a');
     for (let link of links) {
-
         link.addEventListener('click', function(e) {
             window.location.href = this.href;
             if (!e)
@@ -98,27 +97,26 @@ function processLinks() {
  * This function is called whenever a new page change occurs
  * @param  {String} location new location of the page
  */
-function onPageChange() {
+async function onPageChange() {
     processLinks();
-    getStores(['preferences', 'sizings', 'billing']).then((stores) => {
-        // if stores are not configured yet..
-        if (stores.some(x => x === undefined)) {
-            setNotificationBarText('Bot not yet configured');
-            return;
-        }
-        const autocheckout = stores[0].autocheckout;
-        const autopay = stores[0].autopay;
-        setNotificationBarText('Autocheckout ' + (autocheckout ? 'enabled' : 'disabled') + ', Autopay ' + (autopay ? 'enabled' : 'disabled'));
-        if (!stores[0].autocheckout) return;
+    const stores = await getStores(['preferences', 'sizings', 'billing']);
+    // if stores are not configured yet..
+    if (stores.some(x => x === undefined)) {
+        setNotificationBarText('Bot not yet configured');
+        return;
+    }
+    const autoCheckout = stores[0].autoCheckout;
+    const autoPay = stores[0].autoPay;
+    setNotificationBarText('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
+    if (!stores[0].autoCheckout) return;
 
-        if (isProductPage()) {
-            processProduct(stores[0], stores[1]);
-        } else if (isCart()) {
-            processCart(stores[0]);
-        } else if (isCheckout()) {
-            processCheckout(stores[0], stores[2]);
-        }
-    });
+    if (isProductPage()) {
+        processProduct(stores[0], stores[1]);
+    } else if (isCart()) {
+        processCart(stores[0]);
+    } else if (isCheckout()) {
+        processCheckout(stores[0], stores[2]);
+    }
 }
 
 /**
@@ -127,7 +125,7 @@ function onPageChange() {
  * @param  {Object} preferencesStore Object that stores the preference options
  */
 function processCart(preferencesStore) {
-    const delay = preferencesStore['delay_go_checkout'];
+    const delay = preferencesStore.goToCheckoutDelay;
     timeout(() => {
         document.location.href = '/checkout';
     }, delay, 'Going to checkout');
@@ -140,20 +138,20 @@ function processCart(preferencesStore) {
  * @param  {Object} billingStore Object that stores the billings options
  */
 function processCheckout(preferencesStore, billingStore) {
-    const checkoutDelay = preferencesStore['delay_checkout'];
+    const checkoutDelay = preferencesStore.checkoutDelay;
     document.getElementsByName('order[terms]')[0].click();
 
     for (let key of Object.keys(billingStore)) {
         document.getElementById(key).value = billingStore[key];
     }
 
-    if (preferencesStore.bypasscaptcha) {
+    if (preferencesStore.captchaBypass) {
         let captcha = document.querySelector('.g-recaptcha');
         if (captcha) {
             captcha.remove();
         }
     }
-    if (preferencesStore.autopay) {
+    if (preferencesStore.autoPay) {
         timeout(() => {
             document.getElementsByName('commit')[0].click();
         }, checkoutDelay, 'Checking out');
@@ -169,8 +167,8 @@ function processCheckout(preferencesStore, billingStore) {
  */
 function processProduct(preferencesStore, sizingStore) {
     if (!isSoldOut()) {
-        let maxPrice = preferencesStore.max_price;
-        let minPrice = preferencesStore.min_price;
+        let maxPrice = preferencesStore.maxPrice;
+        let minPrice = preferencesStore.minPrice;
         let itemPrice = document.querySelector('[itemprop=price]');
 
         if (itemPrice !== null) {
@@ -196,14 +194,14 @@ function processProduct(preferencesStore, sizingStore) {
         let targetOption = sizesOptions.find(x => sizeMatch(categorySize, x.text));
 
         if (!targetOption) {
-            if (preferencesStore.nopickanysize) {
+            if (preferencesStore.strictSize) {
                 setNotificationBarText('The desired size is not available');
                 return;
             }
             targetOption = sizesOptions[0];
         }
 
-        let atcDelay = preferencesStore['delay_atc'];
+        let atcDelay = preferencesStore.addToCartDelay;
         targetOption.selected = true;
 
         timeout(() => {

@@ -38,7 +38,7 @@ class FormBuilder {
 
     const btn = document.createElement('input');
     btn.type = 'submit';
-    btn.className = 'btn btn-success save-btn';
+    btn.className = 'btn btn-raised btn-primary save-btn';
     btn.innerText = 'Save';
     formNode.addEventListener('submit', async () => {
       await this.onSave();
