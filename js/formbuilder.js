@@ -34,17 +34,18 @@ class FormBuilder {
     btnContainer.style.textAlign = 'center';
     btnContainer.style.marginTop = '20px';
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
+    const formNode = this.targetNode.getElementsByTagName('form')[0];
+
+    const btn = document.createElement('input');
+    btn.type = 'submit';
     btn.className = 'btn btn-success save-btn';
     btn.innerText = 'Save';
-    btn.addEventListener('click', async () => {
+    formNode.addEventListener('submit', async () => {
       await this.onSave();
     });
 
     btnContainer.appendChild(btn);
-
-    this.targetNode.appendChild(btnContainer);
+    formNode.appendChild(btnContainer);
   }
 
   async onSave() {
