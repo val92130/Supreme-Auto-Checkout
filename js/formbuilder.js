@@ -50,7 +50,7 @@ class FormBuilder {
 
   async onSave() {
     const isValid = this.form.validate();
-    console.log(this.form.getData());
+    console.log(isValid);
     if (isValid) {
       await setStoreValue(this.form.getData(), this.name);
       success('Configuration saved !');
