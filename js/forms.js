@@ -207,8 +207,10 @@ const _forms = [
       "order_billing_name": {
         "type": "string",
         "title": "Firstname and Lastname",
+        "description": "Firstname and Lastname separated by a space",
         "required": true,
-        "minLength": 1
+        "minLength": 1,
+        "pattern": /(\w+)(\s)(\w+)/
       },
       "order_email": {
         "type": "string",
