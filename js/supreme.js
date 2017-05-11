@@ -72,10 +72,8 @@ function timeout(fn, ms, actionName) {
  * Attach an event on product links of the page to reload the page instead of loading in ajax
  */
 function processLinks() {
-    let innerArticles = document.getElementsByClassName('inner-article');
-    if (!innerArticles) return;
     let links = document.links;
-    
+
     for (let link of links) {
         link.addEventListener('click', function(e) {
             window.location.href = this.href;
@@ -109,7 +107,6 @@ function processSoldOutProducts(hideSoldOut) {
  */
 async function onPageChange() {
     processLinks();
-
 
     const stores = await getStores(['preferences', 'sizings', 'billing']);
     // if stores are not configured yet..
