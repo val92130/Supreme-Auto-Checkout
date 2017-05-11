@@ -92,6 +92,10 @@ function processLinks() {
     }
 }
 
+function processSoldOutProducts() {
+    Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), x => x.style.display = 'block');
+}
+
 
 /**
  * This function is called whenever a new page change occurs
@@ -99,6 +103,8 @@ function processLinks() {
  */
 async function onPageChange() {
     processLinks();
+    processSoldOutProducts();
+    
     const stores = await getStores(['preferences', 'sizings', 'billing']);
     // if stores are not configured yet..
     if (stores.some(x => x === undefined)) {
