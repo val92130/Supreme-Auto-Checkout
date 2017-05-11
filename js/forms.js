@@ -160,6 +160,13 @@ const _forms = [
         "default": false,
         "required": true,
       },
+      "hideSoldOut": {
+        "type": "boolean",
+        "title": "Hide sold out products",
+        "description": "If enabled, the sold out products won't be shown on the product list",
+        "default": false,
+        "required": true,
+      },
       "addToCartDelay": {
         "type": "integer",
         "title": "Add to cart delay (ms)",

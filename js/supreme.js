@@ -74,8 +74,8 @@ function timeout(fn, ms, actionName) {
 function processLinks() {
     let innerArticles = document.getElementsByClassName('inner-article');
     if (!innerArticles) return;
-
-    const links = document.querySelectorAll('.inner-article a');
+    let links = document.links;
+    
     for (let link of links) {
         link.addEventListener('click', function(e) {
             window.location.href = this.href;
@@ -92,8 +92,14 @@ function processLinks() {
     }
 }
 
-function processSoldOutProducts() {
+function processSoldOutProducts(hideSoldOut) {
     Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), x => x.style.display = 'block');
+    if (hideSoldOut) {
+        let sold_outs = Array.prototype.filter.call(document.getElementsByTagName('article'), x => x.getElementsByClassName('sold_out_tag').length);
+        for (let node of sold_outs) {
+            node.remove();
+        }
+    }
 }
 
 
@@ -103,14 +109,16 @@ function processSoldOutProducts() {
  */
 async function onPageChange() {
     processLinks();
-    processSoldOutProducts();
-    
+
+
     const stores = await getStores(['preferences', 'sizings', 'billing']);
     // if stores are not configured yet..
     if (stores.some(x => x === undefined)) {
         setNotificationBarText('Bot not yet configured');
         return;
     }
+    const hideSoldOut = stores[0].hideSoldOut;
+    processSoldOutProducts(hideSoldOut);
     const autoCheckout = stores[0].autoCheckout;
     const autoPay = stores[0].autoPay;
     setNotificationBarText('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
