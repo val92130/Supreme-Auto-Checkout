@@ -260,7 +260,7 @@ const _forms = [
   {
     "category": "Palace",
     "type": "object",
-    "name": "sizings",
+    "name": "preferences",
     "properties": _preferences,
   },
   {
