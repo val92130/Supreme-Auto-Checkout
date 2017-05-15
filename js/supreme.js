@@ -108,7 +108,7 @@ function processSoldOutProducts(hideSoldOut) {
 async function onPageChange() {
     processLinks();
 
-    const stores = await getStores(['preferences', 'sizings', 'billing']);
+    const stores = await getOptions('Supreme', ['preferences', 'sizings', 'billing']);
     // if stores are not configured yet..
     if (stores.some(x => x === undefined)) {
         setNotificationBarText('Bot not yet configured');
@@ -200,25 +200,37 @@ function processProduct(preferencesStore, sizingStore) {
         let submitBtn = document.querySelector('[name=commit]');
         let productCategory = getProductCategory();
         let sizesOptions = getSizesOptions();
-        let categorySize = sizingStore[productCategory];
 
-        let targetOption = sizesOptions.find(x => sizeMatch(categorySize, x.text));
+        // If sizes options are available
+        if (sizesOptions.length) {
+            let categorySize = sizingStore[productCategory];
 
-        if (!targetOption) {
-            if (preferencesStore.strictSize) {
-                setNotificationBarText('The desired size is not available');
-                return;
+            let targetOption = sizesOptions.find(x => sizeMatch(categorySize, x.text));
+
+            if (!targetOption) {
+                if (preferencesStore.strictSize) {
+                    setNotificationBarText('The desired size is not available');
+                    return;
+                }
+                targetOption = sizesOptions[0];
             }
-            targetOption = sizesOptions[0];
+            targetOption.selected = true;
         }
 
         let atcDelay = preferencesStore.addToCartDelay;
-        targetOption.selected = true;
-
         timeout(() => {
             submitBtn.click();
+            let count = 0;
+
+            function proccess(currentCount) {
+                if (document.getElementById('cart') || currentCount >= 10) {
+                    window.location.href = '/shop/cart/';
+                } else {
+                    timeout(() => proccess(currentCount + 1), 100, 'Waiting for product to be in cart...');
+                }
+            }
             timeout(() => {
-                window.location.href = '/shop/cart/';
+                proccess(count);
             }, 100);
         }, atcDelay, 'Adding to cart');
     }

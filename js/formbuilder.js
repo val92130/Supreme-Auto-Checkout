@@ -19,7 +19,7 @@ class FormBuilder {
   }
 
   async getInitialData() {
-    return await getStore(this.category, this.name);
+    return await getOption(this.category, this.name);
   }
 
   async render() {
@@ -51,9 +51,8 @@ class FormBuilder {
 
   async onSave() {
     const isValid = this.form.validate();
-    console.log(isValid);
     if (isValid) {
-      await setStoreValue(this.category, this.name, this.form.getData());
+      await setOptionValue(this.category, this.name, this.form.getData());
       success('Configuration saved !');
     }
   }

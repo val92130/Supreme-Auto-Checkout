@@ -1,27 +1,28 @@
-function setStoreValue(category, storeName, value) {
+async function setOptionValue(category, optName, value) {
+    const store = await getAllOptions(category);
     return new Promise((resolve, reject) => {
         const obj = {};
-        obj[storeName] = value;
-        const t = {};
-        t[category] = obj;
-        chrome.storage.local.set(t, () => {
+        store[optName] = value;
+        obj[category] = store;
+        chrome.storage.local.set(obj, () => {
             resolve();
         });
     });
 }
 
-function getStore(category, name) {
+function getAllOptions(category) {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(category, (items) => {
-            if (!Object.keys(items).length) {
-                resolve(undefined);
-            } else {
-                resolve(items[category][name]);
-            }
+            resolve(items[category]);
         });
     });
 }
 
-function getStores(names) {
-    return Promise.all(names.map(x => getStore(x)));
+async function getOption(category, name) {
+    const options = await getAllOptions(category);
+    return options[name];
+}
+
+function getOptions(category, names) {
+    return Promise.all(names.map(x => getOption(category, x)));
 }
