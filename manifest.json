@@ -20,6 +20,6 @@
         "matches": [
             "*://*.supremenewyork.com/*"
         ],
-        "js": ["js/storage.js", "js/lib/jquery-3.2.1.min.js", "js/supreme.js"]
+        "js": ["js/storage.js", "js/lib/jquery-3.2.1.min.js", "js/BaseManager.js", "js/supreme.js"]
     }]
 }

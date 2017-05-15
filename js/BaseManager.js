@@ -3,6 +3,35 @@ class BaseManager {
     this.notificationBar = this.createNotificationBar();
   }
 
+  start() {
+    // Checks for page change by repetidly checking the current page location and tracking change
+    (() => {
+      var currentPage = window.location.href;
+      setInterval(() => {
+        this.updateNotificationBar();
+        if (currentPage != window.location.href) {
+          currentPage = window.location.href;
+          setTimeout(() => this.onPageChange(), 100);
+        }
+      }, 50);
+      this.updateNotificationBar();
+      this.onPageChange();
+    })();
+  }
+
+  updateNotificationBar() {
+    if (document.getElementById('sup-notif-bar')) return;
+    let notificationBar = document.createElement("div");
+    notificationBar.style.width = '100%';
+    notificationBar.style.textAlign = 'center';
+    notificationBar.style.backgroundColor = '#cbffcd';
+    notificationBar.style.lineHeight = '50px';
+    notificationBar.style.height = '50px';
+    notificationBar.style.fontSize = 'medium';
+    notificationBar.id = "sup-notif-bar";
+    document.body.prepend(notificationBar);
+  }
+
   /**
    * Helper timeout function to add a timer in the notification bar
    * @param  {Function} fn Function to be called after the delay
@@ -55,22 +84,8 @@ class BaseManager {
   setNotificationBarText(text) {
     this.notificationBar.textContent = text;
   }
-}
-
-class SupremeManager extends BaseManager {
-  constructor() {
-
-  }
 
   onPageChange() {
-
-  }
-
-  onCheckout() {
-
-  }
-
-  onProductPage() {
 
   }
 }
