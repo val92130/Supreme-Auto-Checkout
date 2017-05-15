@@ -1,20 +1,22 @@
-function setStoreValue(val, storeName) {
+function setStoreValue(category, storeName, value) {
     return new Promise((resolve, reject) => {
         const obj = {};
-        obj[storeName] = val;
-        chrome.storage.local.set(obj, () => {
+        obj[storeName] = value;
+        const t = {};
+        t[category] = obj;
+        chrome.storage.local.set(t, () => {
             resolve();
         });
     });
 }
 
-function getStore(name) {
+function getStore(category, name) {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get(name, (items) => {
+        chrome.storage.local.get(category, (items) => {
             if (!Object.keys(items).length) {
                 resolve(undefined);
             } else {
-                resolve(items[name]);
+                resolve(items[category][name]);
             }
         });
     });

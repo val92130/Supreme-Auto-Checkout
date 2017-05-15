@@ -15,10 +15,11 @@ class FormBuilder {
     this.form = BrutusinForms.create(schema);
     this.targetNode = targetNode;
     this.name = name;
+    this.category = schema.category;
   }
 
   async getInitialData() {
-    return await getStore(this.name);
+    return await getStore(this.category, this.name);
   }
 
   async render() {
@@ -52,7 +53,7 @@ class FormBuilder {
     const isValid = this.form.validate();
     console.log(isValid);
     if (isValid) {
-      await setStoreValue(this.form.getData(), this.name);
+      await setStoreValue(this.category, this.name, this.form.getData());
       success('Configuration saved !');
     }
   }

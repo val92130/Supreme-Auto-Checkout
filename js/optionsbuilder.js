@@ -131,7 +131,7 @@ class OptionsBuilder {
       tabPane.appendChild(inner);
       tabContainer.appendChild(tabPane);
 
-      const form = new FormBuilder(forms[i], inner, formCategory + '-' + formName);
+      const form = new FormBuilder(forms[i], inner, formName);
       form.render();
     }
     return tabContainer;
