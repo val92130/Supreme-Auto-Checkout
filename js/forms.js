@@ -19,7 +19,7 @@ const cards = [{
 
 const sizes = ["Small", "Medium", "Large", "XLarge"];
 const sizesPants = ["28", "30", "32", "34", "36", "38", "40"];
-
+const shoeSizes = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "14.5"];
 const currentYear = new Date().getFullYear();
 
 const _preferences = {
@@ -155,6 +155,13 @@ const _sizings = {
     "minLength": 1,
     "enum": sizes
   },
+  "shoes": {
+    "type": "string",
+    "title": "Shoes",
+    "required": true,
+    "minLength": 1,
+    "enum": shoeSizes
+  }
 };
 
 const _forms = [
