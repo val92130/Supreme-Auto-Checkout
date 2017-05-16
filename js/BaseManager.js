@@ -88,4 +88,23 @@ class BaseManager {
   onPageChange() {
 
   }
+
+  sizeMatch(sizeA, sizeB) {
+    sizeA = sizeA.toString().toLowerCase();
+    sizeB = sizeB.toString().toLowerCase();
+
+    if (!sizeB || !sizeA) return false;
+
+    if (sizeA === sizeB) {
+      return true;
+    }
+
+    if (!isNaN(sizeA) || !isNaN(sizeB)) return false;
+
+    // Match sizes like 'S/M';
+    const splitA = sizeA.split('/');
+    const splitB = sizeB.split('/');
+
+    return splitA.some(x => sizeB[0] === x[0]) || splitB.some(x => sizeA[0] === x[0]);
+  }
 }
