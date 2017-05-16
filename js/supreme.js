@@ -91,9 +91,11 @@ class SupremeManager extends BaseManager {
   processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
     document.getElementsByName('order[terms]')[0].click();
-
+    
     for (let key of Object.keys(this.billing)) {
-      document.getElementById(key).value = this.billing[key];
+      let el = document.getElementById(key);
+      el.value = this.billing[key];
+      el.dispatchEvent(new Event('change'));
     }
 
     if (this.preferences.captchaBypass) {
