@@ -11,23 +11,33 @@ const options = {
 };
 
 var products = {};
+var lastUpdate = new Date();
 
 app.use(cors());
 
-function updateProducts() {
+function getProducts(callback) {
   request(options, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      products = JSON.parse(body).products_and_categories;
+      callback(undefined, JSON.parse(body).products_and_categories);
+    } else {
+      callback({ error });
     }
   });
 }
 
 app.get('/products.json', function(req, res){
-  res.json(products);
-});
+  var now = new Date();
+  var diff = (now.getTime() - lastUpdate.getTime()) / 1000;
 
-setInterval(() => {
-  updateProducts();
-}, 3000);
+  if (diff >= 10) {
+    lastUpdate = now;
+    getProducts((err, prod) => {
+      products = prod;
+      res.json(err ? err : products);
+    });
+  } else {
+    res.json(products);
+  }
+});
 
 app.listen(3000);
