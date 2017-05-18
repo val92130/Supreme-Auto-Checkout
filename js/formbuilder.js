@@ -19,10 +19,16 @@ class FormBuilder {
   }
 
   async getInitialData() {
-    return await getOption(this.category, this.name);
+    let options = await getOption(this.category, this.name);
+    return options;
   }
 
   async render() {
+    const store = await getAllOptions(this.category);
+    if (store === undefined) {
+      createStore(this.category);
+    }
+    
     const initialData = await this.getInitialData();
 
     if (initialData !== undefined) {

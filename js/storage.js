@@ -20,7 +20,19 @@ function getAllOptions(category) {
 
 async function getOption(category, name) {
     const options = await getAllOptions(category);
-    return options[name];
+    if (options !== undefined) {
+        return options[name];
+    }
+}
+
+function createStore(category) {
+    return new Promise((resolve, reject) => {
+        const store = {};
+        store[category] = {};
+        chrome.storage.local.set(store, () => {
+            resolve();
+        });
+    });
 }
 
 function getOptions(category, names) {
