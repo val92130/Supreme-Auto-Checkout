@@ -161,20 +161,18 @@ class SupremeManager extends BaseManager {
 
       let atcDelay = this.preferences.addToCartDelay;
       this.timeout(() => {
-        submitBtn.click();
-        let count = 0;
-
-        function proccess(currentCount) {
-          if (document.getElementById('cart') || currentCount >= 10) {
-            window.location.href = '/shop/cart/';
+        const process = () => {
+          if (document.querySelector('.in-cart')) {
+            setTimeout(() => {
+              window.location.href = '/shop/cart/';
+            }, 200);
           } else {
-            this.timeout(() => proccess(currentCount + 1), 100, 'Waiting for product to be in cart...');
+            submitBtn.click();
+            this.timeout(() => process(), 500, 'Waiting for product to be in cart...');
           }
         }
 
-        this.timeout(() => {
-          proccess(count);
-        }, 160);
+        process();
       }, atcDelay, 'Adding to cart');
     }
   }
