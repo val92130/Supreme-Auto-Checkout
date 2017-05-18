@@ -147,7 +147,7 @@ class SupremeManager extends BaseManager {
       if (sizesOptions.length) {
         let categorySize = this.sizings[productCategory];
 
-        let targetOption = sizesOptions.find(x => this.sizeMatch(categorySize, x.text));
+        let targetOption = sizesOptions.find(x => this.sizeMatch(categorySize, x.text, productCategory));
 
         if (!targetOption) {
           if (this.preferences.strictSize) {
