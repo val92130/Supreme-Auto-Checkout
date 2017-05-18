@@ -17,17 +17,7 @@ app.use(cors());
 function updateProducts() {
   request(options, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      let res = JSON.parse(body).products_and_categories;
-      res = res.map(x => () => {
-        if (x.image_url !== undefined) {
-          delete x.image_url;
-        }
-        if (x.image_url_hi !== undefined) {
-          delete x.image_url_hi;
-        }
-        return x;
-      });
-      products = res;
+      products = JSON.parse(body).products_and_categories;
     }
   });
 }
