@@ -15,6 +15,7 @@ Supreme Auto Checkout provides many features such as:
   - **Size choice for every category of product.**
   - **Captcha bypass** (beta feature).
   - **Option to set a minimum/maximum price for a product.**
+  - **Option to hide sold out products.**
   - **Easy configuration.**
 
 # Installation
@@ -24,7 +25,7 @@ To install the chrome extension you must first download the latest release [here
 Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
-  >- Drag the folder containing the extension into Google Chrome.
+  >- Drag the **src** folder containing the extension into Google Chrome.
 
 # Configuration
 
