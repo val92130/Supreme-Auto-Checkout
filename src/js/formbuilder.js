@@ -39,13 +39,12 @@ class FormBuilder {
 
     const btnContainer = document.createElement('div');
     btnContainer.style.textAlign = 'center';
-    btnContainer.style.marginTop = '20px';
 
     const formNode = this.targetNode.getElementsByTagName('form')[0];
 
     const btn = document.createElement('input');
     btn.type = 'submit';
-    btn.className = 'btn btn-raised btn-primary save-btn';
+    btn.className = 'btn btn-raised btn-danger save-btn';
     btn.innerText = 'Save';
     formNode.addEventListener('submit', async () => {
       await this.onSave();
