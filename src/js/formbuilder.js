@@ -26,7 +26,7 @@ class FormBuilder {
   async render() {
     const store = await getAllOptions(this.category);
     if (store === undefined) {
-      createStore(this.category);
+      await createStore(this.category);
     }
     
     const initialData = await this.getInitialData();

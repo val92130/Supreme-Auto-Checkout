@@ -146,7 +146,10 @@ class SupremeManager extends BaseManager {
       // If sizes options are available
       if (sizesOptions.length) {
         let categorySize = this.sizings[productCategory];
-
+        if (categorySize === undefined) {
+          this.setNotificationBarText('Unknown category "' + productCategory + '", cannot process');
+          return;
+        }
         let targetOption = sizesOptions.find(x => this.sizeMatch(categorySize, x.text, productCategory));
 
         if (!targetOption) {
