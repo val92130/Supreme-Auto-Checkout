@@ -255,18 +255,6 @@ const _forms = [
     "type": "object",
     "name": "sizings",
     "properties": _sizings,
-  },
-  {
-    "category": "Palace",
-    "type": "object",
-    "name": "preferences",
-    "properties": _preferences,
-  },
-  {
-    "category": "Palace",
-    "type": "object",
-    "name": "sizings",
-    "properties": _sizings,
   }
 ];
 
