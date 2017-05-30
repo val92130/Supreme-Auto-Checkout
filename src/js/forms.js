@@ -66,14 +66,6 @@ const _preferences = {
     "default": 300,
     "required": true,
   },
-  "goToCheckoutDelay": {
-    "type": "integer",
-    "title": "Proceed to checkout delay (ms)",
-    "description": "Delay before going to checkout once the product is added to the cart",
-    "minimum": 1,
-    "default": 200,
-    "required": true,
-  },
   "checkoutDelay": {
     "type": "integer",
     "title": "Checkout delay (ms)",

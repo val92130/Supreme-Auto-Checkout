@@ -76,10 +76,9 @@ class SupremeManager extends BaseManager {
    * @param  {Object} preferencesStore Object that stores the preference options
    */
   processCart() {
-    const delay = this.preferences.goToCheckoutDelay;
     this.timeout(() => {
       document.location.href = '/checkout';
-    }, delay, 'Going to checkout');
+    }, 100, 'Going to checkout');
   }
 
   /**
@@ -167,13 +166,13 @@ class SupremeManager extends BaseManager {
         const process = () => {
           if (document.querySelector('.in-cart')) {
             setTimeout(() => {
-              window.location.href = '/shop/cart/';
+              window.location.href = '/checkout';
             }, 200);
           } else {
             submitBtn.click();
             this.timeout(() => process(), 500, 'Waiting for product to be in cart...');
           }
-        }
+        };
 
         process();
       }, atcDelay, 'Adding to cart');
