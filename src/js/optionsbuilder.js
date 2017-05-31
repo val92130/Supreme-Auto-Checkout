@@ -4,15 +4,31 @@ class OptionsBuilder {
     this.forms = forms;
     this.groupedForms = OptionsBuilder.GroupBy(forms, 'category');
     this.formCategory = Object.keys(this.groupedForms)[0];
+    this.customTabs = [];
   }
 
   render() {
     this.targetNode.innerHTML = '';
+
     const menu = this.createMenu(this.groupedForms);
 
     const forms = this.forms.filter(x => x.category === this.formCategory);
     const tabs = OptionsBuilder.CreateTabs(forms);
     const panes = OptionsBuilder.CreatePanes(forms);
+    const customTabs = this.customTabs.filter(x => x.category === this.formCategory);
+
+    for(let tab of customTabs) {
+      let li = document.createElement('li');
+      li.class = 'nav-item';
+      li.innerHTML = `<a class="nav-link" id="${tab.name}-nav" data-toggle="tab" role="tab" href="#${tab.name}-tab">${tab.name}</a>`;
+      tabs.appendChild(li);
+      let content = document.createElement('div');
+      content.class = 'tab-pane';
+      content.id = `${tab.name}-tab`;
+      content.role = 'tabpanel';
+      content.innerHTML = typeof tab.content === 'string' ? tab.content : tab.content.innerHTML;
+      panes.appendChild(content);
+    }
 
     this.targetNode.appendChild(menu);
     this.targetNode.appendChild(tabs);
@@ -25,6 +41,10 @@ class OptionsBuilder {
       return rv;
     }, {});
   };
+
+  addCustomTab(category, name, content) {
+    this.customTabs.push({category, name, content});
+  }
 
   createMenu() {
     let navContainer = document.createElement('div');
