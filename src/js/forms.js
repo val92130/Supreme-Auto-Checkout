@@ -126,7 +126,7 @@ const _sizings = {
     "minLength": 1,
     "enum": sizes
   },
-  "tops": {
+  "tops-sweaters": {
     "type": "string",
     "title": "Tops/Sweaters",
     "required": true,
