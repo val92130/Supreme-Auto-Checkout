@@ -255,6 +255,26 @@ const _forms = [
     "type": "object",
     "name": "sizings",
     "properties": _sizings,
+  },
+  {
+    "category": "Supreme",
+    "type": "object",
+    "name": "monitor",
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "title": "Monitoring enabled",
+        "default": false,
+        "required": true,
+      },
+      "url": {
+        "type": "string",
+        "title": "Monitor server url",
+        "required": true,
+        "minLength": 1,
+        "default": "http://localhost:3000"
+      },
+    }
   }
 ];
 

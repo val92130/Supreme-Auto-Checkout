@@ -39,5 +39,4 @@ app.get('/products.json', function(req, res){
     res.json(products);
   }
 });
-
 app.listen(3000);
