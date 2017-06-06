@@ -1,6 +1,4 @@
-<!DOCTYPE html>
 <html>
-
 <head>
     <title>Bot configuration</title>
     <script type="text/javascript" src="js/lib/tether.min.js"></script>
@@ -28,9 +26,62 @@
             </div>
         </div>
     </div>
+
+    <div data-option="auto-cop" data-option-category="Supreme">
+
+        <!-- Modal -->
+        <div id="atc-product-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add a product</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="atc-add-form">
+                            <div class="form-group">
+                                <label for="keyword">Product keyword (regex):</label>
+                                <input type="text" class="form-control" id="keyword" name="keyword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="color">Color (regex):</label>
+                                <input type="text" class="form-control" id="color" name="color" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category (regex):</label>
+                                <input type="text" class="form-control" id="category" name="category" required>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-raised">Add</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="well">
+            <h2>Auto-cop Product List</h2>
+            <p>Click the + button to add a product</p>
+            <br/>
+            <table class="table" id="atc-table">
+                <thead>
+                <tr>
+                    <th>Keyword</th>
+                    <th>Color</th>
+                    <th>Category</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <button data-target="#atc-product-modal" data-toggle="modal" class="btn btn-raised btn-danger">Add</button>
+        </div>
+    </div>
     <script type="text/javascript" src="js/lib/notify.min.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/storage.js"></script>
+    <script type="text/javascript" src="js/supreme-autocop-form.js"></script>
     <script type="text/javascript" src="js/forms.js"></script>
     <script type="text/javascript" src="js/formbuilder.js"></script>
     <script type="text/javascript" src="js/optionsbuilder.js"></script>

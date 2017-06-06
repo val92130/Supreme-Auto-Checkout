@@ -4,6 +4,7 @@ async function run() {
   if (supremeOptions === undefined) {
     await createStore("Supreme");
   }
+
   let url = supremeOptions.monitor.url;
   let enabled = supremeOptions.monitor.enabled;
 

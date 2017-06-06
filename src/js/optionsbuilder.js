@@ -19,13 +19,13 @@ class OptionsBuilder {
 
     for(let tab of customTabs) {
       let li = document.createElement('li');
-      li.class = 'nav-item';
+      li.className = 'nav-item';
       li.innerHTML = `<a class="nav-link" id="${tab.name}-nav" data-toggle="tab" role="tab" href="#${tab.name}-tab">${tab.name}</a>`;
       tabs.appendChild(li);
       let content = document.createElement('div');
-      content.class = 'tab-pane';
+      content.className = 'tab-pane';
       content.id = `${tab.name}-tab`;
-      content.role = 'tabpanel';
+      content.setAttribute('role', 'tabpanel');
       content.innerHTML = typeof tab.content === 'string' ? tab.content : tab.content.innerHTML;
       panes.appendChild(content);
     }
