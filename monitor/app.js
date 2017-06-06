@@ -25,6 +25,20 @@ function getProducts(callback) {
   });
 }
 
+function getProduct(id, callback) {
+  let opt = { headers: options.headers, url: `http://www.supremenewyork.com/shop/${id}.json`};
+  if (!id || isNaN(id)) {
+    callback({ error: 'Invalid id' });
+  }
+  request(opt, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      callback(undefined, JSON.parse(body));
+    } else {
+      callback({ error });
+    }
+  });
+}
+
 app.get('/products.json', function(req, res){
   var now = new Date();
   var diff = (now.getTime() - lastUpdate.getTime()) / 1000;
@@ -32,11 +46,18 @@ app.get('/products.json', function(req, res){
   if (diff >= 10) {
     lastUpdate = now;
     getProducts((err, prod) => {
-      products = prod;
+      if (!err)
+        products = prod;
       res.json(err ? err : products);
     });
   } else {
     res.json(products);
   }
+});
+
+app.get('/product/:id', function (req, res) {
+  getProduct(req.param('id'), function(err, prod) {
+    res.json(err ? err : prod);
+  });
 });
 app.listen(3000);
