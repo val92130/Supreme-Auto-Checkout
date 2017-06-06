@@ -28,6 +28,13 @@ window.onload = async function() {
     tableRef.innerHTML = inner.innerHTML;
   }
 
+  let selectOpt = document.getElementById('atc-category');
+  let options = "";
+  for (let key of Object.keys(_sizings)) {
+    options += `<option value="${key}">${key}</option>`;
+  }
+  selectOpt.innerHTML = options;
+
   let form = document.getElementById('atc-add-form');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
