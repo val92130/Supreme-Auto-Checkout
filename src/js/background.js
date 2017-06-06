@@ -13,7 +13,7 @@ async function run() {
   }
 
   let products = await getProducts(url);
-  if (!Object.keys(products).length) {
+  if (!Object.keys(products).length || products.error) {
     return;
   }
 
