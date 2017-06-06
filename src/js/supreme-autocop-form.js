@@ -65,5 +65,10 @@ window.onload = async function() {
     await updateProductList();
   });
 
+
+
+  setInterval(async () => {
+    await updateProductList();
+  }, 3000);
   await updateProductList();
 };
