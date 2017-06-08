@@ -17,6 +17,10 @@ async function run() {
     return;
   }
 
+  if (supremeOptions.products === undefined) {
+    await setOptionValue(storeName, "products", products);
+  }
+
   let prevProducts = Object.keys(supremeOptions.products).length ? supremeOptions.products : products;
 
   let prevProductsConcat = [].concat.apply([], Object.keys(prevProducts).map(x => prevProducts[x]));
@@ -29,6 +33,10 @@ async function run() {
 
 
   let atcProducts = supremeOptions.atc;
+  if (atcProducts === undefined) {
+    return;
+  }
+  
   for (let product of atcProducts) {
     let m = currProductsConcat.filter(x => match(product.keyword, x.name) && x.category_name.toLowerCase() === product.category.toLowerCase())[0];
     if (m !== undefined) {

@@ -239,7 +239,7 @@ const _forms = [
         "title": "Expiry year",
         "required": true,
         "minLength": 1,
-        "enum": Array.apply(null, new Array(5)).map((x, i) => currentYear + i),
+        "enum": ["2017", "2018", "2019", "2020"],
       },
       "vval": {
         "type": "string",
