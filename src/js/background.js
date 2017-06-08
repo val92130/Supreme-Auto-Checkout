@@ -28,9 +28,8 @@ async function run() {
   let newProducts = currProductsConcat.filter(x => prevProductsConcat.map(y => y.id).indexOf(x.id) === -1);
 
   for (let newProd of newProducts) {
-    createNotification(`New product added: ${newProd.name}`, `${newProd.name} was just added! Price: ${newProd.price}`);
+    await createNotification(`New product added: ${newProd.name}`, `${newProd.name} was just added! Price: ${newProd.price}`);
   }
-
 
   let atcProducts = supremeOptions.atc;
   if (atcProducts === undefined) {
