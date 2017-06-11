@@ -6,6 +6,17 @@ window.onload = async function() {
     return elem.value;
   }
 
+  async function deleteItem(uuid) {
+    const storeName = "Supreme";
+    const supremeOptions = await getAllOptions(storeName);
+    let atc_opts = supremeOptions.atc;
+    if (atc_opts === undefined) {
+      return;
+    }
+    await setOptionValue(storeName, "atc", atc_opts.filter(x => x.uuid !== uuid));
+    await updateProductList();
+  }
+
   async function updateProductList() {
     var tableRef = document.getElementById('atc-table').getElementsByTagName('tbody')[0];
     const storeName = "Supreme";
@@ -16,16 +27,24 @@ window.onload = async function() {
     }
 
     let inner = document.createElement('div');
-    for (let prod of atc_opts) {
+    for (let prod of atc_opts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))) {
       var tr = document.createElement('tr');
       tr.innerHTML = `
       <td>${prod.keyword}</td>
       <td>${prod.color}</td>
       <td>${prod.category}</td>
+      <td><button type="button" class="atc-delete-btn btn btn-sm btn-danger btn-raised" data-atc-id="${prod.uuid}">Delete</button></td>
       `;
       inner.appendChild(tr);
     }
     tableRef.innerHTML = inner.innerHTML;
+    const deleteBtns = document.querySelectorAll('.atc-delete-btn');
+    for (let btn of deleteBtns) {
+      btn.addEventListener('click', async () => {
+        const uid = btn.getAttribute('data-atc-id');
+        await deleteItem(uid);
+      });
+    }
   }
 
   let selectOpt = document.getElementById('atc-category');
@@ -56,7 +75,9 @@ window.onload = async function() {
 
     // Don't add duplicate
     if (!atc_opts.some(x => x.color === color && x.keyword === keyword && x.category)) {
-      atc_opts.push({ keyword, color, category });
+      const uuid = guid();
+      const timestamp = Date.now();
+      atc_opts.push({ keyword, color, category, uuid, timestamp });
     }
 
     await setOptionValue(storeName, "atc", atc_opts);
@@ -64,11 +85,10 @@ window.onload = async function() {
     form.reset();
     await updateProductList();
   });
-
-
-
-  setInterval(async () => {
-    await updateProductList();
-  }, 3000);
   await updateProductList();
+
+  const updateBtn = document.getElementById('atc-update-btn');
+  updateBtn.addEventListener('click', async () => {
+    await updateProductList();
+  })
 };
