@@ -62,14 +62,6 @@ async function run() {
   await setOptionValue(storeName, "atc", atcProducts);
 }
 
-function match(keyword, name) {
-  keyword = keyword.replace(/\s/g, "");
-  name = name.replace(/\s/g, "");
-
-  var re = new RegExp(keyword);
-  return keyword.toLowerCase() === name.toLowerCase() || re.test(name);
-}
-
 async function getProducts(baseUrl) {
   return new Promise(resolve =>  $.getJSON(`${baseUrl}/products.json`, resolve))
 }

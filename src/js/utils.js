@@ -28,3 +28,12 @@ function guid() {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
       s4() + '-' + s4() + s4() + s4();
 }
+
+
+function match(keyword, name) {
+    keyword = keyword.replace(/\s/g, "");
+    name = name.replace(/\s/g, "");
+
+    var re = new RegExp(keyword);
+    return keyword.toLowerCase() === name.toLowerCase() || re.test(name);
+}

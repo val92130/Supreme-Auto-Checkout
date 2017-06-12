@@ -33,7 +33,10 @@ window.onload = async function() {
       <td>${prod.keyword}</td>
       <td>${prod.color}</td>
       <td>${prod.category}</td>
-      <td><button type="button" class="atc-delete-btn btn btn-sm btn-danger btn-raised" data-atc-id="${prod.uuid}">Delete</button></td>
+      <td>
+      <button type="button" class="atc-delete-btn btn btn-sm btn-danger btn-raised" data-atc-id="${prod.uuid}">Delete</button>
+      <button type="button" class="atc-test-btn btn btn-sm btn-info btn-raised" data-test-kw="${prod.keyword}" data-target="#atc-tester-modal" data-toggle="modal" >Test</button>
+      </td>
       `;
       inner.appendChild(tr);
     }
@@ -43,6 +46,14 @@ window.onload = async function() {
       btn.addEventListener('click', async () => {
         const uid = btn.getAttribute('data-atc-id');
         await deleteItem(uid);
+      });
+    }
+
+    const testBtns = document.querySelectorAll('.atc-test-btn');
+    for (let btn of testBtns) {
+      btn.addEventListener('click', async () => {
+        const kw = btn.getAttribute('data-test-kw');
+        setTesterModalKeyword(kw);
       });
     }
   }
@@ -90,5 +101,17 @@ window.onload = async function() {
   const updateBtn = document.getElementById('atc-update-btn');
   updateBtn.addEventListener('click', async () => {
     await updateProductList();
-  })
+  });
+
+
+  function setTesterModalKeyword(kw) {
+    document.getElementById('atc-tester-keyword').value = kw;
+  }
+
+  document.getElementById('atc-test-btn').addEventListener('click', () => {
+    const kw = document.getElementById('atc-tester-keyword').value;
+    const input = document.getElementById('atc-tester-input').value;
+    const isMatch = match(kw, input);
+    alert(isMatch ? "Match" : "Not matching");
+  });
 };
