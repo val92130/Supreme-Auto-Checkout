@@ -21,14 +21,16 @@ async function run() {
     await setOptionValue(storeName, "products", products);
   }
 
-  let prevProducts = Object.keys(supremeOptions.products).length ? supremeOptions.products : products;
+  let prevProductsObj = Object.keys(supremeOptions.products).length ? supremeOptions.products : products;
 
-  let prevProductsConcat = [].concat.apply([], Object.keys(prevProducts).map(x => prevProducts[x]));
-  let currProductsConcat = [].concat.apply([], Object.keys(products).map(x => products[x]));
-  let newProducts = currProductsConcat.filter(x => prevProductsConcat.map(y => y.id).indexOf(x.id) === -1);
+  let prevProducts = [].concat.apply([], Object.keys(prevProductsObj).map(x => prevProductsObj[x]));
+  let currProducts = [].concat.apply([], Object.keys(products).map(x => products[x]));
+  let newProducts = currProducts.filter(x => prevProducts.map(y => y.id).indexOf(x.id) === -1);
 
-  for (let newProd of newProducts) {
-    await createNotification(`New product added: ${newProd.name}`, `${newProd.name} was just added! Price: ${newProd.price}`);
+  await setOptionValue(storeName, "products", products);
+  
+  for (let newProd of removeDuplicatesBy(x => x.name, newProducts)) {
+    createNotification(`New product added: ${newProd.name}`, `${newProd.name} was just added! Price: ${newProd.price}`);
   }
 
   let atcProducts = supremeOptions.atc;
@@ -37,7 +39,7 @@ async function run() {
   }
   
   for (let product of atcProducts) {
-    let m = currProductsConcat.filter(x => match(product.keyword, x.name) && x.category_name.toLowerCase() === product.category.toLowerCase())[0];
+    let m = currProducts.filter(x => match(product.keyword, x.name) && x.category_name.toLowerCase() === product.category.toLowerCase())[0];
     if (m !== undefined) {
       let productInfo = await getProduct(url, m.id);
 
@@ -58,7 +60,6 @@ async function run() {
     }
   }
 
-  await setOptionValue(storeName, "products", products);
   await setOptionValue(storeName, "atc", atcProducts);
 }
 

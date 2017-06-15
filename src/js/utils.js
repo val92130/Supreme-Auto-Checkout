@@ -37,3 +37,12 @@ function match(keyword, name) {
     var re = new RegExp(keyword);
     return keyword.toLowerCase() === name.toLowerCase() || re.test(name);
 }
+
+function removeDuplicatesBy(keyFn, array) {
+    var mySet = new Set();
+    return array.filter(function(x) {
+        var key = keyFn(x), isNew = !mySet.has(key);
+        if (isNew) mySet.add(key);
+        return isNew;
+    });
+}
