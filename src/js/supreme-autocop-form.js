@@ -106,6 +106,7 @@ window.onload = async function() {
 
   function setTesterModalKeyword(kw) {
     document.getElementById('atc-tester-keyword').value = kw;
+    document.getElementById('atc-tester-input').value = '';
   }
 
   document.getElementById('atc-test-btn').addEventListener('click', () => {

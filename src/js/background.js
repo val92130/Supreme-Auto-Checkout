@@ -28,7 +28,7 @@ async function run() {
   let newProducts = currProducts.filter(x => prevProducts.map(y => y.id).indexOf(x.id) === -1);
 
   await setOptionValue(storeName, "products", products);
-  
+
   for (let newProd of removeDuplicatesBy(x => x.name, newProducts)) {
     createNotification(`New product added: ${newProd.name}`, `${newProd.name} was just added! Price: ${newProd.price}`);
   }
