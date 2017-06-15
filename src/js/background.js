@@ -54,7 +54,7 @@ async function run() {
 
         if (matchedStyle) {
           atcProducts.splice(atcProducts.indexOf(product), 1);
-          chrome.tabs.create({ url: `http://supremenewyork.com/shop/${m.id}` });
+          chrome.tabs.create({ url: `http://supremenewyork.com/shop/${m.id}?atc-category=${product.category}` });
         }
       }
     }

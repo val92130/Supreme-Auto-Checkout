@@ -184,7 +184,7 @@ class SupremeManager extends BaseManager {
    */
   isProductPage() {
     let path = location.pathname.substring(1).split('/');
-    return path.length === 4 && path[0] === 'shop';
+    return (path.length === 4 && path[0] === 'shop') || getQueryStringValue('atc-category') !== "";
   }
 
   /**
@@ -207,7 +207,8 @@ class SupremeManager extends BaseManager {
    * Returns the product category when the user is on a product page
    */
   getProductCategory() {
-    return location.pathname.substring(1).split('/')[1];
+    let category = getQueryStringValue('atc-category');
+    return category === "" ? location.pathname.substring(1).split('/')[1] : category;
   }
 
   /**
