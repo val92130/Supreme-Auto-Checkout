@@ -10,6 +10,8 @@ Supreme Auto Checkout is a Google Chrome extension to automate the process of bu
 
 Supreme Auto Checkout provides many features such as:
   - **Auto Checkout** - The product will automatically be added to your cart and will straight go to the checkout page.
+  - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
+  - **Product Monitor** - Be notified when new products are added to the shop.
   - **AutoFill** - All of your billing informations will be automaticaly filled on the checkout page.
   - **Configurable delays for every steps of the checkout process.**
   - **Size choice for every category of product.**
@@ -53,3 +55,24 @@ The **Captcha Bypass** feature works by deleting from the DOM the node containin
 This temporary works because Supreme doesn't seems to validate Google's Re-captcha on server-side.
 
 This option is **NOT** recommended, use with caution.
+
+
+# Auto Cop
+
+**The autocop feature requires the product monitoring to be enabled to work!**
+
+
+# Product monitoring
+
+To enable the product monitoring you must first run the monitoring server, either locally or on a remote computer.
+
+To do so, you must first have **node js** installed.
+
+To run the server, navigate to the `monitor` folder and type in your command prompt:
+ ```bash
+  $ node app.js
+ ```
+ 
+ Finally, go on the options menu of the Chrome extension and set the ip address of the server where the monitoring is run.
+ 
+ If run locally, just type **http://localhost:3000**.
