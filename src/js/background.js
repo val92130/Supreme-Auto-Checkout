@@ -52,7 +52,7 @@ async function run() {
           matchedStyle = productInfo.styles[0];
         }
 
-        if (matchedStyle) {
+        if (matchedStyle && matchedStyle.sizes.some(x => x.stock_level > 0)) {
           atcProducts.splice(atcProducts.indexOf(product), 1);
           chrome.tabs.create({ url: `http://supremenewyork.com/shop/${m.id}?atc-category=${product.category}` });
         }
