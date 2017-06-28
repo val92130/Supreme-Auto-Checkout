@@ -164,7 +164,7 @@ class SupremeManager extends BaseManager {
       let atcDelay = this.preferences.addToCartDelay;
       this.timeout(() => {
         const process = () => {
-          if (document.querySelector('.in-cart')) {
+          if (document.querySelector('.in-cart') && document.getElementById('cart')) {
             setTimeout(() => {
               window.location.href = '/checkout';
             }, 200);
