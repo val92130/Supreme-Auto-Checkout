@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+
+    "name": "SupremeOATC",
+    "description": "Supreme Open-Source add to cart bot",
+    "version": "0.1",
+    "browser_action": {
+        "default_popup": "index.html",
+        "default_icon": "assets/img/icon.png"
+    },
+    "options_page": "index.html",
+    "permissions": [
+        "activeTab",
+        "contentSettings",
+        "cookies",
+        "storage",
+        "webNavigation",
+        "background",
+        "notifications"
+    ],
+    "content_scripts": [{
+        "matches": [
+            "*://*.supremenewyork.com/*"
+        ],
+        "js": ["assets/js/utils.js", "assets/js/storage.js", "assets/js/lib/jquery-3.2.1.min.js", "assets/js/BaseManager.js", "assets/js/supreme.js"]
+    }]
+}
