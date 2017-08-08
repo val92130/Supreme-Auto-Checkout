@@ -35,18 +35,15 @@ const store = createStore(
 store.subscribe(() => {
   const state = store.getState();
   if (state) {
-    saveState({
-      task: state.task,
-      auth: state.auth,
-    }, VERSION);
+    saveState(state, VERSION);
   }
 });
 
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={history}>
       {getRoutes(store)}
     </Router>
   </Provider>,

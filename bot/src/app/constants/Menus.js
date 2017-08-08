@@ -1,3 +1,3 @@
-export const MENU_OPTIONS = 'OPTIONS';
-export const MENU_BILLING = 'BILLING';
-export const MENU_SIZES = 'SIZES';
+export const MENU_OPTIONS = 'Options';
+export const MENU_BILLING = 'Billing';
+export const MENU_SIZES = 'Sizes';
