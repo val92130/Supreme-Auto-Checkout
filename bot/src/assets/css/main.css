@@ -6,6 +6,11 @@ body {
   margin: 0;
   font-size: 13px;
   line-height: 20px;
+  min-width: 800px;
+}
+
+form > div {
+  width: 100% !important;
 }
 
 html, body, #app {

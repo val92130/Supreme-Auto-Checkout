@@ -5,6 +5,7 @@ import Drawer from 'material-ui/Drawer';
 import Subheader from 'material-ui/Subheader';
 import { cyan500 } from 'material-ui/styles/colors';
 import { spacing, typography } from 'material-ui/styles';
+import ListIcon from 'material-ui/svg-icons/action/list';
 
 const SelectableList = makeSelectable(List);
 
@@ -34,6 +35,7 @@ export default function AppDrawer(props) {
           value="supreme"
           primaryText="Supreme"
           containerElement={<Link to={'/supreme/'}/>}
+          leftIcon={<ListIcon />}
         />
       </SelectableList>
     </Drawer>

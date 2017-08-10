@@ -1,91 +1,106 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm, Field } from 'redux-form'
+import MenuItem from 'material-ui/MenuItem'
+import { RadioButton } from 'material-ui/RadioButton'
+import { AutoComplete as MUIAutoComplete } from 'material-ui';
+import {
+  AutoComplete,
+  Checkbox,
+  RadioButtonGroup,
+  SelectField,
+  TextField,
+  Toggle,
+  DatePicker
+} from 'redux-form-material-ui'
+import Styles from '../../constants/Styles';
 
 const Billing = props => {
   const { handleSubmit, pristine, reset, submitting } = props;
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <div>
-        <label>First Name</label>
-        <div>
-          <Field
-            name="firstName"
-            component="input"
-            type="text"
-            placeholder="First Name"
-          />
-        </div>
+        <Field name="order_billing_name" component={TextField} hintText="Firstname and Lastname" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <label>Last Name</label>
-        <div>
-          <Field
-            name="lastName"
-            component="input"
-            type="text"
-            placeholder="Last Name"
-          />
-        </div>
+        <Field name="order_email" component={TextField} hintText="Email" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <label>Email</label>
-        <div>
-          <Field
-            name="email"
-            component="input"
-            type="email"
-            placeholder="Email"
-          />
-        </div>
+        <Field name="order_tel" component={TextField} hintText="Phone number" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <label>Sex</label>
-        <div>
-          <label>
-            <Field name="sex" component="input" type="radio" value="male" />
-            {' '}
-            Male
-          </label>
-          <label>
-            <Field name="sex" component="input" type="radio" value="female" />
-            {' '}
-            Female
-          </label>
-        </div>
+        <Field name="bo" component={TextField} hintText="Address" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <label>Favorite Color</label>
-        <div>
-          <Field name="favoriteColor" component="select">
-            <option />
-            <option value="ff0000">Red</option>
-            <option value="00ff00">Green</option>
-            <option value="0000ff">Blue</option>
-          </Field>
-        </div>
+        <Field name="order_billing_city" component={TextField} hintText="City" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <label htmlFor="employed">Employed</label>
-        <div>
-          <Field
-            name="employed"
-            id="employed"
-            component="input"
-            type="checkbox"
-          />
-        </div>
+        <Field name="order_billing_country" component={TextField} hintText="Country" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <label>Notes</label>
-        <div>
-          <Field name="notes" component="textarea" />
-        </div>
+        <Field name="order_billing_zip" component={TextField} hintText="Zip" style={Styles.fields.text}/>
       </div>
+
       <div>
-        <button type="submit" disabled={pristine || submitting}>Submit</button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>
-          Clear Values
-        </button>
+        <Field
+          name="credit_card_type"
+          component={SelectField}
+          floatingLabelText="Credit card type"
+          openOnFocus
+          style={Styles.fields.text}
+        >
+          <MenuItem value="visa" primaryText="Visa"/>
+          <MenuItem value="american_express" primaryText="American Express"/>
+          <MenuItem value="master" primaryText="Mastercard"/>
+          <MenuItem value="solo" primaryText="Solo"/>
+        </Field>
+      </div>
+
+      <div>
+        <Field name="cnb" component={TextField} hintText="Credit Card Number" style={Styles.fields.text}/>
+      </div>
+
+      <div>
+        <Field
+          name="credit_card_month"
+          component={SelectField}
+          floatingLabelText="Expiry month"
+          openOnFocus
+          style={Styles.fields.text}
+        >
+          {
+            Array.apply(null, new Array(12)).map((x, i) => {
+              const month = ++i < 10 ? `0${i}` : i;
+              return <MenuItem value={month} primaryText={month}/>;
+            })
+          }
+        </Field>
+      </div>
+
+      <div>
+        <Field
+          name="credit_card_year"
+          component={SelectField}
+          floatingLabelText="Expiry year"
+          openOnFocus
+          style={Styles.fields.text}
+        >
+          {
+            Array.apply(null, new Array(5)).map((x, i) => {
+              const year = new Date().getFullYear() + i;
+              return <MenuItem value={year} primaryText={year}/>;
+            })
+          }
+        </Field>
+      </div>
+
+      <div>
+        <Field name="vval" component={TextField} hintText="CCV" style={Styles.fields.text}/>
       </div>
     </form>
   );
