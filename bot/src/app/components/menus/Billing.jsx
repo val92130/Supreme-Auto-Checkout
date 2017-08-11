@@ -13,17 +13,31 @@ import {
   DatePicker
 } from 'redux-form-material-ui'
 import Styles from '../../constants/Styles';
+import * as Utils from '../../constants/Utils';
+import * as Validators from '../../constants/FormValidators';
 
 const Billing = props => {
   const { handleSubmit, pristine, reset, submitting } = props;
   return (
     <form>
       <div>
-        <Field name="order_billing_name" component={TextField} hintText="Firstname and Lastname" style={Styles.fields.text}/>
+        <Field
+          name="order_billing_name"
+          validate={[Validators.required]}
+          component={TextField}
+          hintText="Firstname and Lastname"
+          style={Styles.fields.text}
+        />
       </div>
 
       <div>
-        <Field name="order_email" component={TextField} hintText="Email" style={Styles.fields.text}/>
+        <Field
+          name="order_email"
+          component={TextField}
+          hintText="Email"
+          style={Styles.fields.text}
+          validate={[Validators.required, Validators.email]}
+        />
       </div>
 
       <div>
@@ -39,7 +53,11 @@ const Billing = props => {
       </div>
 
       <div>
-        <Field name="order_billing_country" component={TextField} hintText="Country" style={Styles.fields.text}/>
+        <Field name="order_billing_country" component={SelectField} hintText="Country" style={Styles.fields.text}>
+          {
+            Utils.countries.map(x => <MenuItem value={x.value} primaryText={x.text}/>)
+          }
+        </Field>
       </div>
 
       <div>
