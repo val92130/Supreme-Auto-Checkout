@@ -4,7 +4,7 @@ export function email(input) {
 }
 
 export function required(value) {
-  return (value === '' || value === null || value === undefined) ? 'Required field' : undefined;
+  return !value ? 'Required field' : undefined;
 }
 
 export function simpleText(value) {
@@ -21,4 +21,8 @@ export function minValue(min) {
 
 export function maxValue(max) {
   return value => (value && value > max ? `The value must be less than ${max}` : undefined);
+}
+
+export function fullName(value) {
+  return !value || value.split(' ').filter(x => x !== "").length < 2 ? 'Please enter a valid full name (firstname + lastname)' : undefined;
 }

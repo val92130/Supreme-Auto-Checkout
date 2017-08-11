@@ -35,7 +35,7 @@ const store = createStore(
 store.subscribe(() => {
   const state = store.getState();
   if (state) {
-    saveState(state, VERSION);
+    saveState({ menu: state.menu, settings: state.settings }, VERSION);
   }
 });
 

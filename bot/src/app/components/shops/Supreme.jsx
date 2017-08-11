@@ -5,20 +5,24 @@ import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Layout from '../../containers/Layout.jsx';
 import { changeMenu } from '../../actions/menu';
+import { updateSettings } from '../../actions/settings';
 
 class Supreme extends Component {
-  static getContainerForMenu(menu) {
+  getContainerForMenu(menu) {
     switch (menu) {
       case menus.MENU_BILLING:
-        return (<Billing />);
+        return (<Billing onSubmit={data => this.onSubmit(menu, data)} />);
       default:
         return null;
     }
   }
 
+  onSubmit(menu, data) {
+    this.props.updateSettings(menu, data);
+  }
+
   componentWillMount() {
     if (this.props.menu == null) {
-      console.log('bruh');
       this.props.changeMenu(Supreme.getDefaultMenu());
     }
   }
@@ -54,7 +58,7 @@ class Supreme extends Component {
     const { menu } = this.props;
     return (
       <Layout title={menu || 'Loading...'} tabs={this.getTabs()} currentTab={menu}>
-        { Supreme.getContainerForMenu(menu) }
+        { this.getContainerForMenu(menu) }
       </Layout>
     );
   }
@@ -63,12 +67,14 @@ class Supreme extends Component {
 function mapStateToProps(state) {
   return {
     menu: state.menu.currentMenu,
+    settings: state.settings.values,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     changeMenu: menu => dispatch(changeMenu(menu)),
+    updateSettings: (key, value) => dispatch(updateSettings(key, value))
   };
 }
 

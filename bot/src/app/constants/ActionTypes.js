@@ -1,1 +1,2 @@
 export const CHANGE_MENU = 'CHANGE_MENU';
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';

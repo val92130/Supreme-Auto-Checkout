@@ -1,32 +1,29 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem'
-import { RadioButton } from 'material-ui/RadioButton'
-import { AutoComplete as MUIAutoComplete } from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
 import {
-  AutoComplete,
-  Checkbox,
-  RadioButtonGroup,
   SelectField,
   TextField,
-  Toggle,
-  DatePicker
 } from 'redux-form-material-ui'
 import Styles from '../../constants/Styles';
 import * as Utils from '../../constants/Utils';
 import * as Validators from '../../constants/FormValidators';
+import * as menus from '../../constants/Menus';
 
 const Billing = props => {
-  const { handleSubmit, pristine, reset, submitting } = props;
+  const { handleSubmit, pristine, submitting, error } = props;
   return (
-    <form>
+    <form onSubmit={handleSubmit} id="biling-form">
       <div>
         <Field
           name="order_billing_name"
-          validate={[Validators.required]}
+          validate={Validators.fullName}
           component={TextField}
           hintText="Firstname and Lastname"
           style={Styles.fields.text}
+          errorText={error}
         />
       </div>
 
@@ -41,21 +38,45 @@ const Billing = props => {
       </div>
 
       <div>
-        <Field name="order_tel" component={TextField} hintText="Phone number" style={Styles.fields.text}/>
+        <Field
+          name="order_tel"
+          component={TextField}
+          hintText="Phone number"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        />
       </div>
 
       <div>
-        <Field name="bo" component={TextField} hintText="Address" style={Styles.fields.text}/>
+        <Field
+          name="bo"
+          component={TextField}
+          hintText="Address"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        />
       </div>
 
       <div>
-        <Field name="order_billing_city" component={TextField} hintText="City" style={Styles.fields.text}/>
+        <Field
+          name="order_billing_city"
+          component={TextField}
+          hintText="City"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        />
       </div>
 
       <div>
-        <Field name="order_billing_country" component={SelectField} hintText="Country" style={Styles.fields.text}>
+        <Field
+          name="order_billing_country"
+          component={SelectField}
+          hintText="Country"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        >
           {
-            Utils.countries.map(x => <MenuItem value={x.value} primaryText={x.text}/>)
+            Utils.countries.map(x => <MenuItem key={x.value} value={x.value} primaryText={x.text}/>)
           }
         </Field>
       </div>
@@ -69,8 +90,8 @@ const Billing = props => {
           name="credit_card_type"
           component={SelectField}
           floatingLabelText="Credit card type"
-          openOnFocus
           style={Styles.fields.text}
+          validate={[Validators.required]}
         >
           <MenuItem value="visa" primaryText="Visa"/>
           <MenuItem value="american_express" primaryText="American Express"/>
@@ -80,7 +101,13 @@ const Billing = props => {
       </div>
 
       <div>
-        <Field name="cnb" component={TextField} hintText="Credit Card Number" style={Styles.fields.text}/>
+        <Field
+          name="cnb"
+          component={TextField}
+          hintText="Credit Card Number"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        />
       </div>
 
       <div>
@@ -88,13 +115,13 @@ const Billing = props => {
           name="credit_card_month"
           component={SelectField}
           floatingLabelText="Expiry month"
-          openOnFocus
+          validate={[Validators.required]}
           style={Styles.fields.text}
         >
           {
             Array.apply(null, new Array(12)).map((x, i) => {
               const month = ++i < 10 ? `0${i}` : i;
-              return <MenuItem value={month} primaryText={month}/>;
+              return <MenuItem key={month} value={month} primaryText={month}/>;
             })
           }
         </Field>
@@ -105,25 +132,44 @@ const Billing = props => {
           name="credit_card_year"
           component={SelectField}
           floatingLabelText="Expiry year"
-          openOnFocus
           style={Styles.fields.text}
+          validate={[Validators.required]}
         >
           {
             Array.apply(null, new Array(5)).map((x, i) => {
               const year = new Date().getFullYear() + i;
-              return <MenuItem value={year} primaryText={year}/>;
+              return <MenuItem key={year} value={year} primaryText={year}/>;
             })
           }
         </Field>
       </div>
 
       <div>
-        <Field name="vval" component={TextField} hintText="CCV" style={Styles.fields.text}/>
+        <Field
+          name="vval"
+          component={TextField}
+          hintText="CCV"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        />
+      </div>
+      <div>
+        <RaisedButton
+          label="Save"
+          disabled={pristine || submitting}
+          type={"submit"}
+        />
       </div>
     </form>
   );
 };
 
-export default reduxForm({
+function mapStateToProps(state) {
+  return {
+    initialValues: state.settings.values[menus.MENU_BILLING] || {},
+  };
+}
+
+export default connect(mapStateToProps)(reduxForm({
   form: 'billing',
-})(Billing);
+})(Billing))
