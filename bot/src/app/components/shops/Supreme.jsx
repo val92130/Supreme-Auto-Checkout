@@ -3,6 +3,7 @@ import Tab from 'material-ui/Tabs/Tab';
 import { connect } from 'react-redux';
 import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
+import Options from './../menus/Options';
 import Layout from '../../containers/Layout.jsx';
 import { changeMenu } from '../../actions/menu';
 import { updateSettings } from '../../actions/settings';
@@ -12,6 +13,8 @@ class Supreme extends Component {
     switch (menu) {
       case menus.MENU_BILLING:
         return (<Billing onSubmit={data => this.onSubmit(menu, data)} />);
+      case menus.MENU_OPTIONS:
+        return (<Options onSubmit={data => this.onSubmit(menu, data)} />);
       default:
         return null;
     }

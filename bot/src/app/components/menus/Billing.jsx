@@ -1,19 +1,19 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
-import MenuItem from 'material-ui/MenuItem'
+import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
   SelectField,
   TextField,
-} from 'redux-form-material-ui'
+} from 'redux-form-material-ui';
 import Styles from '../../constants/Styles';
 import * as Utils from '../../constants/Utils';
 import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
 
 const Billing = props => {
-  const { handleSubmit, pristine, submitting, error } = props;
+  const { handleSubmit, pristine, submitting } = props;
   return (
     <form onSubmit={handleSubmit} id="biling-form">
       <div>
@@ -21,9 +21,9 @@ const Billing = props => {
           name="order_billing_name"
           validate={Validators.fullName}
           component={TextField}
+          floatingLabelText="Firstname and Lastname"
           hintText="Firstname and Lastname"
           style={Styles.fields.text}
-          errorText={error}
         />
       </div>
 
@@ -31,6 +31,7 @@ const Billing = props => {
         <Field
           name="order_email"
           component={TextField}
+          floatingLabelText="Email"
           hintText="Email"
           style={Styles.fields.text}
           validate={[Validators.required, Validators.email]}
@@ -41,6 +42,7 @@ const Billing = props => {
         <Field
           name="order_tel"
           component={TextField}
+          floatingLabelText="Phone number"
           hintText="Phone number"
           style={Styles.fields.text}
           validate={[Validators.required]}
@@ -51,6 +53,7 @@ const Billing = props => {
         <Field
           name="bo"
           component={TextField}
+          floatingLabelText="Address"
           hintText="Address"
           style={Styles.fields.text}
           validate={[Validators.required]}
@@ -61,6 +64,7 @@ const Billing = props => {
         <Field
           name="order_billing_city"
           component={TextField}
+          floatingLabelText="City"
           hintText="City"
           style={Styles.fields.text}
           validate={[Validators.required]}
@@ -71,18 +75,19 @@ const Billing = props => {
         <Field
           name="order_billing_country"
           component={SelectField}
+          floatingLabelText="Country"
           hintText="Country"
           style={Styles.fields.text}
           validate={[Validators.required]}
         >
           {
-            Utils.countries.map(x => <MenuItem key={x.value} value={x.value} primaryText={x.text}/>)
+            Utils.countries.map(x => <MenuItem key={x.value} value={x.value} primaryText={x.text} />)
           }
         </Field>
       </div>
 
       <div>
-        <Field name="order_billing_zip" component={TextField} hintText="Zip" style={Styles.fields.text}/>
+        <Field name="order_billing_zip" component={TextField} hintText="Zip" style={Styles.fields.text} />
       </div>
 
       <div>
@@ -104,6 +109,7 @@ const Billing = props => {
         <Field
           name="cnb"
           component={TextField}
+          floatingLabelText="Credit Card Number"
           hintText="Credit Card Number"
           style={Styles.fields.text}
           validate={[Validators.required]}
@@ -115,6 +121,7 @@ const Billing = props => {
           name="credit_card_month"
           component={SelectField}
           floatingLabelText="Expiry month"
+          hintText="Expiry month"
           validate={[Validators.required]}
           style={Styles.fields.text}
         >
@@ -132,6 +139,7 @@ const Billing = props => {
           name="credit_card_year"
           component={SelectField}
           floatingLabelText="Expiry year"
+          hintText="Expiry year"
           style={Styles.fields.text}
           validate={[Validators.required]}
         >
@@ -149,6 +157,7 @@ const Billing = props => {
           name="vval"
           component={TextField}
           hintText="CCV"
+          floatingLabelText="CCV"
           style={Styles.fields.text}
           validate={[Validators.required]}
         />
@@ -157,7 +166,7 @@ const Billing = props => {
         <RaisedButton
           label="Save"
           disabled={pristine || submitting}
-          type={"submit"}
+          type="submit"
         />
       </div>
     </form>
@@ -172,4 +181,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(reduxForm({
   form: 'billing',
-})(Billing))
+})(Billing));
