@@ -90,7 +90,7 @@ class SupremeManager extends BaseManager {
   processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
     document.getElementsByName('order[terms]')[0].click();
-    
+
     for (let key of Object.keys(this.billing)) {
       let el = document.getElementById(key);
       el.value = this.billing[key];

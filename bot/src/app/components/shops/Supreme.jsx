@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Options from './../menus/Options';
+import Sizes from './../menus/Sizes';
 import Layout from '../../containers/Layout.jsx';
 import { changeMenu } from '../../actions/menu';
 import { updateSettings } from '../../actions/settings';
@@ -15,6 +16,8 @@ class Supreme extends Component {
         return (<Billing onSubmit={data => this.onSubmit(menu, data)} />);
       case menus.MENU_OPTIONS:
         return (<Options onSubmit={data => this.onSubmit(menu, data)} />);
+      case menus.MENU_SIZES:
+        return (<Sizes onSubmit={data => this.onSubmit(menu, data)} />);
       default:
         return null;
     }
@@ -31,7 +34,7 @@ class Supreme extends Component {
   }
 
   static getDefaultMenu() {
-    return menus.MENU_OPTIONS;
+    return menus.MENU_BILLING;
   }
 
   getTabs() {

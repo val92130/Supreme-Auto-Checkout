@@ -3,24 +3,10 @@ import { Link } from 'react-router';
 import { List, ListItem, makeSelectable } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Subheader from 'material-ui/Subheader';
-import { cyan500 } from 'material-ui/styles/colors';
-import { spacing, typography } from 'material-ui/styles';
 import ListIcon from 'material-ui/svg-icons/action/list';
+import Styles from '../constants/Styles';
 
 const SelectableList = makeSelectable(List);
-
-const styles = {
-  logo: {
-    fontSize: 16,
-    color: typography.textFullWhite,
-    lineHeight: `${spacing.desktopKeylineIncrement}px`,
-    fontWeight: typography.fontWeightLight,
-    backgroundColor: cyan500,
-    marginBottom: 8,
-    height: 64,
-    textAlign: 'center',
-  },
-};
 
 export default function AppDrawer(props) {
   const { location } = props;
@@ -28,13 +14,13 @@ export default function AppDrawer(props) {
   const currentPage = paths[0];
   return (
     <Drawer open>
-      <div style={styles.logo}>Supreme Auto Checkout</div>
+      <div style={Styles.logo}>Supreme Auto Checkout</div>
       <SelectableList value={currentPage}>
         <Subheader>Shops</Subheader>
         <ListItem
           value="supreme"
           primaryText="Supreme"
-          containerElement={<Link to={'/supreme/'}/>}
+          containerElement={<Link to={'/supreme/'} />}
           leftIcon={<ListIcon />}
         />
       </SelectableList>

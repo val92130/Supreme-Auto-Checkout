@@ -91,31 +91,31 @@ class BaseManager {
 
   sizeMatch(sizeA, sizeB, category) {
 
-      sizeA = sizeA.toString().toLowerCase();
-      sizeB = sizeB.toString().toLowerCase();
-      if (!sizeB || !sizeA) return false;
+    sizeA = sizeA.toString().toLowerCase();
+    sizeB = sizeB.toString().toLowerCase();
+    if (!sizeB || !sizeA) return false;
 
-      if (sizeA === sizeB) {
+    if (sizeA === sizeB) {
+      return true;
+    }
+
+    if (category === "shoes") {
+      // Match sizes like UK10/US10.5'
+      const a = sizeA.split(/(?:\/)+/);
+      const b = sizeB.split(/(?:\/)+/);
+
+      if (a.some(x => b.indexOf(x) !== -1)) {
         return true;
       }
-
-      if (category === "shoes") {
-          // Match sizes like UK10/US10.5'
-          const a = sizeA.split(/(?:\/)+/);
-          const b = sizeB.split(/(?:\/)+/);
-
-          if (a.some(x => b.indexOf(x) !== -1)) {
-            return true;
-          }
-          return a[0].replace(/\D/g, '') === b[0].replace(/\D/g, '');
-      }
-
-      if (!isNaN(sizeA) || !isNaN(sizeB)) return false;
-
-      // Match sizes like 'S/M';
-      const splitA = sizeA.split('/');
-      const splitB = sizeB.split('/');
-
-      return splitA.some(x => sizeB[0] === x[0]) || splitB.some(x => sizeA[0] === x[0]);
+      return a[0].replace(/\D/g, '') === b[0].replace(/\D/g, '');
     }
+
+    if (!isNaN(sizeA) || !isNaN(sizeB)) return false;
+
+    // Match sizes like 'S/M';
+    const splitA = sizeA.split('/');
+    const splitB = sizeB.split('/');
+
+    return splitA.some(x => sizeB[0] === x[0]) || splitB.some(x => sizeA[0] === x[0]);
+  }
 }
