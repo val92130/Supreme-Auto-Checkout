@@ -10,10 +10,19 @@ import Styles from '../../constants/Styles';
 import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
 
+const defaultValues = {
+  autoCheckout: false,
+  autoPay: false,
+  strictSize: false,
+  hideSoldOut: false,
+  addToCartDelay: 200,
+  checkoutDelay: 2000,
+};
+
 const Options = props => {
   const { handleSubmit, pristine, submitting } = props;
   return (
-    <form onSubmit={handleSubmit} id="otpions-form">
+    <form onSubmit={handleSubmit} id="options-form">
       <div>
         <Field
           name="autoCheckout"
@@ -105,11 +114,15 @@ const Options = props => {
   );
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    initialValues: state.settings.values[menus.MENU_OPTIONS] || {},
+    initialValues: Object.assign(defaultValues, (state.settings.values[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
   };
 }
+
+Options.propTypes = {
+  shop: PropTypes.string.isRequired,
+};
 
 export default connect(mapStateToProps)(reduxForm({
   form: 'options',

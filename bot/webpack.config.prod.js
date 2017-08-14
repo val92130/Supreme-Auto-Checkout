@@ -13,7 +13,39 @@ const CopyWebPackPluginConfig = new CopyWebpackPlugin([
     { from: './manifest.json', to: './manifest.json' }
 ]);
 
-module.exports = {
+const extConfig = {
+  entry: [
+    './src/extension/index.js',
+  ],
+  output: {
+    path: path.resolve('build'),
+    filename: 'extension.js',
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      request: 'browser-request',
+    },
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.(js)$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'react'],
+          plugins: [
+            'transform-runtime',
+          ],
+        },
+      },
+    ],
+  },
+};
+
+const optionsConfig = {
   entry: './src/app/index.jsx',
   output: {
     path: path.resolve('build'),
@@ -43,3 +75,5 @@ module.exports = {
   },
   plugins: [HtmlWebpackPluginConfig, CopyWebPackPluginConfig]
 };
+
+module.exports = [optionsConfig, extConfig];

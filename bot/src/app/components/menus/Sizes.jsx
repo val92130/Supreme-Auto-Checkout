@@ -161,9 +161,13 @@ const Sizes = props => {
   );
 };
 
-function mapStateToProps(state) {
+Sizes.propTypes = {
+  shop: PropTypes.string.isRequired,
+};
+
+function mapStateToProps(state, ownProps) {
   return {
-    initialValues: state.settings.values[menus.MENU_SIZES] || {},
+    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_SIZES] || {},
   };
 }
 

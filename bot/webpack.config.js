@@ -2,7 +2,39 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const extConfig = {
+  entry: [
+    './src/extension/index.js',
+  ],
+  output: {
+    path: __dirname + '/dist',
+    filename: 'extension.js',
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      request: 'browser-request',
+    },
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.(js)$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'react'],
+          plugins: [
+            'transform-runtime',
+          ],
+        },
+      },
+    ],
+  },
+};
+
+const optionsConfig = {
   devtool: '#eval-source-map',
   entry: [
     './src/app/index.jsx',
@@ -71,3 +103,5 @@ module.exports = {
     ],
   },
 };
+
+module.exports = [optionsConfig, extConfig];

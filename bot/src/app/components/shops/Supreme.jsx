@@ -9,22 +9,24 @@ import Layout from '../../containers/Layout.jsx';
 import { changeMenu } from '../../actions/menu';
 import { updateSettings } from '../../actions/settings';
 
+const SHOP_NAME = 'Supreme';
+
 class Supreme extends Component {
   getContainerForMenu(menu) {
     switch (menu) {
       case menus.MENU_BILLING:
-        return (<Billing onSubmit={data => this.onSubmit(menu, data)} />);
+        return (<Billing onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
       case menus.MENU_OPTIONS:
-        return (<Options onSubmit={data => this.onSubmit(menu, data)} />);
+        return (<Options onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
       case menus.MENU_SIZES:
-        return (<Sizes onSubmit={data => this.onSubmit(menu, data)} />);
+        return (<Sizes onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
       default:
         return null;
     }
   }
 
   onSubmit(menu, data) {
-    this.props.updateSettings(menu, data);
+    this.props.updateSettings(SHOP_NAME, menu, data);
   }
 
   componentWillMount() {
@@ -80,7 +82,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     changeMenu: menu => dispatch(changeMenu(menu)),
-    updateSettings: (key, value) => dispatch(updateSettings(key, value))
+    updateSettings: (shop, key, value) => dispatch(updateSettings(shop, key, value))
   };
 }
 

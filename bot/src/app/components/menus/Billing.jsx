@@ -173,9 +173,13 @@ const Billing = props => {
   );
 };
 
-function mapStateToProps(state) {
+Billing.propTypes = {
+  shop: PropTypes.string.isRequired,
+};
+
+function mapStateToProps(state, ownProps) {
   return {
-    initialValues: state.settings.values[menus.MENU_BILLING] || {},
+    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_BILLING] || {},
   };
 }
 

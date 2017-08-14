@@ -231,8 +231,8 @@ class SupremeManager extends BaseManager {
   }
 }
 
-async function Start() {
-  const stores = await getOptions('Supreme', ['preferences', 'sizings', 'billing']);
+function Start() {
+  const stores = getOptions('Supreme', ['preferences', 'sizings', 'billing']);
   const supremeManager = new SupremeManager(stores[0], stores[1], stores[2]);
   supremeManager.start();
 }

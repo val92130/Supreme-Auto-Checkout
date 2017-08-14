@@ -5,9 +5,9 @@ export default function settings(state = {
 }, action) {
   switch (action.type) {
     case types.UPDATE_SETTINGS:
-      return Object.assign({}, state, {
-        values: Object.assign({}, state.values, action.value),
-      });
+      const data = Object.assign({}, state.values);
+      data[action.shop] = Object.assign({}, state.values[action.shop], action.value);
+      return Object.assign({}, state, { values: data });
     default:
       return state;
   }

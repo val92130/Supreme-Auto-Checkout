@@ -1,4 +1,4 @@
-class BaseManager {
+export default class BaseManager {
   constructor() {
     this.notificationBar = this.createNotificationBar();
   }
