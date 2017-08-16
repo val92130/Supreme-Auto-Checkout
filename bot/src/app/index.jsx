@@ -37,7 +37,9 @@ store.subscribe(() => {
   const state = store.getState();
   if (state) {
     saveState({ menu: state.menu, settings: state.settings }, VERSION);
-    saveToChromeStorage('settings', state.settings.values || {});
+    if (typeof (chrome) !== 'undefined' && typeof (chrome.storage) !== 'undefined') {
+      saveToChromeStorage('settings', state.settings.values || {});
+    }
   }
 });
 
