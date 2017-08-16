@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Tab from 'material-ui/Tabs/Tab';
 import { connect } from 'react-redux';
+import FontIcon from 'material-ui/FontIcon';
 import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Options from './../menus/Options';
@@ -35,6 +36,11 @@ class Supreme extends Component {
     }
   }
 
+  getIconForTabMenu(menu) {
+    const isIncomplete = !this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu];
+    return (<FontIcon className="material-icons">{isIncomplete ? 'error' : 'done'}</FontIcon>);
+  }
+
   static getDefaultMenu() {
     return menus.MENU_BILLING;
   }
@@ -44,18 +50,21 @@ class Supreme extends Component {
       <Tab
         label="Billing"
         key={1}
+        icon={this.getIconForTabMenu(menus.MENU_BILLING)}
         value={menus.MENU_BILLING}
         onClick={() => this.props.changeMenu(menus.MENU_BILLING)}
       />,
       <Tab
         label="Options"
         key={2}
+        icon={this.getIconForTabMenu(menus.MENU_OPTIONS)}
         value={menus.MENU_OPTIONS}
         onClick={() => this.props.changeMenu(menus.MENU_OPTIONS)}
       />,
       <Tab
         label="Sizes"
         key={3}
+        icon={this.getIconForTabMenu(menus.MENU_SIZES)}
         value={menus.MENU_SIZES}
         onClick={() => this.props.changeMenu(menus.MENU_SIZES)}
       />,
