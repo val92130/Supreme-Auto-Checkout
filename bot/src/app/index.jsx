@@ -7,16 +7,17 @@ import createLogger from 'redux-logger';
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { reducer as formReducer } from 'redux-form';
+import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import getRoutes from './routes';
-import { loadSavedState, saveState } from './utils/StorageManager';
+import { loadSavedState, saveState, saveToChromeStorage } from './utils/StorageManager';
 
 
 const VERSION = '0.0.1';
 
 injectTapEventPlugin();
 
-const middleware = [routerMiddleware(browserHistory)];
+const middleware = [thunk, routerMiddleware(browserHistory)];
 if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
@@ -36,6 +37,7 @@ store.subscribe(() => {
   const state = store.getState();
   if (state) {
     saveState({ menu: state.menu, settings: state.settings }, VERSION);
+    saveToChromeStorage('settings', state.settings.values || {});
   }
 });
 

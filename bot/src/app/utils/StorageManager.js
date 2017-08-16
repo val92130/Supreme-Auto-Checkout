@@ -1,3 +1,5 @@
+import * as Helpers from '../utils/Helpers';
+
 export const initializeLocalStorageState = (initialState, version) => {
   localStorage.setItem('state', JSON.stringify([{ value: initialState || {}, version }]));
 };
@@ -37,3 +39,21 @@ export const saveState = (state, version) => {
     initializeLocalStorageState({}, version);
   }
 };
+
+export function saveToChromeStorage(key, value) {
+  return new Promise((resolve) => {
+    const obj = {};
+    obj[key] = value;
+    chrome.storage.sync.set(obj, () => {
+      resolve();
+    });
+  });
+}
+
+export function getFromChromeStorage(key) {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(key, async (settings) => {
+      resolve(settings[key]);
+    });
+  });
+}
