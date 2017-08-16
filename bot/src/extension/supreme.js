@@ -1,4 +1,7 @@
-class SupremeManager extends BaseManager {
+import BaseManager from './BaseManager';
+import * as Helpers from '../app/utils/Helpers';
+
+export default class SupremeManager extends BaseManager {
   constructor(preferences, sizings, billing) {
     super();
     this.preferences = preferences;
@@ -7,7 +10,6 @@ class SupremeManager extends BaseManager {
   }
   /**
    * This function is called whenever a new page change occurs
-   * @param  {String} location new location of the page
    */
   async onPageChange() {
     this.processLinks();
@@ -114,8 +116,6 @@ class SupremeManager extends BaseManager {
    * This function should be called when the user is on a product page, it will
    * try to figure out if the product is sold out or not, and if not, it will find the best available size
    * based on the user's preferences and then it will add the item to cart
-   * @param  {Object} preferencesStore Object that stores the preference options
-   * @param  {Object} sizingStore Object that stores the sizings options
    */
   processProduct() {
     if (!this.isSoldOut()) {
@@ -184,7 +184,7 @@ class SupremeManager extends BaseManager {
    */
   isProductPage() {
     let path = location.pathname.substring(1).split('/');
-    return (path.length === 4 && path[0] === 'shop') || getQueryStringValue('atc-category') !== "";
+    return (path.length === 4 && path[0] === 'shop') || Helpers.getQueryStringValue('atc-category') !== "";
   }
 
   /**
@@ -230,11 +230,3 @@ class SupremeManager extends BaseManager {
     return [...sizes.options];
   }
 }
-
-function Start() {
-  const stores = getOptions('Supreme', ['preferences', 'sizings', 'billing']);
-  const supremeManager = new SupremeManager(stores[0], stores[1], stores[2]);
-  supremeManager.start();
-}
-
-Start();

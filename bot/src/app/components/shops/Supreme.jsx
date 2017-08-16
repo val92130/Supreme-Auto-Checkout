@@ -10,7 +10,7 @@ import Layout from '../../containers/Layout.jsx';
 import { changeMenu } from '../../actions/menu';
 import { updateSettings } from '../../actions/settings';
 
-const SHOP_NAME = 'Supreme';
+export const SHOP_NAME = 'Supreme';
 
 class Supreme extends Component {
   getContainerForMenu(menu) {

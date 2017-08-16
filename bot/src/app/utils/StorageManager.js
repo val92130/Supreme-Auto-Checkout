@@ -44,7 +44,7 @@ export function saveToChromeStorage(key, value) {
   return new Promise((resolve) => {
     const obj = {};
     obj[key] = value;
-    chrome.storage.sync.set(obj, () => {
+    chrome.storage.local.set(obj, () => {
       resolve();
     });
   });
@@ -52,8 +52,9 @@ export function saveToChromeStorage(key, value) {
 
 export function getFromChromeStorage(key) {
   return new Promise((resolve) => {
-    chrome.storage.sync.get(key, async (settings) => {
-      resolve(settings[key]);
+    chrome.storage.local.get(key, async (settings) => {
+      console.log(settings);
+      resolve(Helpers.isObjectEmpty(settings) ? {} : settings[key]);
     });
   });
 }

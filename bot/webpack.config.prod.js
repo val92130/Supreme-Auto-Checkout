@@ -31,7 +31,7 @@ const extConfig = {
   module: {
     loaders: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
