@@ -27,7 +27,7 @@ To install the chrome extension you must first download the latest release [here
 Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
-  >- Drag the **src** folder containing the extension into Google Chrome.
+  >- Drag the **bot/build** folder containing the extension into Google Chrome.
 
 # Configuration
 
@@ -76,3 +76,24 @@ To run the server, navigate to the `monitor` folder and type in your command pro
  Finally, go on the options menu of the Chrome extension and set the ip address of the server where the monitoring is run.
  
  If run locally, just type **http://localhost:3000**.
+ 
+ # Development
+ 
+Requirements:
+- node.js 7+
+- yarn
+
+First, you'll need to install the npm dependencies:
+ ```bash
+  $ yarn
+ ```
+ 
+To build and run the dev server, type the following command in your terminal:
+ ```bash
+  $ yarn start
+ ```
+ 
+ To package a new version of the application run the following command:
+  ```bash
+   $ yarn build
+  ```
