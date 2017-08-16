@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import Tab from 'material-ui/Tabs/Tab';
 import { connect } from 'react-redux';
 import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import { red300 } from 'material-ui/styles/colors';
 import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Options from './../menus/Options';
@@ -38,7 +40,12 @@ class Supreme extends Component {
 
   getIconForTabMenu(menu) {
     const isIncomplete = !this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu];
-    return (<FontIcon className="material-icons">{isIncomplete ? 'error' : 'done'}</FontIcon>);
+    const color = isIncomplete ? red300 : 'white';
+    const tip = isIncomplete ? 'This tab hasn\'t been configured yet' : '';
+    return (<IconButton iconStyle={{ color }} tooltip={tip} tooltipPosition="top-center" tooltipStyles={{color: 'white'}}>
+        <FontIcon style={{ color }} className="material-icons" >{isIncomplete ? 'error' : 'done'}</FontIcon>
+    </IconButton>
+    );
   }
 
   static getDefaultMenu() {

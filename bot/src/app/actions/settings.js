@@ -1,11 +1,15 @@
 import * as types from '../constants/ActionTypes';
+import addNotification from '../actions/notification';
 
 export function updateSettings(shop, key, value) {
-  const obj = {};
-  obj[key] = value;
-  return {
-    type: types.UPDATE_SETTINGS,
-    value: obj,
-    shop,
+  return function(dispatch) {
+    dispatch(addNotification('Settings saved'));
+    const obj = {};
+    obj[key] = value;
+    dispatch({
+      type: types.UPDATE_SETTINGS,
+      value: obj,
+      shop,
+    });
   };
 }
