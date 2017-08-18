@@ -4,7 +4,8 @@ export function email(input) {
 }
 
 export function required(value) {
-  return !value ? 'Required field' : undefined;
+  const empty = typeof value !== 'number' && !value;
+  return empty ? 'Required field' : undefined;
 }
 
 export function simpleText(value) {

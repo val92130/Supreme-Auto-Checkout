@@ -28,8 +28,27 @@ class Supreme extends Component {
     }
   }
 
+  strToNumberReducer(menu, key, value) {
+    if (typeof value === 'string' && !isNaN(value)) {
+      return +(value);
+    }
+    return value;
+  }
+
+  transform(menu, obj, reducer) {
+    const keys = Object.keys(obj);
+    const newObj = {};
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const value = obj[key];
+      newObj[key] = reducer(menu, key, value);
+    }
+    return newObj;
+  }
+
   onSubmit(menu, data) {
-    this.props.updateSettings(SHOP_NAME, menu, data);
+    const newObj = this.transform(menu, data, this.strToNumberReducer);
+    this.props.updateSettings(SHOP_NAME, menu, newObj);
   }
 
   componentWillMount() {

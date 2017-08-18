@@ -91,7 +91,10 @@ export default class SupremeManager extends BaseManager {
    */
   processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
-    document.getElementsByName('order[terms]')[0].click();
+    const terms = document.getElementsByName('order[terms]');
+    if (terms.length) {
+      terms[0].click();
+    }
 
     for (let key of Object.keys(this.billing)) {
       let el = document.getElementById(key);
@@ -123,8 +126,9 @@ export default class SupremeManager extends BaseManager {
       let minPrice = this.preferences.minPrice;
       let itemPrice = document.querySelector('[itemprop=price]');
 
+
       if (itemPrice !== null) {
-        let price = itemPrice.innerHTML.replace(/\D/g, '');
+        let price = +(itemPrice.innerHTML.replace(/\D/g, ''));
         if (!isNaN(price)) {
           if (maxPrice !== undefined && price > maxPrice) {
             this.setNotificationBarText('Product price is too high, not checking out');
@@ -183,31 +187,28 @@ export default class SupremeManager extends BaseManager {
    * Check if the user is currently on a product page
    */
   isProductPage() {
-    let path = location.pathname.substring(1).split('/');
-    return (path.length === 4 && path[0] === 'shop') || Helpers.getQueryStringValue('atc-category') !== "";
+    return Helpers.pageHasNodeOfClass('styles') || Helpers.pageHasNodeOfClass('price') || Helpers.pageHasNodeOfClass('style');
   }
 
   /**
    * Check if the user is currently on the 'cart' page
    */
   isCart() {
-    let path = location.pathname.substring(1).split('/');
-    return path[1] === 'cart';
+    return Helpers.pageHasNodeOfClass('cart') || Helpers.hasStringInPath('cart');
   }
 
   /**
    * Check if the user is currently at the checkout page
    */
   isCheckout() {
-    let path = location.pathname.substring(1).split('/');
-    return path[0] === 'checkout';
+    return Helpers.hasStringInPath('checkout');
   }
 
   /**
    * Returns the product category when the user is on a product page
    */
   getProductCategory() {
-    let category = getQueryStringValue('atc-category');
+    let category = Helpers.getQueryStringValue('atc-category');
     return category === "" ? location.pathname.substring(1).split('/')[1] : category;
   }
 

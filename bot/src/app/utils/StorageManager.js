@@ -53,7 +53,6 @@ export function saveToChromeStorage(key, value) {
 export function getFromChromeStorage(key) {
   return new Promise((resolve) => {
     chrome.storage.local.get(key, async (settings) => {
-      console.log(settings);
       resolve(Helpers.isObjectEmpty(settings) ? {} : settings[key]);
     });
   });
