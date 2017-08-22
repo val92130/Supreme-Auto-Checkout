@@ -67,6 +67,7 @@
     "redux-form": "^6.3.2",
     "redux-form-material-ui": "^4.2.0",
     "redux-localstorage": "^0.4.1",
-    "redux-logger": "^2.7.4"
+    "redux-logger": "^2.7.4",
+    "redux-thunk": "^2.2.0"
   }
 }

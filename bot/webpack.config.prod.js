@@ -1,17 +1,24 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + '/src/app/index.hbs',
   filename: 'index.html',
-  inject: 'body'
+  inject: 'body',
 });
 
 const CopyWebPackPluginConfig = new CopyWebpackPlugin([
     { from: './src/assets/', to: 'assets' },
-    { from: './manifest.json', to: './manifest.json' }
+    { from: './manifest.json', to: './manifest.json' },
 ]);
+
+const DefinePlugin = new webpack.DefinePlugin({
+  'process.env': {
+    NODE_ENV: "'production'",
+  },
+});
 
 const extConfig = {
   entry: [
@@ -73,7 +80,7 @@ const optionsConfig = {
       { test: /\.(jpe?g|gif|png|svg|woff|ttf|wav|mp3)$/, loader: 'file' },
     ],
   },
-  plugins: [HtmlWebpackPluginConfig, CopyWebPackPluginConfig]
+  plugins: [HtmlWebpackPluginConfig, CopyWebPackPluginConfig, DefinePlugin],
 };
 
 module.exports = [optionsConfig, extConfig];
