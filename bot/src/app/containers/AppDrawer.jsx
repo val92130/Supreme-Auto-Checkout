@@ -3,10 +3,16 @@ import { Link } from 'react-router';
 import { List, ListItem, makeSelectable } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Subheader from 'material-ui/Subheader';
-import ListIcon from 'material-ui/svg-icons/action/list';
+import CodeIcon from 'material-ui/svg-icons/action/code';
+import ShopIcon from 'material-ui/svg-icons/action/shop';
 import Styles from '../constants/Styles';
 
 const SelectableList = makeSelectable(List);
+
+function openUrlInNewTab(url) {
+  const win = window.open(url, '_blank');
+  win.focus();
+}
 
 export default function AppDrawer(props) {
   const { location } = props;
@@ -21,7 +27,14 @@ export default function AppDrawer(props) {
           value="supreme"
           primaryText="Supreme"
           containerElement={<Link to={'/supreme/'} />}
-          leftIcon={<ListIcon />}
+          leftIcon={<ShopIcon />}
+        />
+        <Subheader>Other</Subheader>
+        <ListItem
+          value="about"
+          primaryText="Github"
+          onTouchTap={() => openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout')}
+          leftIcon={<CodeIcon />}
         />
       </SelectableList>
     </Drawer>
