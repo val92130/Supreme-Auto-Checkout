@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -12,8 +12,21 @@ import * as Utils from '../../constants/Utils';
 import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
 
+function getStatesForCountry(country) {
+  switch (country) {
+    case 'USA':
+      return Utils.usaRegions;
+    case 'JAPAN':
+      return Utils.japanRegions;
+    case 'CANADA':
+      return Utils.canadaRegions;
+    default:
+      return [];
+  }
+}
+
 const Billing = props => {
-  const { handleSubmit, pristine, submitting } = props;
+  const { handleSubmit, pristine, submitting, country } = props;
   return (
     <form onSubmit={handleSubmit} id="biling-form">
       <div>
@@ -85,9 +98,29 @@ const Billing = props => {
           }
         </Field>
       </div>
+      {
+        ['JAPAN', 'USA', 'CANADA'].indexOf(country) !== -1 &&
+        <Field
+          name="order_billing_state"
+          component={SelectField}
+          floatingLabelText="State"
+          hintText="State"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        >
+          {
+            getStatesForCountry(country).map(x => <MenuItem key={x.value} value={x.value} primaryText={x.text} />)
+          }
+        </Field>
+      }
 
       <div>
-        <Field name="order_billing_zip" component={TextField} hintText="Zip" style={Styles.fields.text} />
+        <Field
+          name="order_billing_zip"
+          component={TextField}
+          floatingLabelText="Zip"
+          style={Styles.fields.text}
+        />
       </div>
 
       <div>
@@ -173,16 +206,20 @@ const Billing = props => {
   );
 };
 
+const BillingForm = reduxForm({
+  form: 'billing',
+})(Billing);
+
 Billing.propTypes = {
   shop: PropTypes.string.isRequired,
 };
+const selector = formValueSelector('billing');
 
 function mapStateToProps(state, ownProps) {
   return {
     initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_BILLING] || {},
+    country: selector(state, 'order_billing_country'),
   };
 }
 
-export default connect(mapStateToProps)(reduxForm({
-  form: 'billing',
-})(Billing));
+export default connect(mapStateToProps)(BillingForm);

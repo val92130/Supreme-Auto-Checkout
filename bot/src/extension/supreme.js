@@ -98,8 +98,10 @@ export default class SupremeManager extends BaseManager {
 
     for (let key of Object.keys(this.billing)) {
       let el = document.getElementById(key);
-      el.value = this.billing[key];
-      el.dispatchEvent(new Event('change'));
+      if (el) {
+        el.value = this.billing[key];
+        el.dispatchEvent(new Event('change'));
+      }
     }
 
     if (this.preferences.captchaBypass) {
@@ -110,7 +112,10 @@ export default class SupremeManager extends BaseManager {
     }
     if (this.preferences.autoPay) {
       this.timeout(() => {
-        document.getElementsByName('commit')[0].click();
+        const commitBtn = document.getElementsByName('commit')[0];
+        if (commitBtn) {
+          commitBtn.click();
+        }
       }, checkoutDelay, 'Checking out');
     }
   }
