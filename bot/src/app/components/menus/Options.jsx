@@ -15,6 +15,7 @@ const defaultValues = {
   autoPay: false,
   strictSize: false,
   hideSoldOut: false,
+  captchaBypass: false,
   addToCartDelay: 200,
   checkoutDelay: 2000,
 };
@@ -55,6 +56,15 @@ const Options = props => {
           name="hideSoldOut"
           component={Toggle}
           label="Hide sold out products"
+          style={Styles.fields.text}
+        />
+      </div>
+
+      <div>
+        <Field
+          name="captchaBypass"
+          component={Toggle}
+          label="Bypass captcha (beta)"
           style={Styles.fields.text}
         />
       </div>

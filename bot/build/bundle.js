@@ -71080,6 +71080,7 @@ var defaultValues = {
   autoPay: false,
   strictSize: false,
   hideSoldOut: false,
+  captchaBypass: false,
   addToCartDelay: 200,
   checkoutDelay: 2000
 };
@@ -71129,6 +71130,16 @@ var Options = function Options(props) {
         name: 'hideSoldOut',
         component: _reduxFormMaterialUi.Toggle,
         label: 'Hide sold out products',
+        style: _Styles2.default.fields.text
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_reduxForm.Field, {
+        name: 'captchaBypass',
+        component: _reduxFormMaterialUi.Toggle,
+        label: 'Bypass captcha (beta)',
         style: _Styles2.default.fields.text
       })
     ),
