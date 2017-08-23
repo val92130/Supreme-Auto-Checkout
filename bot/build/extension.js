@@ -66536,7 +66536,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var defaultValues = {
   autoCheckout: false,
   autoPay: false,
-  strictSize: false,
+  strictSize: true,
   hideSoldOut: false,
   captchaBypass: false,
   addToCartDelay: 200,

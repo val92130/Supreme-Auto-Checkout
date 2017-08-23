@@ -13,7 +13,7 @@ import * as menus from '../../constants/Menus';
 const defaultValues = {
   autoCheckout: false,
   autoPay: false,
-  strictSize: false,
+  strictSize: true,
   hideSoldOut: false,
   captchaBypass: false,
   addToCartDelay: 200,
