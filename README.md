@@ -3,7 +3,7 @@ Supreme Auto Checkout
 
 Supreme Auto Checkout is a Google Chrome extension to automate the process of buying a product from the Supreme shop.
 
-![Bot](https://github.com/val92130/Supreme-Auto-Checkout/blob/refacto-react/screen-bot.png "Bot")
+![Bot](https://github.com/val92130/Supreme-Auto-Checkout/blob/develop/screen-bot.jpg "Bot")
 
 # Requirements
   - Chrome for desktop release 55
