@@ -3,6 +3,8 @@ Supreme Auto Checkout
 
 Supreme Auto Checkout is a Google Chrome extension to automate the process of buying a product from the Supreme shop.
 
+![Bot](https://github.com/val92130/Supreme-Auto-Checkout/blob/refacto-react/screen-bot.png "Bot")
+
 # Requirements
   - Chrome for desktop release 55
 
@@ -10,8 +12,6 @@ Supreme Auto Checkout is a Google Chrome extension to automate the process of bu
 
 Supreme Auto Checkout provides many features such as:
   - **Auto Checkout** - The product will automatically be added to your cart and will straight go to the checkout page.
-  - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
-  - **Product Monitor** - Be notified when new products are added to the shop.
   - **AutoFill** - All of your billing informations will be automaticaly filled on the checkout page.
   - **Configurable delays for every steps of the checkout process.**
   - **Size choice for every category of product.**
@@ -19,6 +19,11 @@ Supreme Auto Checkout provides many features such as:
   - **Option to set a minimum/maximum price for a product.**
   - **Option to hide sold out products.**
   - **Easy configuration.**
+  
+# Coming soon
+Features that will be added in the future:
+  - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
+  - **Product Monitor** - Be notified when new products are added to the shop.
 
 # Installation
 
@@ -27,7 +32,7 @@ To install the chrome extension you must first download the latest release [here
 Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
-  >- Drag the **src** folder containing the extension into Google Chrome.
+  >- Drag the **bot/build** folder containing the extension into Google Chrome.
 
 # Configuration
 
@@ -55,24 +60,24 @@ The **Captcha Bypass** feature works by deleting from the DOM the node containin
 This temporary works because Supreme doesn't seems to validate Google's Re-captcha on server-side.
 
 This option is **NOT** recommended, use with caution.
+ 
+ # Development
+ 
+Requirements:
+- node.js 7+
+- yarn
 
-
-# Auto Cop
-
-**The autocop feature requires the product monitoring to be enabled to work!**
-
-
-# Product monitoring
-
-To enable the product monitoring you must first run the monitoring server, either locally or on a remote computer.
-
-To do so, you must first have **node js** installed.
-
-To run the server, navigate to the `monitor` folder and type in your command prompt:
+First, you'll need to install the npm dependencies:
  ```bash
-  $ node app.js
+  $ yarn
  ```
  
- Finally, go on the options menu of the Chrome extension and set the ip address of the server where the monitoring is run.
+To build and run the dev server, type the following command in your terminal:
+ ```bash
+  $ yarn start
+ ```
  
- If run locally, just type **http://localhost:3000**.
+ To package a new version of the application run the following command:
+  ```bash
+   $ yarn build
+  ```
