@@ -23574,6 +23574,7 @@ var SupremeManager = function (_BaseManager) {
     _this.billing = billing;
     return _this;
   }
+
   /**
    * This function is called whenever a new page change occurs
    */
@@ -23618,7 +23619,6 @@ var SupremeManager = function (_BaseManager) {
                 return _context.abrupt('return');
 
               case 11:
-
                 if (this.isProductPage()) {
                   this.processProduct();
                 } else if (this.isCart()) {
@@ -23758,7 +23758,6 @@ var SupremeManager = function (_BaseManager) {
       if (terms.length) {
         terms[0].click();
       }
-
       var _iteratorNormalCompletion3 = true;
       var _didIteratorError3 = false;
       var _iteratorError3 = undefined;
@@ -23887,7 +23886,7 @@ var SupremeManager = function (_BaseManager) {
   }, {
     key: 'isProductPage',
     value: function isProductPage() {
-      return Helpers.pageHasNodeOfClass('styles') || Helpers.pageHasNodeOfClass('price') || Helpers.pageHasNodeOfClass('style');
+      return Helpers.hasStringInPath('shop') && (Helpers.pageHasNodeOfClass('styles') || Helpers.pageHasNodeOfClass('price') || Helpers.pageHasNodeOfClass('style'));
     }
 
     /**
@@ -23897,7 +23896,7 @@ var SupremeManager = function (_BaseManager) {
   }, {
     key: 'isCart',
     value: function isCart() {
-      return Helpers.pageHasNodeOfClass('cart') || Helpers.hasStringInPath('cart');
+      return Helpers.pageHasNodeOfClass('cart') && Helpers.hasStringInPath('cart');
     }
 
     /**
