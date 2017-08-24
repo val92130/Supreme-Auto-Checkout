@@ -29,7 +29,8 @@ class Supreme extends Component {
   }
 
   strToNumberReducer(menu, key, value) {
-    if (typeof value === 'string' && !isNaN(value)) {
+    // Don't process values for billing
+    if (typeof value === 'string' && !isNaN(value) && menu !== menus.MENU_BILLING) {
       return +(value);
     }
     return value;
