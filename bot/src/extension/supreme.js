@@ -8,6 +8,7 @@ export default class SupremeManager extends BaseManager {
     this.sizings = sizings;
     this.billing = billing;
   }
+
   /**
    * This function is called whenever a new page change occurs
    */
@@ -26,7 +27,6 @@ export default class SupremeManager extends BaseManager {
     const autoPay = this.preferences.autoPay;
     this.setNotificationBarText('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
     if (!this.preferences.autoCheckout) return;
-
     if (this.isProductPage()) {
       this.processProduct();
     } else if (this.isCart()) {
@@ -95,7 +95,6 @@ export default class SupremeManager extends BaseManager {
     if (terms.length) {
       terms[0].click();
     }
-
     for (let key of Object.keys(this.billing)) {
       let el = document.getElementById(key);
       if (el) {
@@ -192,14 +191,16 @@ export default class SupremeManager extends BaseManager {
    * Check if the user is currently on a product page
    */
   isProductPage() {
-    return Helpers.pageHasNodeOfClass('styles') || Helpers.pageHasNodeOfClass('price') || Helpers.pageHasNodeOfClass('style');
+    return Helpers.hasStringInPath('shop') && (Helpers.pageHasNodeOfClass('styles')
+      || Helpers.pageHasNodeOfClass('price')
+      || Helpers.pageHasNodeOfClass('style'));
   }
 
   /**
    * Check if the user is currently on the 'cart' page
    */
   isCart() {
-    return Helpers.pageHasNodeOfClass('cart') || Helpers.hasStringInPath('cart');
+    return Helpers.pageHasNodeOfClass('cart') && Helpers.hasStringInPath('cart');
   }
 
   /**
