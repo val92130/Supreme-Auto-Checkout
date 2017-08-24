@@ -50,6 +50,7 @@ const extConfig = {
       },
     ],
   },
+  plugins: [new webpack.optimize.UglifyJsPlugin()],
 };
 
 const optionsConfig = {
@@ -80,7 +81,7 @@ const optionsConfig = {
       { test: /\.(jpe?g|gif|png|svg|woff|ttf|wav|mp3)$/, loader: 'file' },
     ],
   },
-  plugins: [HtmlWebpackPluginConfig, CopyWebPackPluginConfig, DefinePlugin],
+  plugins: [HtmlWebpackPluginConfig, CopyWebPackPluginConfig, DefinePlugin, new webpack.optimize.UglifyJsPlugin()],
 };
 
 module.exports = [optionsConfig, extConfig];
