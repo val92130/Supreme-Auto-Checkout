@@ -1,5 +1,6 @@
 import BaseManager from './BaseManager';
 import * as Helpers from '../app/utils/Helpers';
+import * as InputProcessor from './InputProcessor';
 
 export default class SupremeManager extends BaseManager {
   constructor(preferences, sizings, billing) {
@@ -91,31 +92,13 @@ export default class SupremeManager extends BaseManager {
    */
   processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
+    const inputs = [...document.querySelectorAll('input, textarea, select')]
+      .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
+    const successFill = InputProcessor.processFields(inputs, this.billing);
+
     const terms = document.getElementsByName('order[terms]');
     if (terms.length) {
       terms[0].click();
-    }
-    for (let key of Object.keys(this.billing)) {
-      let el = document.getElementById(key);
-      if (el) {
-        el.value = this.billing[key];
-        el.dispatchEvent(new Event('change'));
-      }
-    }
-
-    // Process card number and CVV
-    const card_field = document.getElementsByName('credit_card[nlb]');
-    if (card_field) {
-      const f = card_field[0];
-      f.value = this.billing['cnb'];
-      f.dispatchEvent(new Event('change'));
-    }
-
-    const cvv_field = document.getElementsByName('credit_card[rvv]');
-    if (cvv_field) {
-      const f = cvv_field[0];
-      f.value = this.billing['vval'];
-      f.dispatchEvent(new Event('change'));
     }
 
     if (this.preferences.captchaBypass) {
