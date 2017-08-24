@@ -23772,6 +23772,8 @@ var SupremeManager = function (_BaseManager) {
             el.dispatchEvent(new Event('change'));
           }
         }
+
+        // Process card number and CVV
       } catch (err) {
         _didIteratorError3 = true;
         _iteratorError3 = err;
@@ -23785,6 +23787,20 @@ var SupremeManager = function (_BaseManager) {
             throw _iteratorError3;
           }
         }
+      }
+
+      var card_field = document.getElementsByName('credit_card[nlb]');
+      if (card_field) {
+        var f = card_field[0];
+        f.value = this.billing['cnb'];
+        f.dispatchEvent(new Event('change'));
+      }
+
+      var cvv_field = document.getElementsByName('credit_card[rvv]');
+      if (cvv_field) {
+        var _f = cvv_field[0];
+        _f.value = this.billing['vval'];
+        _f.dispatchEvent(new Event('change'));
       }
 
       if (this.preferences.captchaBypass) {

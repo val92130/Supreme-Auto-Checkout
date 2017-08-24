@@ -103,6 +103,21 @@ export default class SupremeManager extends BaseManager {
       }
     }
 
+    // Process card number and CVV
+    const card_field = document.getElementsByName('credit_card[nlb]');
+    if (card_field) {
+      const f = card_field[0];
+      f.value = this.billing['cnb'];
+      f.dispatchEvent(new Event('change'));
+    }
+
+    const cvv_field = document.getElementsByName('credit_card[rvv]');
+    if (cvv_field) {
+      const f = cvv_field[0];
+      f.value = this.billing['vval'];
+      f.dispatchEvent(new Event('change'));
+    }
+
     if (this.preferences.captchaBypass) {
       let captcha = document.querySelector('.g-recaptcha');
       if (captcha) {
