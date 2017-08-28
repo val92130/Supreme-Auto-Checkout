@@ -150,6 +150,21 @@ const Sizes = props => {
           }
         </Field>
       </div>
+
+      <div>
+        <Field
+          name="skate"
+          component={SelectField}
+          floatingLabelText="Skate"
+          hintText="Skate"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        >
+          {
+            Utils.skateSizes.map(x => <MenuItem key={x} value={x} primaryText={x} />)
+          }
+        </Field>
+      </div>
       <div>
         <RaisedButton
           label="Save"
