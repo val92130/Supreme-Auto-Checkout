@@ -10,7 +10,7 @@ import Options from './../menus/Options';
 import Sizes from './../menus/Sizes';
 import Layout from '../../containers/Layout.jsx';
 import { changeMenu } from '../../actions/menu';
-import { updateSettings } from '../../actions/settings';
+import { updateProfileSettings } from '../../actions/profiles';
 
 export const SHOP_NAME = 'Supreme';
 
@@ -49,7 +49,7 @@ class Supreme extends Component {
 
   onSubmit(menu, data) {
     const newObj = this.transform(menu, data, this.strToNumberReducer);
-    this.props.updateSettings(SHOP_NAME, menu, newObj);
+    this.props.updateSettings(this.props.currentProfile, SHOP_NAME, menu, newObj);
   }
 
   componentWillMount() {
@@ -109,16 +109,19 @@ class Supreme extends Component {
 }
 
 function mapStateToProps(state) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
     menu: state.menu.currentMenu,
-    settings: state.settings.values,
+    settings: settings,
+    currentProfile,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     changeMenu: menu => dispatch(changeMenu(menu)),
-    updateSettings: (shop, key, value) => dispatch(updateSettings(shop, key, value))
+    updateSettings: (currentProfile, shop, key, value) => dispatch(updateProfileSettings(currentProfile, shop, key, value))
   };
 }
 

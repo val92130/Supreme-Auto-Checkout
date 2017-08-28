@@ -27,3 +27,12 @@ export function maxValue(max) {
 export function fullName(value) {
   return !value || value.split(' ').filter(x => x !== "").length < 2 ? 'Please enter a valid full name (firstname + lastname)' : undefined;
 }
+
+export function unique(candidates) {
+  return value => {
+    if (candidates.indexOf(value) !== -1) {
+      return 'This value already exists and must be unique';
+    }
+    return undefined;
+  };
+}

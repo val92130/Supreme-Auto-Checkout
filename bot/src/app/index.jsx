@@ -23,22 +23,28 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const savedState = loadSavedState(VERSION);
-const store = createStore(
-  combineReducers(Object.assign({}, reducers, {
-    routing: routerReducer,
-    form: formReducer,
-  })),
-  savedState,
-  applyMiddleware(...middleware),
-);
+const appReducer = combineReducers(Object.assign({}, reducers, {
+  routing: routerReducer,
+  form: formReducer,
+}));
+
+const rootReducer = (state, action) => {
+  if (action.type === 'PROFILE_CHANGE') {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+};
+const store = createStore(rootReducer, savedState, applyMiddleware(...middleware));
 
 // Save state in localStorage automatically
 store.subscribe(() => {
   const state = store.getState();
   if (state) {
-    saveState({ menu: state.menu, settings: state.settings }, VERSION);
+    saveState({ menu: state.menu, profiles: state.profiles }, VERSION);
+    const currentProfile = state.profiles.currentProfile;
+    const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
     if (typeof (chrome) !== 'undefined' && typeof (chrome.storage) !== 'undefined') {
-      saveToChromeStorage('settings', state.settings.values || {});
+      saveToChromeStorage('settings', settings || {});
     }
   }
 });

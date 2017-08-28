@@ -216,8 +216,10 @@ Billing.propTypes = {
 const selector = formValueSelector('billing');
 
 function mapStateToProps(state, ownProps) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
-    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_BILLING] || {},
+    initialValues: (settings[ownProps.shop] || {})[menus.MENU_BILLING] || {},
     country: selector(state, 'order_billing_country'),
   };
 }

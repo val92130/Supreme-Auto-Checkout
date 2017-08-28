@@ -125,8 +125,10 @@ const Options = props => {
 };
 
 function mapStateToProps(state, ownProps) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
-    initialValues: Object.assign(defaultValues, (state.settings.values[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
+    initialValues: Object.assign({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
   };
 }
 

@@ -13904,6 +13904,7 @@ exports.number = number;
 exports.minValue = minValue;
 exports.maxValue = maxValue;
 exports.fullName = fullName;
+exports.unique = unique;
 function email(input) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(input) ? undefined : 'Please enter a valid email';
@@ -13940,6 +13941,15 @@ function fullName(value) {
   }).length < 2 ? 'Please enter a valid full name (firstname + lastname)' : undefined;
 }
 
+function unique(candidates) {
+  return function (value) {
+    if (candidates.indexOf(value) !== -1) {
+      return 'This value already exists and must be unique';
+    }
+    return undefined;
+  };
+}
+
 /***/ }),
 /* 188 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -13951,8 +13961,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var CHANGE_MENU = exports.CHANGE_MENU = 'CHANGE_MENU';
-var UPDATE_SETTINGS = exports.UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 var NOTIFICATION_ADD = exports.NOTIFICATION_ADD = 'NOTIFICATION_ADD';
+var PROFILE_CREATE = exports.PROFILE_CREATE = 'PROFILE_CREATE';
+var PROFILE_UPDATE_SETTINGS = exports.PROFILE_UPDATE_SETTINGS = 'PROFILE_UPDATE_SETTINGS';
+var PROFILE_REMOVE = exports.PROFILE_REMOVE = 'PROFILE_REMOVE';
+var PROFILE_SET_ENABLED = exports.PROFILE_SET_ENABLED = 'PROFILE_SET_ENABLED';
 
 /***/ }),
 /* 189 */
@@ -24628,7 +24641,7 @@ var _Layout2 = _interopRequireDefault(_Layout);
 
 var _menu = __webpack_require__(772);
 
-var _settings = __webpack_require__(773);
+var _profiles = __webpack_require__(773);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -24691,7 +24704,7 @@ var Supreme = function (_Component) {
     key: 'onSubmit',
     value: function onSubmit(menu, data) {
       var newObj = this.transform(menu, data, this.strToNumberReducer);
-      this.props.updateSettings(SHOP_NAME, menu, newObj);
+      this.props.updateSettings(this.props.currentProfile, SHOP_NAME, menu, newObj);
     }
   }, {
     key: 'componentWillMount',
@@ -24768,9 +24781,14 @@ var Supreme = function (_Component) {
 }(_react.Component);
 
 function mapStateToProps(state) {
+  var currentProfile = state.profiles.currentProfile;
+  var settings = state.profiles.profiles.filter(function (x) {
+    return x.name === currentProfile;
+  })[0].settings;
   return {
     menu: state.menu.currentMenu,
-    settings: state.settings.values
+    settings: settings,
+    currentProfile: currentProfile
   };
 }
 
@@ -24779,8 +24797,8 @@ function mapDispatchToProps(dispatch) {
     changeMenu: function changeMenu(menu) {
       return dispatch((0, _menu.changeMenu)(menu));
     },
-    updateSettings: function updateSettings(shop, key, value) {
-      return dispatch((0, _settings.updateSettings)(shop, key, value));
+    updateSettings: function updateSettings(currentProfile, shop, key, value) {
+      return dispatch((0, _profiles.updateProfileSettings)(currentProfile, shop, key, value));
     }
   };
 }
@@ -40470,8 +40488,12 @@ Billing.propTypes = {
 var selector = (0, _reduxForm.formValueSelector)('billing');
 
 function mapStateToProps(state, ownProps) {
+  var currentProfile = state.profiles.currentProfile;
+  var settings = state.profiles.profiles.filter(function (x) {
+    return x.name === currentProfile;
+  })[0].settings;
   return {
-    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_BILLING] || {},
+    initialValues: (settings[ownProps.shop] || {})[menus.MENU_BILLING] || {},
     country: selector(state, 'order_billing_country')
   };
 }
@@ -66934,8 +66956,12 @@ var Options = function Options(props) {
 };
 
 function mapStateToProps(state, ownProps) {
+  var currentProfile = state.profiles.currentProfile;
+  var settings = state.profiles.profiles.filter(function (x) {
+    return x.name === currentProfile;
+  })[0].settings;
   return {
-    initialValues: (0, _assign2.default)(defaultValues, (state.settings.values[ownProps.shop] || {})[menus.MENU_OPTIONS] || {})
+    initialValues: (0, _assign2.default)({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {})
   };
 }
 
@@ -67183,8 +67209,12 @@ Sizes.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  var currentProfile = state.profiles.currentProfile;
+  var settings = state.profiles.profiles.filter(function (x) {
+    return x.name === currentProfile;
+  })[0].settings;
   return {
-    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_SIZES] || {}
+    initialValues: (settings[ownProps.shop] || {})[menus.MENU_SIZES] || {}
   };
 }
 
@@ -68256,7 +68286,10 @@ function changeMenu(newMenu) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateSettings = updateSettings;
+exports.createProfile = createProfile;
+exports.setProfileEnabled = setProfileEnabled;
+exports.removeProfile = removeProfile;
+exports.updateProfileSettings = updateProfileSettings;
 
 var _ActionTypes = __webpack_require__(188);
 
@@ -68270,13 +68303,45 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function updateSettings(shop, key, value) {
+function createProfile(name, description) {
+  return function (dispatch) {
+    dispatch((0, _notification2.default)('Profile created'));
+    dispatch({
+      type: types.PROFILE_CREATE,
+      name: name,
+      description: description
+    });
+  };
+}
+
+function setProfileEnabled(name) {
+  return function (dispatch) {
+    dispatch((0, _notification2.default)('Profile set to ' + name));
+    dispatch({
+      type: types.PROFILE_SET_ENABLED,
+      name: name
+    });
+  };
+}
+
+function removeProfile(name) {
+  return function (dispatch) {
+    dispatch((0, _notification2.default)('Profile created'));
+    dispatch({
+      type: types.PROFILE_REMOVE,
+      name: name
+    });
+  };
+}
+
+function updateProfileSettings(profileName, shop, key, value) {
   return function (dispatch) {
     dispatch((0, _notification2.default)('Settings saved'));
     var obj = {};
     obj[key] = value;
     dispatch({
-      type: types.UPDATE_SETTINGS,
+      type: types.PROFILE_UPDATE_SETTINGS,
+      name: profileName,
       value: obj,
       shop: shop
     });

@@ -166,8 +166,10 @@ Sizes.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
-    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_SIZES] || {},
+    initialValues: (settings[ownProps.shop] || {})[menus.MENU_SIZES] || {},
   };
 }
 
