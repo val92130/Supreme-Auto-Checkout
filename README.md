@@ -13,6 +13,7 @@ Supreme Auto Checkout is a Google Chrome extension to automate the process of bu
 Supreme Auto Checkout provides many features such as:
   - **Auto Checkout** - The product will automatically be added to your cart and will straight go to the checkout page.
   - **AutoFill** - All of your billing informations will be automaticaly filled on the checkout page.
+  - **Multi profiles** - You can setup multiple profiles to quickly switch settings during drop day!
   - **Configurable delays for every steps of the checkout process.**
   - **Size choice for every category of product.**
   - **Captcha bypass** (beta feature).
