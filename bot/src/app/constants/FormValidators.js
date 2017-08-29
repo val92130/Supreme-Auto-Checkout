@@ -36,3 +36,29 @@ export function unique(candidates) {
     return undefined;
   };
 }
+
+export function date(val) {
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? 'Required date' : undefined;
+}
+
+export function time24(val) {
+  const msg = 'Invalid time';
+  if (!val) {
+    return msg;
+  }
+  const split = val.split(':');
+  if (!split.length || split.length > 2) {
+    return msg;
+  }
+  const hour = +split[0];
+  const minute = +split[1];
+  if (isNaN(hour) || hour > 24) {
+    return msg;
+  }
+
+  if (isNaN(minute) || minute > 60 || (hour === 24 && minute > 0)) {
+    return msg;
+  }
+  if (hour < 0 || minute < 0) return msg;
+}
