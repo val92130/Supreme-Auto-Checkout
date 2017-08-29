@@ -53,6 +53,7 @@
     "webpack-hot-middleware": "^2.18.0"
   },
   "dependencies": {
+    "browser-request": "^0.3.3",
     "lodash": "^4.17.4",
     "material-ui": "^0.16.7",
     "react": "^15.6.1",

@@ -52,6 +52,38 @@ const extConfig = {
   },
 };
 
+const backgroundConfig = {
+  entry: [
+    './src/extension/background/index.js',
+  ],
+  output: {
+    path: path.resolve('build'),
+    filename: 'background.js',
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      request: 'browser-request',
+    },
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.(js|jsx)$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'react'],
+          plugins: [
+            'transform-runtime',
+          ],
+        },
+      },
+    ],
+  },
+};
+
 const optionsConfig = {
   entry: './src/app/index.jsx',
   output: {
@@ -83,4 +115,4 @@ const optionsConfig = {
   plugins: [HtmlWebpackPluginConfig, CopyWebPackPluginConfig, DefinePlugin],
 };
 
-module.exports = [optionsConfig, extConfig];
+module.exports = [optionsConfig, extConfig, backgroundConfig];
