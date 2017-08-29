@@ -40,11 +40,12 @@ const store = createStore(rootReducer, savedState, applyMiddleware(...middleware
 store.subscribe(() => {
   const state = store.getState();
   if (state) {
-    saveState({ menu: state.menu, profiles: state.profiles }, VERSION);
+    saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc }, VERSION);
     const currentProfile = state.profiles.currentProfile;
     const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
     if (typeof (chrome) !== 'undefined' && typeof (chrome.storage) !== 'undefined') {
       saveToChromeStorage('settings', settings || {});
+      saveToChromeStorage('atc', state.atc || {});
     }
   }
 });

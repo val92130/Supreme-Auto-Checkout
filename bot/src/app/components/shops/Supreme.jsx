@@ -8,7 +8,9 @@ import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Options from './../menus/Options';
 import Sizes from './../menus/Sizes';
+import Atc from './../menus/Atc';
 import Layout from '../../containers/Layout.jsx';
+import Badge from 'material-ui/Badge';
 import { changeMenu } from '../../actions/menu';
 import { updateProfileSettings } from '../../actions/profiles';
 
@@ -23,6 +25,8 @@ class Supreme extends Component {
         return (<Options onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
       case menus.MENU_SIZES:
         return (<Sizes onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
+      case menus.MENU_ATC:
+        return (<Atc shop={SHOP_NAME} />);
       default:
         return null;
     }
@@ -59,6 +63,19 @@ class Supreme extends Component {
   }
 
   getIconForTabMenu(menu) {
+    if (menu === menus.MENU_ATC) {
+      return (
+          <IconButton iconStyle={{ color: 'white' }} style={{ padding: 0 }} tooltipPosition="top-center" tooltipStyles={{ color: 'white' }}>
+            <Badge
+              badgeStyle={{ top: -24, right: 12 }}
+              badgeContent={this.props.atcProducts.length}
+              primary
+            >
+              <FontIcon style={{ color: 'white', top: -24, right: 12 }} className="material-icons" >done</FontIcon>
+            </Badge>
+          </IconButton>
+      );
+    }
     const isIncomplete = !this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu];
     const color = isIncomplete ? red300 : 'white';
     const tip = isIncomplete ? 'This tab hasn\'t been configured yet' : '';
@@ -95,6 +112,13 @@ class Supreme extends Component {
         value={menus.MENU_SIZES}
         onClick={() => this.props.changeMenu(menus.MENU_SIZES)}
       />,
+      <Tab
+        label="AutoCop"
+        key={4}
+        icon={this.getIconForTabMenu(menus.MENU_ATC)}
+        value={menus.MENU_ATC}
+        onClick={() => this.props.changeMenu(menus.MENU_ATC)}
+      />,
     ];
   }
 
@@ -114,6 +138,7 @@ function mapStateToProps(state) {
   return {
     menu: state.menu.currentMenu,
     settings: settings,
+    atcProducts: state.atc.atcProducts,
     currentProfile,
   };
 }
@@ -121,7 +146,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     changeMenu: menu => dispatch(changeMenu(menu)),
-    updateSettings: (currentProfile, shop, key, value) => dispatch(updateProfileSettings(currentProfile, shop, key, value))
+    updateSettings: (currentProfile, shop, key, value) => dispatch(updateProfileSettings(currentProfile, shop, key, value)),
   };
 }
 

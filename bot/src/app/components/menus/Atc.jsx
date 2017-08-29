@@ -10,25 +10,19 @@ import {
 } from 'material-ui/Table';
 import { red300 } from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
-import Toggle from 'material-ui/Toggle';
 import IconButton from 'material-ui/IconButton';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
 import RaisedButton from 'material-ui/RaisedButton';
-import { createProfile, setProfileEnabled, removeProfile } from '../actions/profiles';
-import Layout from '../containers/Layout.jsx';
-import ProfileCreateForm from './ProfileCreateForm';
-import ProfileToggle from './ProfileToggle';
+import Toggle from 'material-ui/Toggle';
+import { addAtcProduct, removeAtcProduct, setAtcProductEnabled } from '../../actions/atc';
+import AtcCreateForm from '../AtcCreateForm';
 
-class Profile extends Component {
+class Atc extends Component {
   constructor(props) {
     super(props);
     this.state = {
       createModalOpen: false,
     };
-  }
-
-  onSetProfile(profileName) {
-    this.props.setProfileEnabled(profileName);
   }
 
   requestCloseModal() {
@@ -43,53 +37,56 @@ class Profile extends Component {
     });
   }
 
-  onRequestDeleteProfile(name) {
-    this.props.removeProfile(name);
+  onRequestDeleteAtc(atcName) {
+    this.props.removeAtcProduct(atcName);
   }
 
   handleSubmit(data) {
-    this.props.createProfile(data.name, data.description);
     this.requestCloseModal();
+    this.props.addAtcProduct(data);
+  }
+
+  toggleAtc(name, enabled) {
+    this.props.setAtcProductEnabled(name, enabled);
   }
 
   render() {
-    const { profiles, currentProfile } = this.props;
+    const { atcProducts } = this.props;
 
     return (
-      <Layout title="Profiles">
+      <div>
         <Dialog
           open={this.state.createModalOpen}
-          title="Create a new profile"
+          title="Add a new atc product"
           modal={false}
           onRequestClose={() => this.requestCloseModal()}
         >
-          <ProfileCreateForm
-            onSubmit={data => this.handleSubmit(data)}
-            onRequestClose={() => this.requestCloseModal()}
-          />
+          <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} />
         </Dialog>
         <RaisedButton label="Add new" onTouchTap={() => this.requestModalOpen()} primary />
         <Table selectable={false}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Description</TableHeaderColumn>
+              <TableHeaderColumn>Regex</TableHeaderColumn>
+              <TableHeaderColumn>Category</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} stripedRows>
             {
-              profiles.map((x, i) => {
+              atcProducts.map((x) => {
                 return (
-                  <TableRow key={i}>
+                  <TableRow key={x.name}>
                     <TableRowColumn>{x.name}</TableRowColumn>
-                    <TableRowColumn>{x.description}</TableRowColumn>
+                    <TableRowColumn>{x.regex}</TableRowColumn>
+                    <TableRowColumn>{x.category}</TableRowColumn>
                     <TableRowColumn>
-                      <ProfileToggle profile={x} />
+                      <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
                     </TableRowColumn>
                     <TableRowColumn>
-                      <IconButton onTouchTap={() => this.onRequestDeleteProfile(x.name)} disabled={x.name === 'default'}>
+                      <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>
                         <DeleteButton color={red300} />
                       </IconButton>
                     </TableRowColumn>
@@ -99,24 +96,23 @@ class Profile extends Component {
             }
           </TableBody>
         </Table>
-      </Layout>
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    profiles: state.profiles.profiles,
-    currentProfile: state.profiles.currentProfile,
+    atcProducts: state.atc.atcProducts,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    createProfile: (name, description) => dispatch(createProfile(name, description)),
-    setProfileEnabled: name => dispatch(setProfileEnabled(name)),
-    removeProfile: name => dispatch(removeProfile(name)),
+    addAtcProduct: data => dispatch(addAtcProduct(data)),
+    removeAtcProduct: data => dispatch(removeAtcProduct(data)),
+    setAtcProductEnabled: (name, enabled) => dispatch(setAtcProductEnabled(name, enabled)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Atc);
