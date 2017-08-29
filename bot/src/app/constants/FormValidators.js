@@ -13,7 +13,7 @@ export function simpleText(value) {
 }
 
 export function number(value) {
-  return value && isNaN(Number(value)) ? 'This field must be a number' : undefined;
+  return value && (isNaN(Number(value)) || +value < 0) ? 'This field must be a positive number' : undefined;
 }
 
 export function minValue(min) {
