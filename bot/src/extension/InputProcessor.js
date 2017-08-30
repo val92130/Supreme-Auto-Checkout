@@ -22,6 +22,15 @@ export function processField(input, settings) {
 }
 
 export function processUnknownField(input, settings) {
+  const splittedName = settings['order_billing_name'].split(' ');
+  if (input.name === 'credit_card[last_name]') {
+    setInputValue(input, splittedName[0]);
+    return true;
+  }
+  if (input.name === 'credit_card[first_name]') {
+    setInputValue(input, splittedName[1]);
+    return true;
+  }
   if (input.name === 'order[billing_name]') {
     setInputValue(input, settings['order_billing_name']);
     return true;
@@ -120,23 +129,23 @@ export function processByLabel(input, settings) {
     setInputValue(input, settings['order_billing_name']);
     return true;
   }
-  if (hasText(['email'])) {
+  if (hasText(['email', 'Eメール'])) {
     setInputValue(input, settings['order_email']);
     return true;
   }
-  if (hasText(['tel', 'phone', 'phone number'])) {
+  if (hasText(['tel', 'phone', 'phone number', '電話番号'])) {
     setInputValue(input, settings['order_tel']);
     return true;
   }
-  if (hasText(['address', 'adresse', 'addresse'])) {
+  if (hasText(['address', 'adresse', 'addresse', '住所'])) {
     setInputValue(input, settings['bo']);
     return true;
   }
-  if (hasText(['city', 'ville'])) {
+  if (hasText(['city', 'ville', '区市町村'])) {
     setInputValue(input, settings['order_billing_city']);
     return true;
   }
-  if (hasText(['zip', 'code postal', 'codepostal', 'code_postal', 'postal code', 'postalcode'])) {
+  if (hasText(['zip', 'code postal', 'codepostal', 'code_postal', 'postal code', 'postalcode', '郵便番号'])) {
     setInputValue(input, settings['order_billing_zip']);
     return true;
   }
@@ -144,26 +153,26 @@ export function processByLabel(input, settings) {
     setInputValue(input, settings['order_billing_country']);
     return true;
   }
-  if (hasText(['state', 'état', 'etat', 'province'])) {
+  if (hasText(['state', 'état', 'etat', 'province', '都道府県'])) {
     setInputValue(input, settings['order_billing_state']);
     return true;
   }
-  if (hasText(['type', 'type de carte', 'credit card type'])) {
+  if (hasText(['type', 'type de carte', 'credit card type', '支払い方法'])) {
     setInputValue(input, settings['credit_card_type']);
     return true;
   }
-  if (hasText(['numéro', 'number', 'numero'])) {
+  if (hasText(['numéro', 'number', 'numero', 'カード番号'])) {
     setInputValue(input, settings['cnb']);
     return true;
   }
-  if (hasText(['exp. date', 'exp date', 'expiry date', 'date d’exp.', 'date d\'exp.', 'date d\'expiration'])) {
+  if (hasText(['exp. date', 'exp date', 'expiry date', 'date d’exp.', 'date d\'exp.', 'date d\'expiration', '有効期限'])) {
     if (input.type === 'select-one') {
       const isMonth = input.options && input.options[0] && input.options[0].value[0] === '0';
       setInputValue(input, settings[isMonth ? 'credit_card_month' : 'credit_card_year']);
       return true;
     }
   }
-  if (hasText(['CVV'])) {
+  if (hasText(['CVV', 'CVV番号'])) {
     setInputValue(input, settings['vval']);
     return true;
   }

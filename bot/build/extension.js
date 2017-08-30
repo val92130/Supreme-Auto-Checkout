@@ -14089,6 +14089,10 @@ var usaRegions = exports.usaRegions = [{ "text": "AL", "value": "AL" }, { "text"
 var canadaRegions = exports.canadaRegions = [{ "text": "AB", "value": "AB" }, { "text": "BC", "value": "BC" }, { "text": "MB", "value": "MB" }, { "text": "NB", "value": "NB" }, { "text": "NL", "value": "NL" }, { "text": "NT", "value": "NT" }, { "text": "NS", "value": "NS" }, { "text": "NU", "value": "NU" }, { "text": "ON", "value": "ON" }, { "text": "PE", "value": "PE" }, { "text": "QC", "value": "QC" }, { "text": "SK", "value": "SK" }, { "text": "YT", "value": "YT" }];
 var japanRegions = exports.japanRegions = [{ "text": " 北海道", "value": " 北海道" }, { "text": " 青森県", "value": " 青森県" }, { "text": " 岩手県", "value": " 岩手県" }, { "text": " 宮城県", "value": " 宮城県" }, { "text": " 秋田県", "value": " 秋田県" }, { "text": " 山形県", "value": " 山形県" }, { "text": " 福島県", "value": " 福島県" }, { "text": " 茨城県", "value": " 茨城県" }, { "text": " 栃木県", "value": " 栃木県" }, { "text": " 群馬県", "value": " 群馬県" }, { "text": " 埼玉県", "value": " 埼玉県" }, { "text": " 千葉県", "value": " 千葉県" }, { "text": " 東京都", "value": " 東京都" }, { "text": " 神奈川県", "value": " 神奈川県" }, { "text": " 新潟県", "value": " 新潟県" }, { "text": " 富山県", "value": " 富山県" }, { "text": " 石川県", "value": " 石川県" }, { "text": " 福井県", "value": " 福井県" }, { "text": " 山梨県", "value": " 山梨県" }, { "text": " 長野県", "value": " 長野県" }, { "text": " 岐阜県", "value": " 岐阜県" }, { "text": " 静岡県", "value": " 静岡県" }, { "text": " 愛知県", "value": " 愛知県" }, { "text": " 三重県", "value": " 三重県" }, { "text": " 滋賀県", "value": " 滋賀県" }, { "text": " 京都府", "value": " 京都府" }, { "text": " 大阪府", "value": " 大阪府" }, { "text": " 兵庫県", "value": " 兵庫県" }, { "text": " 奈良県", "value": " 奈良県" }, { "text": " 和歌山県", "value": " 和歌山県" }, { "text": " 鳥取県", "value": " 鳥取県" }, { "text": " 島根県", "value": " 島根県" }, { "text": " 岡山県", "value": " 岡山県" }, { "text": " 広島県", "value": " 広島県" }, { "text": " 山口県", "value": " 山口県" }, { "text": " 徳島県", "value": " 徳島県" }, { "text": " 香川県", "value": " 香川県" }, { "text": " 愛媛県", "value": " 愛媛県" }, { "text": " 高知県", "value": " 高知県" }, { "text": " 福岡県", "value": " 福岡県" }, { "text": " 佐賀県", "value": " 佐賀県" }, { "text": " 長崎県", "value": " 長崎県" }, { "text": " 熊本県", "value": " 熊本県" }, { "text": " 大分県", "value": " 大分県" }, { "text": " 宮崎県", "value": " 宮崎県" }, { "text": " 鹿児島県", "value": " 鹿児島県" }, { "text": " 沖縄県", "value": " 沖縄県" }];
 var categories = exports.categories = ['accessories', 't-shirts', 'pants', 'shorts', 'sweatshirts', 'tops-sweaters', 'shirts', 'jackets', 'shoes', 'skate'];
+var creditCards = exports.creditCards = [{ text: 'Visa', value: 'visa' }, { text: 'American Express', value: 'american_express' }, { text: 'Mastercard', value: 'master' }, { text: 'Solo', value: 'solo' }];
+var japanCreditCards = exports.japanCreditCards = creditCards.concat([{ text: 'JCB', value: 'jcb' }, { text: '代金引換', value: 'cod' }]).filter(function (x) {
+  return x.value !== 'solo';
+});
 
 /***/ }),
 /* 194 */
@@ -25045,6 +25049,15 @@ function processField(input, settings) {
 }
 
 function processUnknownField(input, settings) {
+  var splittedName = settings['order_billing_name'].split(' ');
+  if (input.name === 'credit_card[last_name]') {
+    setInputValue(input, splittedName[0]);
+    return true;
+  }
+  if (input.name === 'credit_card[first_name]') {
+    setInputValue(input, splittedName[1]);
+    return true;
+  }
   if (input.name === 'order[billing_name]') {
     setInputValue(input, settings['order_billing_name']);
     return true;
@@ -25149,23 +25162,23 @@ function processByLabel(input, settings) {
     setInputValue(input, settings['order_billing_name']);
     return true;
   }
-  if (hasText(['email'])) {
+  if (hasText(['email', 'Eメール'])) {
     setInputValue(input, settings['order_email']);
     return true;
   }
-  if (hasText(['tel', 'phone', 'phone number'])) {
+  if (hasText(['tel', 'phone', 'phone number', '電話番号'])) {
     setInputValue(input, settings['order_tel']);
     return true;
   }
-  if (hasText(['address', 'adresse', 'addresse'])) {
+  if (hasText(['address', 'adresse', 'addresse', '住所'])) {
     setInputValue(input, settings['bo']);
     return true;
   }
-  if (hasText(['city', 'ville'])) {
+  if (hasText(['city', 'ville', '区市町村'])) {
     setInputValue(input, settings['order_billing_city']);
     return true;
   }
-  if (hasText(['zip', 'code postal', 'codepostal', 'code_postal', 'postal code', 'postalcode'])) {
+  if (hasText(['zip', 'code postal', 'codepostal', 'code_postal', 'postal code', 'postalcode', '郵便番号'])) {
     setInputValue(input, settings['order_billing_zip']);
     return true;
   }
@@ -25173,26 +25186,26 @@ function processByLabel(input, settings) {
     setInputValue(input, settings['order_billing_country']);
     return true;
   }
-  if (hasText(['state', 'état', 'etat', 'province'])) {
+  if (hasText(['state', 'état', 'etat', 'province', '都道府県'])) {
     setInputValue(input, settings['order_billing_state']);
     return true;
   }
-  if (hasText(['type', 'type de carte', 'credit card type'])) {
+  if (hasText(['type', 'type de carte', 'credit card type', '支払い方法'])) {
     setInputValue(input, settings['credit_card_type']);
     return true;
   }
-  if (hasText(['numéro', 'number', 'numero'])) {
+  if (hasText(['numéro', 'number', 'numero', 'カード番号'])) {
     setInputValue(input, settings['cnb']);
     return true;
   }
-  if (hasText(['exp. date', 'exp date', 'expiry date', 'date d’exp.', 'date d\'exp.', 'date d\'expiration'])) {
+  if (hasText(['exp. date', 'exp date', 'expiry date', 'date d’exp.', 'date d\'exp.', 'date d\'expiration', '有効期限'])) {
     if (input.type === 'select-one') {
       var isMonth = input.options && input.options[0] && input.options[0].value[0] === '0';
       setInputValue(input, settings[isMonth ? 'credit_card_month' : 'credit_card_year']);
       return true;
     }
   }
-  if (hasText(['CVV'])) {
+  if (hasText(['CVV', 'CVV番号'])) {
     setInputValue(input, settings['vval']);
     return true;
   }
@@ -41063,10 +41076,9 @@ var Billing = function Billing(props) {
           style: _Styles2.default.fields.text,
           validate: [Validators.required]
         },
-        _react2.default.createElement(_MenuItem2.default, { value: 'visa', primaryText: 'Visa' }),
-        _react2.default.createElement(_MenuItem2.default, { value: 'american_express', primaryText: 'American Express' }),
-        _react2.default.createElement(_MenuItem2.default, { value: 'master', primaryText: 'Mastercard' }),
-        _react2.default.createElement(_MenuItem2.default, { value: 'solo', primaryText: 'Solo' })
+        (country === 'JAPAN' ? Utils.japanCreditCards : Utils.creditCards).map(function (x) {
+          return _react2.default.createElement(_MenuItem2.default, { value: x.value, primaryText: x.text, key: x.value });
+        })
       )
     ),
     _react2.default.createElement(

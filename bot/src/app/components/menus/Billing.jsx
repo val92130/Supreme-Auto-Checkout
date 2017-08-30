@@ -131,10 +131,11 @@ const Billing = props => {
           style={Styles.fields.text}
           validate={[Validators.required]}
         >
-          <MenuItem value="visa" primaryText="Visa"/>
-          <MenuItem value="american_express" primaryText="American Express"/>
-          <MenuItem value="master" primaryText="Mastercard"/>
-          <MenuItem value="solo" primaryText="Solo"/>
+          {
+            (country === 'JAPAN' ? Utils.japanCreditCards : Utils.creditCards).map(x =>
+              <MenuItem value={x.value} primaryText={x.text} key={x.value} />,
+            )
+          }
         </Field>
       </div>
 
