@@ -20,10 +20,10 @@ Supreme Auto Checkout provides many features such as:
   - **Option to set a minimum/maximum price for a product.**
   - **Option to hide sold out products.**
   - **Easy configuration.**
+  - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
   
 # Coming soon
 Features that will be added in the future:
-  - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
   - **Product Monitor** - Be notified when new products are added to the shop.
 
 # Installation
@@ -34,6 +34,14 @@ Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
   >- Drag the **bot/build** folder containing the extension into Google Chrome.
+  
+  
+# Updating
+
+If you already have a previous version of the bot installed, I recommend you to **uninstall it before installing the new version**
+as it can cause issues if the new version introduced some changes in the way the data is saved to the local storage.
+
+Note: You'll have to reconfigure the bot when you reinstall it.
 
 # Configuration
 
@@ -53,6 +61,36 @@ If you have enabled the **Strict size choice** option, the product won't be adde
 If you have set the **Minimum Price** or **Maximum Price** option, the product won't be added to your cart if the price is higher or lower than what you set.
 
 If **Auto Payment** is enabled, the bot will automatically submit the checkout form once you're on the checkout page, otherwise, your billing infos will still be automatically filled but you will need to manually click on the checkout button.
+
+# AutoCop
+
+Autocop is a feature to automatically add to cart products who matches some specific keywords.
+
+You **MUST** keep your browser open for this feature to work.
+
+To set it up, you first must enable **AutoCheckout** and **Enable AutoCop** in the Options tab.
+
+You'll then have to setup an **ATC Start Time**, which would most likely be the time when the online shop updates (11AM).
+
+You will have to set the time as a 24hour format (hh:mm:ss), note that it will be based on your system's time.
+
+A recommended value would be **11:00:10** to make sure that the shop has updated before running the ATC.
+
+Once the ATC time is reached, the bot will automatically open tabs to add to cart matching products.
+
+The product who matches the most the keywords will be added to the cart.
+
+# Setting up AutoCop products
+
+To setup AutoCop products, you need to go in the **AutoCop** tab of your bot then click on the **Add new** button.
+
+This will open a form requesting the following informations:
+   - **Name** - A name to distinct your atc products, not really important
+   - **Product keywords** - This field is a multi-selectable input, you can add keywords by pressing the Enter key,
+   thoses keywords are **case insensitive** and white-spaces at the end and start of the keyword will be removed.
+   - **Color** (optional) - If set, the ATC will try to checkout the product matching this color, also **case insensitive**
+   - **Product category** - The category of the product
+   - **Enabled**
 
 # Captcha Bypass
 
