@@ -68,7 +68,7 @@ class Atc extends Component {
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Regex</TableHeaderColumn>
+              <TableHeaderColumn>Keywords</TableHeaderColumn>
               <TableHeaderColumn>Category</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
@@ -80,7 +80,7 @@ class Atc extends Component {
                 return (
                   <TableRow key={x.name}>
                     <TableRowColumn>{x.name}</TableRowColumn>
-                    <TableRowColumn>{x.regex}</TableRowColumn>
+                    <TableRowColumn>{x.keywords.join(', ')}</TableRowColumn>
                     <TableRowColumn>{x.category}</TableRowColumn>
                     <TableRowColumn>
                       <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />

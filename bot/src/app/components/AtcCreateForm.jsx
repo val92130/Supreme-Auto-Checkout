@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
+import ChipInput from 'material-ui-chip-input';
 import MenuItem from 'material-ui/MenuItem';
 import {
   TextField,
@@ -16,6 +17,26 @@ import { categories } from '../constants/Utils';
 class AtcCreateForm extends Component {
   render() {
     const { handleSubmit, pristine, submitting, onRequestClose, atcProducts } = this.props;
+    const renderChip = ({input, hintText, floatingLabelText}) => (
+      <ChipInput
+        {...input}
+        value = { input.value || []}
+        onRequestAdd={(addedChip) => {
+          let values = input.value || [];
+          values = values.slice();
+          values.push(addedChip);
+          input.onChange(values);
+        }}
+        onRequestDelete={(deletedChip) => {
+          let values = input.value || [];
+          values = values.filter(v => v !== deletedChip);
+          input.onChange(values);
+        }}
+        onBlur={() => input.onBlur()}
+        hintText={hintText}
+        floatingLabelText={floatingLabelText}
+      />
+    );
     const buttonStyle = {
       margin: 6,
       float: 'right',
@@ -36,12 +57,16 @@ class AtcCreateForm extends Component {
 
           <div>
             <Field
-              name="regex"
-              component={TextField}
-              floatingLabelText="Regex"
-              hintText="Regex"
+              name="keywords"
+              component={renderChip}
+              floatingLabelText="Product keywords"
+              hintText="Product keywords"
               style={Styles.fields.text}
+              labelStyle={Styles.fields.text}
               validate={[Validators.required]}
+              chipContainerStyle={Styles.fields.text}
+              fullWidth
+              fullWidthInput
             />
           </div>
 

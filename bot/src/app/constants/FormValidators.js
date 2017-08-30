@@ -1,3 +1,5 @@
+import * as Helpers from '../utils/Helpers';
+
 export function email(input) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(input) ? undefined : 'Please enter a valid email';
@@ -44,26 +46,7 @@ export function date(val) {
 
 export function time24(val) {
   const msg = 'Invalid time';
-  if (!val) {
+  if (!Helpers.setTimeForToday(val)) {
     return msg;
   }
-  const split = val.split(':');
-  if (!split.length || split.length > 3) {
-    return msg;
-  }
-  const hour = +split[0];
-  const minute = +split[1];
-  const seconds = +split[2];
-  if (isNaN(hour) || hour > 24) {
-    return msg;
-  }
-
-  if (isNaN(minute) || minute > 60 || (hour === 24 && minute > 0)) {
-    return msg;
-  }
-
-  if (isNaN(seconds) || seconds > 60) {
-    return msg;
-  }
-  if (hour < 0 || minute < 0 || seconds < 0) return msg;
 }

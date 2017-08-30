@@ -34,6 +34,8 @@ export default class SupremeManager extends BaseManager {
       this.processCart();
     } else if (this.isCheckout()) {
       this.processCheckout();
+    } else if (this.isShopCategoryPage()) {
+      this.processAtc();
     }
   }
 
@@ -45,7 +47,7 @@ export default class SupremeManager extends BaseManager {
    * Attach an event on product links of the page to reload the page instead of loading in ajax
    */
   processLinks() {
-    let links = document.links;
+    const links = document.links;
 
     for (let link of links) {
       link.addEventListener('click', function (e) {
@@ -185,6 +187,44 @@ export default class SupremeManager extends BaseManager {
     }
   }
 
+  processAtc() {
+    const queryString = Helpers.getQueryStringValue('atc-kw');
+    if (!queryString) {
+      return;
+    }
+    const keywords = queryString.split(';');
+    const innerArticles = [...document.querySelectorAll('.inner-article')];
+    const products = [];
+    for (let i = 0; i < innerArticles.length; i += 1) {
+      const h1 = innerArticles[i].querySelector('h1');
+      const a = innerArticles[i].querySelector('a');
+      if (h1 && a && h1.innerText && a.href) {
+        const product = {
+          matches: 0,
+          url: a.href,
+        };
+        const name = h1.innerText.toLowerCase();
+        for (let j = 0; j < keywords.length; j += 1) {
+          const keyword = keywords[j].toLowerCase();
+          const regexp = new RegExp(keyword);
+          if (regexp.test(name)) {
+            product.matches += 1;
+          }
+        }
+
+        products.push(product);
+      }
+    }
+    const bestMatch = products.filter(x => x.matches > 0).sort((a, b) => b.matches - a.matches)[0];
+    if (bestMatch) {
+      window.location.href = bestMatch.url;
+    }
+  }
+
+  isShopCategoryPage() {
+    return Helpers.hasStringInPath('shop') && Helpers.hasStringInPath('all') && Helpers.pathCount() === 3;
+  }
+
   /**
    * Check if the user is currently on a product page
    */
@@ -212,8 +252,8 @@ export default class SupremeManager extends BaseManager {
    * Returns the product category when the user is on a product page
    */
   getProductCategory() {
-    let category = Helpers.getQueryStringValue('atc-category');
-    return category === "" ? location.pathname.substring(1).split('/')[1] : category;
+    const category = Helpers.getQueryStringValue('atc-category');
+    return !category ? location.pathname.substring(1).split('/')[1] : category;
   }
 
   /**

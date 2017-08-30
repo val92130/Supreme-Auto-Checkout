@@ -73,7 +73,7 @@ const Options = props => {
         <Field
           name="atcEnabled"
           component={Toggle}
-          label="Enable AutoCop"
+          label="Enable AutoCop (Autocheckout required)"
           style={Styles.fields.text}
         />
       </div>
@@ -81,37 +81,15 @@ const Options = props => {
       {
         atcEnabled &&
           <div>
-            <div>
-              <Field
-                name="atcProductFetchingInterval"
-                component={TextField}
-                floatingLabelText="Atc product fetching interval (seconds)"
-                hintText="Atc product fetching (seconds)"
-                style={Styles.fields.text}
-                validate={[Validators.required, Validators.number]}
-              />
-            </div>
-            <div>
-              <Field
-                name="atcMonitorInterval"
-                component={TextField}
-                floatingLabelText="Check interval (seconds)"
-                hintText="Check interval (seconds)"
-                style={Styles.fields.text}
-                validate={[Validators.required, Validators.number]}
-              />
-            </div>
-            <div>
-              <Field
-                name="atcStartTime"
-                component={TextField}
-                floatingLabelText="ATC Start time (hh:mm:ss) 24hour format"
-                hintText="ATC Start time"
-                style={Styles.fields.text}
-                validate={[Validators.required, Validators.time24]}
-              />
-            </div>
-          <br />
+            <Field
+              name="atcStartTime"
+              component={TextField}
+              floatingLabelText="ATC Start time (hh:mm:ss) 24hour format"
+              hintText="ATC Start time"
+              style={Styles.fields.text}
+              validate={[Validators.required, Validators.time24]}
+            />
+            <br />
           </div>
       }
 
