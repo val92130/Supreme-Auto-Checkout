@@ -49,6 +49,8 @@ After the extension is installed, the extension logo should appear on the Chrome
 
 Make sure to configure all the required options otherwise the bot won't load.
 
+It is also recommended to clear your cookies on the Supreme shop before using the bot.
+
 # Usage
 
 After you have configured the extension, go to the Supreme website. If the extension is installed correctly you should see a message on the top of the webpage stating that the bot is running.
