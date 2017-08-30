@@ -9400,6 +9400,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.email = email;
 exports.required = required;
+exports.notEmpty = notEmpty;
 exports.simpleText = simpleText;
 exports.number = number;
 exports.minValue = minValue;
@@ -9423,6 +9424,12 @@ function email(input) {
 function required(value) {
   var empty = typeof value !== 'number' && !value;
   return empty ? 'Required field' : undefined;
+}
+
+function notEmpty(arr) {
+  if (!Array.isArray(arr) || !arr.length) {
+    return 'This field must not be empty';
+  }
 }
 
 function simpleText(value) {
@@ -69929,8 +69936,13 @@ var AtcCreateForm = function (_Component) {
       var renderChip = function renderChip(_ref) {
         var input = _ref.input,
             hintText = _ref.hintText,
-            floatingLabelText = _ref.floatingLabelText;
+            floatingLabelText = _ref.floatingLabelText,
+            _ref$meta = _ref.meta,
+            touched = _ref$meta.touched,
+            error = _ref$meta.error;
         return _react2.default.createElement(_materialUiChipInput2.default, (0, _extends3.default)({}, input, {
+          chipContainerStyle: _Styles2.default.fields.text,
+          fullWidth: true,
           value: input.value || [],
           onRequestAdd: function onRequestAdd(addedChip) {
             var values = input.value || [];
@@ -69949,7 +69961,8 @@ var AtcCreateForm = function (_Component) {
             return input.onBlur();
           },
           hintText: hintText,
-          floatingLabelText: floatingLabelText
+          floatingLabelText: floatingLabelText,
+          errorText: touched && error ? error : ''
         }));
       };
       var buttonStyle = {
@@ -69980,14 +69993,11 @@ var AtcCreateForm = function (_Component) {
           _react2.default.createElement(_reduxForm.Field, {
             name: 'keywords',
             component: renderChip,
-            floatingLabelText: 'Product keywords',
+            floatingLabelText: 'Product keywords, press enter to validate a keyword',
             hintText: 'Product keywords',
             style: _Styles2.default.fields.text,
             labelStyle: _Styles2.default.fields.text,
-            validate: [Validators.required],
-            chipContainerStyle: _Styles2.default.fields.text,
-            fullWidth: true,
-            fullWidthInput: true
+            validate: [Validators.required, Validators.notEmpty]
           })
         ),
         _react2.default.createElement(
@@ -70053,7 +70063,10 @@ var Form = (0, _reduxForm.reduxForm)({
 
 function mapStateToProps(state) {
   return {
-    atcProducts: state.atc.atcProducts
+    atcProducts: state.atc.atcProducts,
+    initialValues: {
+      enabled: true
+    }
   };
 }
 

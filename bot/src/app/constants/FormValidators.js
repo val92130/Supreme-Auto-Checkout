@@ -10,6 +10,12 @@ export function required(value) {
   return empty ? 'Required field' : undefined;
 }
 
+export function notEmpty(arr) {
+  if (!Array.isArray(arr) || !arr.length) {
+    return 'This field must not be empty';
+  }
+}
+
 export function simpleText(value) {
   return value && !value.match(/^[0-9a-zA-Z_]{1,64}$/) ? 'Only use characters (a-z, A-Z, 0-9, _)' : undefined;
 }

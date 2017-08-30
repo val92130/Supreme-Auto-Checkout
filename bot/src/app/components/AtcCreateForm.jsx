@@ -17,9 +17,11 @@ import { categories } from '../constants/Utils';
 class AtcCreateForm extends Component {
   render() {
     const { handleSubmit, pristine, submitting, onRequestClose, atcProducts } = this.props;
-    const renderChip = ({input, hintText, floatingLabelText}) => (
+    const renderChip = ({input, hintText, floatingLabelText, meta: {touched, error} }) => (
       <ChipInput
         {...input}
+        chipContainerStyle={Styles.fields.text}
+        fullWidth
         value = { input.value || []}
         onRequestAdd={(addedChip) => {
           let values = input.value || [];
@@ -35,6 +37,7 @@ class AtcCreateForm extends Component {
         onBlur={() => input.onBlur()}
         hintText={hintText}
         floatingLabelText={floatingLabelText}
+        errorText={(touched && error) ? error : ''}
       />
     );
     const buttonStyle = {
@@ -59,14 +62,11 @@ class AtcCreateForm extends Component {
             <Field
               name="keywords"
               component={renderChip}
-              floatingLabelText="Product keywords"
+              floatingLabelText="Product keywords, press enter to validate a keyword"
               hintText="Product keywords"
               style={Styles.fields.text}
               labelStyle={Styles.fields.text}
-              validate={[Validators.required]}
-              chipContainerStyle={Styles.fields.text}
-              fullWidth
-              fullWidthInput
+              validate={[Validators.required, Validators.notEmpty]}
             />
           </div>
 
@@ -130,6 +130,9 @@ const Form = reduxForm({
 function mapStateToProps(state) {
   return {
     atcProducts: state.atc.atcProducts,
+    initialValues: {
+      enabled: true,
+    },
   };
 }
 
