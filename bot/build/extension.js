@@ -25697,21 +25697,34 @@ var SupremeManager = function (_BaseManager) {
         return;
       }
       var keywords = queryString.split(';');
+      var kwColor = Helpers.getQueryStringValue('atc-color');
       var innerArticles = [].concat((0, _toConsumableArray3.default)(document.querySelectorAll('.inner-article')));
       var products = [];
       for (var i = 0; i < innerArticles.length; i += 1) {
         var h1 = innerArticles[i].querySelector('h1');
         var a = innerArticles[i].querySelector('a');
+        var p = innerArticles[i].querySelector('p');
         if (h1 && a && h1.innerText && a.href) {
           var product = {
             matches: 0,
             url: a.href
           };
-          var name = h1.innerText.toLowerCase();
+          var name = h1.innerText.toLowerCase().trim();
+          var color = null;
+          if (p && p.innerText) {
+            color = p.innerText.toLowerCase().trim();
+          }
           for (var j = 0; j < keywords.length; j += 1) {
-            var keyword = keywords[j].toLowerCase();
+            var keyword = keywords[j].toLowerCase().trim();
             var regexp = new RegExp(keyword);
+            // name matches
             if (regexp.test(name)) {
+              if (kwColor && color) {
+                var regexColor = new RegExp(color);
+                if (regexColor.test(kwColor)) {
+                  product.matches += 1;
+                }
+              }
               product.matches += 1;
             }
           }
@@ -68014,6 +68027,11 @@ var Atc = function (_Component) {
               _react2.default.createElement(
                 _Table.TableHeaderColumn,
                 null,
+                'Color'
+              ),
+              _react2.default.createElement(
+                _Table.TableHeaderColumn,
+                null,
                 'Category'
               ),
               _react2.default.createElement(
@@ -68044,6 +68062,11 @@ var Atc = function (_Component) {
                   _Table.TableRowColumn,
                   null,
                   x.keywords.join(', ')
+                ),
+                _react2.default.createElement(
+                  _Table.TableRowColumn,
+                  null,
+                  x.color || 'ANY'
                 ),
                 _react2.default.createElement(
                   _Table.TableRowColumn,
@@ -69998,6 +70021,17 @@ var AtcCreateForm = function (_Component) {
             style: _Styles2.default.fields.text,
             labelStyle: _Styles2.default.fields.text,
             validate: [Validators.required, Validators.notEmpty]
+          })
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_reduxForm.Field, {
+            name: 'color',
+            component: _reduxFormMaterialUi.TextField,
+            floatingLabelText: 'Color',
+            hintText: 'Color',
+            style: _Styles2.default.fields.text
           })
         ),
         _react2.default.createElement(

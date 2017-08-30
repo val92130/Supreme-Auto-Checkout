@@ -69,6 +69,7 @@ class Atc extends Component {
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
               <TableHeaderColumn>Keywords</TableHeaderColumn>
+              <TableHeaderColumn>Color</TableHeaderColumn>
               <TableHeaderColumn>Category</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
@@ -81,6 +82,7 @@ class Atc extends Component {
                   <TableRow key={x.name}>
                     <TableRowColumn>{x.name}</TableRowColumn>
                     <TableRowColumn>{x.keywords.join(', ')}</TableRowColumn>
+                    <TableRowColumn>{x.color || 'ANY'}</TableRowColumn>
                     <TableRowColumn>{x.category}</TableRowColumn>
                     <TableRowColumn>
                       <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />

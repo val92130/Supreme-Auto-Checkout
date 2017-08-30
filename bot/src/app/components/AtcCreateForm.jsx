@@ -72,6 +72,16 @@ class AtcCreateForm extends Component {
 
           <div>
             <Field
+              name="color"
+              component={TextField}
+              floatingLabelText="Color"
+              hintText="Color"
+              style={Styles.fields.text}
+            />
+          </div>
+
+          <div>
+            <Field
               name="category"
               component={SelectField}
               floatingLabelText="Product category"

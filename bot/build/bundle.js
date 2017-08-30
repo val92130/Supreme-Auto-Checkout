@@ -72110,6 +72110,11 @@ var Atc = function (_Component) {
               _react2.default.createElement(
                 _Table.TableHeaderColumn,
                 null,
+                'Color'
+              ),
+              _react2.default.createElement(
+                _Table.TableHeaderColumn,
+                null,
                 'Category'
               ),
               _react2.default.createElement(
@@ -72140,6 +72145,11 @@ var Atc = function (_Component) {
                   _Table.TableRowColumn,
                   null,
                   x.keywords.join(', ')
+                ),
+                _react2.default.createElement(
+                  _Table.TableRowColumn,
+                  null,
+                  x.color || 'ANY'
                 ),
                 _react2.default.createElement(
                   _Table.TableRowColumn,
@@ -74000,6 +74010,17 @@ var AtcCreateForm = function (_Component) {
             style: _Styles2.default.fields.text,
             labelStyle: _Styles2.default.fields.text,
             validate: [Validators.required, Validators.notEmpty]
+          })
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_reduxForm.Field, {
+            name: 'color',
+            component: _reduxFormMaterialUi.TextField,
+            floatingLabelText: 'Color',
+            hintText: 'Color',
+            style: _Styles2.default.fields.text
           })
         ),
         _react2.default.createElement(

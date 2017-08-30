@@ -193,21 +193,34 @@ export default class SupremeManager extends BaseManager {
       return;
     }
     const keywords = queryString.split(';');
+    const kwColor = Helpers.getQueryStringValue('atc-color');
     const innerArticles = [...document.querySelectorAll('.inner-article')];
     const products = [];
     for (let i = 0; i < innerArticles.length; i += 1) {
       const h1 = innerArticles[i].querySelector('h1');
       const a = innerArticles[i].querySelector('a');
+      const p = innerArticles[i].querySelector('p');
       if (h1 && a && h1.innerText && a.href) {
         const product = {
           matches: 0,
           url: a.href,
         };
-        const name = h1.innerText.toLowerCase();
+        const name = h1.innerText.toLowerCase().trim();
+        let color = null;
+        if (p && p.innerText) {
+          color = p.innerText.toLowerCase().trim();
+        }
         for (let j = 0; j < keywords.length; j += 1) {
-          const keyword = keywords[j].toLowerCase();
+          const keyword = keywords[j].toLowerCase().trim();
           const regexp = new RegExp(keyword);
+          // name matches
           if (regexp.test(name)) {
+            if (kwColor && color) {
+              const regexColor = new RegExp(color);
+              if (regexColor.test(kwColor)) {
+                product.matches += 1;
+              }
+            }
             product.matches += 1;
           }
         }

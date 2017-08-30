@@ -891,7 +891,7 @@ var getSettings = function () {
 
 var processProducts = function () {
   var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(products) {
-    var i, product, category, keywords;
+    var i, product, category, keywords, color, url;
     return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -899,9 +899,18 @@ var processProducts = function () {
             for (i = 0; i < products.length; i += 1) {
               product = products[i];
               category = product.category;
-              keywords = product.keywords;
 
-              chrome.tabs.create({ url: 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';') });
+              if (category === 'tops-sweaters') {
+                category = 'tops_sweaters';
+              }
+              keywords = product.keywords;
+              color = product.color;
+              url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
+
+              if (color) {
+                url = url + '&atc-color=' + color;
+              }
+              chrome.tabs.create({ url: url });
             }
 
           case 1:

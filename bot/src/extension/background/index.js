@@ -22,9 +22,17 @@ async function getSettings() {
 async function processProducts(products) {
   for (let i = 0; i < products.length; i += 1) {
     const product = products[i];
-    const category = product.category;
+    let category = product.category;
+    if (category === 'tops-sweaters') {
+      category = 'tops_sweaters';
+    }
     const keywords = product.keywords;
-    chrome.tabs.create({ url: `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}` });
+    const color = product.color;
+    let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
+    if (color) {
+      url = `${url}&atc-color=${color}`;
+    }
+    chrome.tabs.create({ url });
   }
 }
 
