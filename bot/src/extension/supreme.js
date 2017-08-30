@@ -1,5 +1,6 @@
 import BaseManager from './BaseManager';
 import * as Helpers from '../app/utils/Helpers';
+import * as InputProcessor from './InputProcessor';
 
 export default class SupremeManager extends BaseManager {
   constructor(preferences, sizings, billing) {
@@ -33,6 +34,8 @@ export default class SupremeManager extends BaseManager {
       this.processCart();
     } else if (this.isCheckout()) {
       this.processCheckout();
+    } else if (this.isShopCategoryPage()) {
+      this.processAtc();
     }
   }
 
@@ -44,7 +47,7 @@ export default class SupremeManager extends BaseManager {
    * Attach an event on product links of the page to reload the page instead of loading in ajax
    */
   processLinks() {
-    let links = document.links;
+    const links = document.links;
 
     for (let link of links) {
       link.addEventListener('click', function (e) {
@@ -91,31 +94,13 @@ export default class SupremeManager extends BaseManager {
    */
   processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
+    const inputs = [...document.querySelectorAll('input, textarea, select')]
+      .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
+    const successFill = InputProcessor.processFields(inputs, this.billing);
+
     const terms = document.getElementsByName('order[terms]');
     if (terms.length) {
       terms[0].click();
-    }
-    for (let key of Object.keys(this.billing)) {
-      let el = document.getElementById(key);
-      if (el) {
-        el.value = this.billing[key];
-        el.dispatchEvent(new Event('change'));
-      }
-    }
-
-    // Process card number and CVV
-    const card_field = document.getElementsByName('credit_card[nlb]');
-    if (card_field) {
-      const f = card_field[0];
-      f.value = this.billing['cnb'];
-      f.dispatchEvent(new Event('change'));
-    }
-
-    const cvv_field = document.getElementsByName('credit_card[rvv]');
-    if (cvv_field) {
-      const f = cvv_field[0];
-      f.value = this.billing['vval'];
-      f.dispatchEvent(new Event('change'));
     }
 
     if (this.preferences.captchaBypass) {
@@ -202,6 +187,57 @@ export default class SupremeManager extends BaseManager {
     }
   }
 
+  processAtc() {
+    const queryString = Helpers.getQueryStringValue('atc-kw');
+    if (!queryString) {
+      return;
+    }
+    const keywords = queryString.split(';');
+    const kwColor = Helpers.getQueryStringValue('atc-color');
+    const innerArticles = [...document.querySelectorAll('.inner-article')];
+    const products = [];
+    for (let i = 0; i < innerArticles.length; i += 1) {
+      const h1 = innerArticles[i].querySelector('h1');
+      const a = innerArticles[i].querySelector('a');
+      const p = innerArticles[i].querySelector('p');
+      if (h1 && a && h1.innerText && a.href) {
+        const product = {
+          matches: 0,
+          url: a.href,
+        };
+        const name = h1.innerText.toLowerCase().trim();
+        let color = null;
+        if (p && p.innerText) {
+          color = p.innerText.toLowerCase().trim();
+        }
+        for (let j = 0; j < keywords.length; j += 1) {
+          const keyword = keywords[j].toLowerCase().trim();
+          const regexp = new RegExp(keyword);
+          // name matches
+          if (regexp.test(name)) {
+            if (kwColor && color) {
+              const regexColor = new RegExp(color);
+              if (regexColor.test(kwColor)) {
+                product.matches += 1;
+              }
+            }
+            product.matches += 1;
+          }
+        }
+
+        products.push(product);
+      }
+    }
+    const bestMatch = products.filter(x => x.matches > 0).sort((a, b) => b.matches - a.matches)[0];
+    if (bestMatch) {
+      window.location.href = bestMatch.url;
+    }
+  }
+
+  isShopCategoryPage() {
+    return Helpers.hasStringInPath('shop') && Helpers.hasStringInPath('all') && Helpers.pathCount() === 3;
+  }
+
   /**
    * Check if the user is currently on a product page
    */
@@ -229,8 +265,8 @@ export default class SupremeManager extends BaseManager {
    * Returns the product category when the user is on a product page
    */
   getProductCategory() {
-    let category = Helpers.getQueryStringValue('atc-category');
-    return category === "" ? location.pathname.substring(1).split('/')[1] : category;
+    const category = Helpers.getQueryStringValue('atc-category');
+    return !category ? location.pathname.substring(1).split('/')[1] : category;
   }
 
   /**

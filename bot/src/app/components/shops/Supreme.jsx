@@ -8,9 +8,11 @@ import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Options from './../menus/Options';
 import Sizes from './../menus/Sizes';
+import Atc from './../menus/Atc';
 import Layout from '../../containers/Layout.jsx';
+import Badge from 'material-ui/Badge';
 import { changeMenu } from '../../actions/menu';
-import { updateSettings } from '../../actions/settings';
+import { updateProfileSettings } from '../../actions/profiles';
 
 export const SHOP_NAME = 'Supreme';
 
@@ -23,6 +25,8 @@ class Supreme extends Component {
         return (<Options onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
       case menus.MENU_SIZES:
         return (<Sizes onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
+      case menus.MENU_ATC:
+        return (<Atc shop={SHOP_NAME} />);
       default:
         return null;
     }
@@ -49,7 +53,7 @@ class Supreme extends Component {
 
   onSubmit(menu, data) {
     const newObj = this.transform(menu, data, this.strToNumberReducer);
-    this.props.updateSettings(SHOP_NAME, menu, newObj);
+    this.props.updateSettings(this.props.currentProfile, SHOP_NAME, menu, newObj);
   }
 
   componentWillMount() {
@@ -59,6 +63,19 @@ class Supreme extends Component {
   }
 
   getIconForTabMenu(menu) {
+    if (menu === menus.MENU_ATC) {
+      return (
+          <IconButton iconStyle={{ color: 'white' }} style={{ padding: 0 }} tooltipPosition="top-center" tooltipStyles={{ color: 'white' }}>
+            <Badge
+              badgeStyle={{ top: -24, right: 12 }}
+              badgeContent={this.props.atcProducts.length}
+              primary
+            >
+              <FontIcon style={{ color: 'white', top: -24, right: 12 }} className="material-icons" >done</FontIcon>
+            </Badge>
+          </IconButton>
+      );
+    }
     const isIncomplete = !this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu];
     const color = isIncomplete ? red300 : 'white';
     const tip = isIncomplete ? 'This tab hasn\'t been configured yet' : '';
@@ -95,6 +112,13 @@ class Supreme extends Component {
         value={menus.MENU_SIZES}
         onClick={() => this.props.changeMenu(menus.MENU_SIZES)}
       />,
+      <Tab
+        label="AutoCop"
+        key={4}
+        icon={this.getIconForTabMenu(menus.MENU_ATC)}
+        value={menus.MENU_ATC}
+        onClick={() => this.props.changeMenu(menus.MENU_ATC)}
+      />,
     ];
   }
 
@@ -109,16 +133,20 @@ class Supreme extends Component {
 }
 
 function mapStateToProps(state) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
     menu: state.menu.currentMenu,
-    settings: state.settings.values,
+    settings: settings,
+    atcProducts: state.atc.atcProducts,
+    currentProfile,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     changeMenu: menu => dispatch(changeMenu(menu)),
-    updateSettings: (shop, key, value) => dispatch(updateSettings(shop, key, value))
+    updateSettings: (currentProfile, shop, key, value) => dispatch(updateProfileSettings(currentProfile, shop, key, value)),
   };
 }
 

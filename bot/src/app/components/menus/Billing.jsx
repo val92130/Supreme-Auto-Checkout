@@ -131,10 +131,11 @@ const Billing = props => {
           style={Styles.fields.text}
           validate={[Validators.required]}
         >
-          <MenuItem value="visa" primaryText="Visa"/>
-          <MenuItem value="american_express" primaryText="American Express"/>
-          <MenuItem value="master" primaryText="Mastercard"/>
-          <MenuItem value="solo" primaryText="Solo"/>
+          {
+            (country === 'JAPAN' ? Utils.japanCreditCards : Utils.creditCards).map(x =>
+              <MenuItem value={x.value} primaryText={x.text} key={x.value} />,
+            )
+          }
         </Field>
       </div>
 
@@ -216,8 +217,10 @@ Billing.propTypes = {
 const selector = formValueSelector('billing');
 
 function mapStateToProps(state, ownProps) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
-    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_BILLING] || {},
+    initialValues: (settings[ownProps.shop] || {})[menus.MENU_BILLING] || {},
     country: selector(state, 'order_billing_country'),
   };
 }

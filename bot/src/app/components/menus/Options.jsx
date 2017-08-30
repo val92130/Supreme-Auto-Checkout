@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
   TextField,
   Toggle,
-} from 'redux-form-material-ui';
+  } from 'redux-form-material-ui';
 import Styles from '../../constants/Styles';
 import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
@@ -21,7 +21,7 @@ const defaultValues = {
 };
 
 const Options = props => {
-  const { handleSubmit, pristine, submitting } = props;
+  const { handleSubmit, pristine, submitting, atcEnabled } = props;
   return (
     <form onSubmit={handleSubmit} id="options-form">
       <div>
@@ -68,6 +68,30 @@ const Options = props => {
           style={Styles.fields.text}
         />
       </div>
+
+      <div>
+        <Field
+          name="atcEnabled"
+          component={Toggle}
+          label="Enable AutoCop (Autocheckout required)"
+          style={Styles.fields.text}
+        />
+      </div>
+
+      {
+        atcEnabled &&
+          <div>
+            <Field
+              name="atcStartTime"
+              component={TextField}
+              floatingLabelText="ATC Start time (hh:mm:ss) 24hour format"
+              hintText="ATC Start time"
+              style={Styles.fields.text}
+              validate={[Validators.required, Validators.time24]}
+            />
+            <br />
+          </div>
+      }
 
       <div>
         <Field
@@ -124,9 +148,18 @@ const Options = props => {
   );
 };
 
+const OptionsForm = reduxForm({
+  form: 'options',
+})(Options);
+
+const selector = formValueSelector('options');
+
 function mapStateToProps(state, ownProps) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
-    initialValues: Object.assign(defaultValues, (state.settings.values[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
+    initialValues: Object.assign({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
+    atcEnabled: selector(state, 'atcEnabled'),
   };
 }
 
@@ -134,6 +167,5 @@ Options.propTypes = {
   shop: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps)(reduxForm({
-  form: 'options',
-})(Options));
+
+export default connect(mapStateToProps)(OptionsForm);

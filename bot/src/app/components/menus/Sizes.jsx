@@ -150,6 +150,21 @@ const Sizes = props => {
           }
         </Field>
       </div>
+
+      <div>
+        <Field
+          name="skate"
+          component={SelectField}
+          floatingLabelText="Skate"
+          hintText="Skate"
+          style={Styles.fields.text}
+          validate={[Validators.required]}
+        >
+          {
+            Utils.skateSizes.map(x => <MenuItem key={x} value={x} primaryText={x} />)
+          }
+        </Field>
+      </div>
       <div>
         <RaisedButton
           label="Save"
@@ -166,8 +181,10 @@ Sizes.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  const currentProfile = state.profiles.currentProfile;
+  const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   return {
-    initialValues: (state.settings.values[ownProps.shop] || {})[menus.MENU_SIZES] || {},
+    initialValues: (settings[ownProps.shop] || {})[menus.MENU_SIZES] || {},
   };
 }
 
