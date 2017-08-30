@@ -48,11 +48,12 @@ export function time24(val) {
     return msg;
   }
   const split = val.split(':');
-  if (!split.length || split.length > 2) {
+  if (!split.length || split.length > 3) {
     return msg;
   }
   const hour = +split[0];
   const minute = +split[1];
+  const seconds = +split[2];
   if (isNaN(hour) || hour > 24) {
     return msg;
   }
@@ -60,5 +61,9 @@ export function time24(val) {
   if (isNaN(minute) || minute > 60 || (hour === 24 && minute > 0)) {
     return msg;
   }
-  if (hour < 0 || minute < 0) return msg;
+
+  if (isNaN(seconds) || seconds > 60) {
+    return msg;
+  }
+  if (hour < 0 || minute < 0 || seconds < 0) return msg;
 }

@@ -7002,11 +7002,12 @@ function time24(val) {
     return msg;
   }
   var split = val.split(':');
-  if (!split.length || split.length > 2) {
+  if (!split.length || split.length > 3) {
     return msg;
   }
   var hour = +split[0];
   var minute = +split[1];
+  var seconds = +split[2];
   if (isNaN(hour) || hour > 24) {
     return msg;
   }
@@ -7014,7 +7015,11 @@ function time24(val) {
   if (isNaN(minute) || minute > 60 || hour === 24 && minute > 0) {
     return msg;
   }
-  if (hour < 0 || minute < 0) return msg;
+
+  if (isNaN(seconds) || seconds > 60) {
+    return msg;
+  }
+  if (hour < 0 || minute < 0 || seconds < 0) return msg;
 }
 
 /***/ }),
@@ -71538,7 +71543,7 @@ var Options = function Options(props) {
         _react2.default.createElement(_reduxForm.Field, {
           name: 'atcStartTime',
           component: _reduxFormMaterialUi.TextField,
-          floatingLabelText: 'ATC Start time',
+          floatingLabelText: 'ATC Start time (hh:mm:ss) 24hour format',
           hintText: 'ATC Start time',
           style: _Styles2.default.fields.text,
           validate: [Validators.required, Validators.time24]

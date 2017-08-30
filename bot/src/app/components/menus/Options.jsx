@@ -105,7 +105,7 @@ const Options = props => {
               <Field
                 name="atcStartTime"
                 component={TextField}
-                floatingLabelText="ATC Start time"
+                floatingLabelText="ATC Start time (hh:mm:ss) 24hour format"
                 hintText="ATC Start time"
                 style={Styles.fields.text}
                 validate={[Validators.required, Validators.time24]}
