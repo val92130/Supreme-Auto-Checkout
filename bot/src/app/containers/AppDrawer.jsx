@@ -7,6 +7,7 @@ import Subheader from 'material-ui/Subheader';
 import CodeIcon from 'material-ui/svg-icons/action/code';
 import ShopIcon from 'material-ui/svg-icons/action/shop';
 import AccountIcon from 'material-ui/svg-icons/action/account-circle';
+import PaymentIcon from 'material-ui/svg-icons/action/payment';
 import IncompleteIcon from 'material-ui/svg-icons/alert/error';
 import Styles from '../constants/Styles';
 import { SHOP_NAME as SupremeShopName } from '../components/shops/Supreme';
@@ -60,6 +61,12 @@ class AppDrawer extends Component {
             primaryText="Github"
             onTouchTap={() => openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout')}
             leftIcon={<CodeIcon />}
+          />
+          <ListItem
+            value="donation"
+            primaryText="Donation"
+            onTouchTap={() => openUrlInNewTab('https://www.paypal.me/vchatelain')}
+            leftIcon={<PaymentIcon />}
           />
         </SelectableList>
       </Drawer>

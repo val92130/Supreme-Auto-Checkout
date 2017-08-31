@@ -56475,6 +56475,10 @@ var _accountCircle = __webpack_require__(746);
 
 var _accountCircle2 = _interopRequireDefault(_accountCircle);
 
+var _payment = __webpack_require__(871);
+
+var _payment2 = _interopRequireDefault(_payment);
+
 var _error = __webpack_require__(747);
 
 var _error2 = _interopRequireDefault(_error);
@@ -56579,6 +56583,14 @@ var AppDrawer = function (_Component) {
               return openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout');
             },
             leftIcon: _react2.default.createElement(_code2.default, null)
+          }),
+          _react2.default.createElement(_List.ListItem, {
+            value: 'donation',
+            primaryText: 'Donation',
+            onTouchTap: function onTouchTap() {
+              return openUrlInNewTab('https://www.paypal.me/vchatelain');
+            },
+            leftIcon: _react2.default.createElement(_payment2.default, null)
           })
         )
       );
@@ -79137,6 +79149,44 @@ ActionLaunch.displayName = 'ActionLaunch';
 ActionLaunch.muiName = 'SvgIcon';
 
 exports.default = ActionLaunch;
+
+/***/ }),
+/* 871 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(20);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(21);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ActionPayment = function ActionPayment(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z' })
+  );
+};
+ActionPayment = (0, _pure2.default)(ActionPayment);
+ActionPayment.displayName = 'ActionPayment';
+ActionPayment.muiName = 'SvgIcon';
+
+exports.default = ActionPayment;
 
 /***/ })
 /******/ ]);
