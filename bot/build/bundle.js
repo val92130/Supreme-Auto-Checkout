@@ -72077,7 +72077,8 @@ var Atc = function (_Component) {
             modal: false,
             onRequestClose: function onRequestClose() {
               return _this2.requestCloseModal();
-            }
+            },
+            autoScrollBodyContent: true
           },
           _react2.default.createElement(_AtcCreateForm2.default, { onRequestClose: function onRequestClose() {
               return _this2.requestCloseModal();

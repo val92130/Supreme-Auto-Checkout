@@ -60,6 +60,7 @@ class Atc extends Component {
           title="Add a new atc product"
           modal={false}
           onRequestClose={() => this.requestCloseModal()}
+          autoScrollBodyContent
         >
           <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} />
         </Dialog>
