@@ -3,7 +3,7 @@ Supreme Auto Checkout
 
 Supreme Auto Checkout is a Google Chrome extension to automate the process of buying a product from the Supreme shop.
 
-![Bot](https://github.com/val92130/Supreme-Auto-Checkout/blob/develop/screen-bot.jpg "Bot")
+![Bot](https://github.com/val92130/Supreme-Auto-Checkout/blob/develop/screenshot.png "Bot")
 
 # Requirements
   - Chrome for desktop release 55
@@ -21,21 +21,23 @@ Supreme Auto Checkout provides many features such as:
   - **Option to hide sold out products.**
   - **Easy configuration.**
   - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
-  
+
 # Coming soon
 Features that will be added in the future:
   - **Product Monitor** - Be notified when new products are added to the shop.
 
 # Installation
 
-To install the chrome extension you must first download the latest release [here](https://github.com/val92130/Supreme-Auto-Checkout/releases).
+You can download the bot on the Chrome Web Store [here](https://chrome.google.com/webstore/detail/supreme-auto-checkout-bot/lokkgfofiabinmcohpdalkcmfjpepkjb?hl=fr&gl=FR).
+
+Or you can also download the latest release [here](https://github.com/val92130/Supreme-Auto-Checkout/releases).
 
 Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
   >- Drag the **bot/build** folder containing the extension into Google Chrome.
-  
-  
+
+
 # Updating
 
 If you already have a previous version of the bot installed, I recommend you to **uninstall it before installing the new version**
@@ -82,6 +84,8 @@ Once the ATC time is reached, the bot will automatically open tabs to add to car
 
 The product who matches the most the keywords will be added to the cart.
 
+![Atc](https://github.com/val92130/Supreme-Auto-Checkout/blob/develop/atc.gif "Atc")
+
 # Setting up AutoCop products
 
 To setup AutoCop products, you need to go in the **AutoCop** tab of your bot then click on the **Add new** button.
@@ -93,7 +97,7 @@ This will open a form requesting the following informations:
    - **Color** (optional) - If set, the ATC will try to checkout the product matching this color, also **case insensitive**
    - **Product category** - The category of the product
    - **Enabled**
-   
+
 You can manually trigger the AutoCop for a product by clicking on the `Run now` button in the Atc product list.
 
 # Captcha Bypass
@@ -103,9 +107,9 @@ The **Captcha Bypass** feature works by deleting from the DOM the node containin
 This temporary works because Supreme doesn't seems to validate Google's Re-captcha on server-side.
 
 This option is **NOT** recommended, use with caution.
- 
+
  # Development
- 
+
 Requirements:
 - node.js 7+
 - yarn
@@ -114,18 +118,18 @@ First, you'll need to install the npm dependencies:
  ```bash
   $ yarn
  ```
- 
+
 To build and run the dev server, type the following command in your terminal:
  ```bash
   $ yarn start
  ```
- 
+
  To package a new version of the application run the following command:
   ```bash
    $ yarn build
   ```
 
 ## Donation
-This project will always be supported for free but any donation would be greatly appreciated! 
+This project will always be supported for free but any donation would be greatly appreciated!
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/vchatelain)
