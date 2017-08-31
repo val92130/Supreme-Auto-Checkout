@@ -25737,7 +25737,7 @@ var SupremeManager = function (_BaseManager) {
             if (regexp.test(name)) {
               if (kwColor && color) {
                 var regexColor = new RegExp(color);
-                if (regexColor.test(kwColor)) {
+                if (regexColor.test(kwColor.toLowerCase().trim())) {
                   product.matches += 1;
                 }
               }

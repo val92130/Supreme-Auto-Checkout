@@ -221,7 +221,7 @@ export default class SupremeManager extends BaseManager {
           if (regexp.test(name)) {
             if (kwColor && color) {
               const regexColor = new RegExp(color);
-              if (regexColor.test(kwColor)) {
+              if (regexColor.test(kwColor.toLowerCase().trim())) {
                 product.matches += 1;
               }
             }
