@@ -8,14 +8,15 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
+import RaisedButton from 'material-ui/RaisedButton';
 import { red300 } from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
-import RaisedButton from 'material-ui/RaisedButton';
 import Toggle from 'material-ui/Toggle';
 import { addAtcProduct, removeAtcProduct, setAtcProductEnabled } from '../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
+import * as Helpers from '../../utils/Helpers';
 
 class Atc extends Component {
   constructor(props) {
@@ -60,6 +61,7 @@ class Atc extends Component {
           title="Add a new atc product"
           modal={false}
           onRequestClose={() => this.requestCloseModal()}
+          autoScrollBodyContent
         >
           <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} />
         </Dialog>
@@ -72,6 +74,7 @@ class Atc extends Component {
               <TableHeaderColumn>Color</TableHeaderColumn>
               <TableHeaderColumn>Category</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
+              <TableHeaderColumn>Run now</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -86,6 +89,9 @@ class Atc extends Component {
                     <TableRowColumn>{x.category}</TableRowColumn>
                     <TableRowColumn>
                       <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      <RaisedButton label="Run" primary onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)} />
                     </TableRowColumn>
                     <TableRowColumn>
                       <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>

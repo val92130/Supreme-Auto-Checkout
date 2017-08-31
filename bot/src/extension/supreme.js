@@ -200,6 +200,10 @@ export default class SupremeManager extends BaseManager {
       const h1 = innerArticles[i].querySelector('h1');
       const a = innerArticles[i].querySelector('a');
       const p = innerArticles[i].querySelector('p');
+      const soldOut = innerArticles[i].getElementsByClassName('sold_out_tag');
+      if (soldOut.length) {
+        continue;
+      }
       if (h1 && a && h1.innerText && a.href) {
         const product = {
           matches: 0,
@@ -231,6 +235,10 @@ export default class SupremeManager extends BaseManager {
     const bestMatch = products.filter(x => x.matches > 0).sort((a, b) => b.matches - a.matches)[0];
     if (bestMatch) {
       window.location.href = bestMatch.url;
+    } else {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }
   }
 
