@@ -735,6 +735,7 @@ exports.getQueryStringValue = getQueryStringValue;
 exports.pageHasNodeOfClass = pageHasNodeOfClass;
 exports.hasStringInPath = hasStringInPath;
 exports.pathCount = pathCount;
+exports.openAtcTab = openAtcTab;
 exports.setTimeForToday = setTimeForToday;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -760,6 +761,15 @@ function hasStringInPath(value) {
 
 function pathCount() {
   return location.pathname.substring(1).split('/').length;
+}
+
+function openAtcTab(category, keywords, color) {
+  var url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
+  if (color) {
+    url = url + '&atc-color=' + color;
+  }
+  var win = window.open(url, '_blank');
+  win.focus();
 }
 
 function setTimeForToday(time) {

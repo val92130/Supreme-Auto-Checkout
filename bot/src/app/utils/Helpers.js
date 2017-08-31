@@ -19,6 +19,15 @@ export function pathCount() {
   return location.pathname.substring(1).split('/').length;
 }
 
+export function openAtcTab(category, keywords, color) {
+  let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
+  if (color) {
+    url = `${url}&atc-color=${color}`;
+  }
+  const win = window.open(url, '_blank');
+  win.focus();
+}
+
 export function setTimeForToday(time) {
   const d = new Date();
   const split = time.split(':');
