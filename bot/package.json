@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Simple react starter project",
   "scripts": {
-    "build": "webpack --env=prod --progress --colors --config ./webpack.config.prod.js",
+    "build": "webpack --env=prod --progress --colors --config ./webpack.config.prod.js --watch",
     "start": "webpack-dev-server --hot --open --content-base dist/",
     "lint": "eslint src && echo \"eslint: no lint errors\""
   },

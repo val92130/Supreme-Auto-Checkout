@@ -14,6 +14,7 @@ import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
 import Toggle from 'material-ui/Toggle';
+import LaunchIcon from 'material-ui/svg-icons/action/launch';
 import { addAtcProduct, removeAtcProduct, setAtcProductEnabled } from '../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
 import * as Helpers from '../../utils/Helpers';
@@ -91,7 +92,9 @@ class Atc extends Component {
                       <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
                     </TableRowColumn>
                     <TableRowColumn>
-                      <RaisedButton label="Run" primary onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)} />
+                      <IconButton onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)}>
+                        <LaunchIcon />
+                      </IconButton>
                     </TableRowColumn>
                     <TableRowColumn>
                       <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>

@@ -93,6 +93,8 @@ This will open a form requesting the following informations:
    - **Color** (optional) - If set, the ATC will try to checkout the product matching this color, also **case insensitive**
    - **Product category** - The category of the product
    - **Enabled**
+   
+You can manually trigger the AutoCop for a product by clicking on the `Run now` button in the Atc product list.
 
 # Captcha Bypass
 
@@ -122,3 +124,8 @@ To build and run the dev server, type the following command in your terminal:
   ```bash
    $ yarn build
   ```
+
+## Donation
+This project will always be supported for free but any donation would be greatly appreciated! 
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/vchatelain)
