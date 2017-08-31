@@ -28,40 +28,43 @@ function getIconForShop(settings, shopName) {
   return <ShopIcon />;
 }
 
-function AppDrawer(props) {
-  const { location, currentProfile, settings } = props;
-  const paths = location.pathname.split('/').filter(x => !!x);
-  const currentPage = paths[0];
-  return (
-    <Drawer open>
-      <div style={Styles.logo}>
-        Supreme Auto Checkout
-      </div>
-      <SelectableList value={currentPage}>
-        <Subheader>Shops</Subheader>
-        <ListItem
-          value="supreme"
-          primaryText="Supreme"
-          containerElement={<Link to={'/supreme/'} />}
-          leftIcon={getIconForShop(settings, SupremeShopName)}
-        />
-        <Subheader>Settings</Subheader>
-        <ListItem
-          value="profiles"
-          primaryText={`Profiles (${currentProfile})`}
-          containerElement={<Link to={'/profiles/'} />}
-          leftIcon={<AccountIcon />}
-        />
-        <Subheader>Other</Subheader>
-        <ListItem
-          value="about"
-          primaryText="Github"
-          onTouchTap={() => openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout')}
-          leftIcon={<CodeIcon />}
-        />
-      </SelectableList>
-    </Drawer>
-  );
+class AppDrawer extends Component {
+
+  render() {
+    const { location, currentProfile, settings, open } = this.props;
+    const paths = location.pathname.split('/').filter(x => !!x);
+    const currentPage = paths[0];
+    return (
+      <Drawer open={open}>
+        <div style={Styles.logo}>
+          Supreme Auto Checkout
+        </div>
+        <SelectableList value={currentPage}>
+          <Subheader>Shops</Subheader>
+          <ListItem
+            value="supreme"
+            primaryText="Supreme"
+            containerElement={<Link to={'/supreme/'} />}
+            leftIcon={getIconForShop(settings, SupremeShopName)}
+          />
+          <Subheader>Settings</Subheader>
+          <ListItem
+            value="profiles"
+            primaryText={`Profiles (${currentProfile})`}
+            containerElement={<Link to={'/profiles/'} />}
+            leftIcon={<AccountIcon />}
+          />
+          <Subheader>Other</Subheader>
+          <ListItem
+            value="about"
+            primaryText="Github"
+            onTouchTap={() => openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout')}
+            leftIcon={<CodeIcon />}
+          />
+        </SelectableList>
+      </Drawer>
+    );
+  }
 }
 
 AppDrawer.propTypes = {
@@ -69,6 +72,7 @@ AppDrawer.propTypes = {
     pathname: PropTypes.string.isRequired,
   }),
   currentProfile: PropTypes.string,
+  open: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

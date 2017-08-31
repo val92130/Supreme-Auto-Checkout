@@ -28,8 +28,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*.supremenewyork.com/*",
-        "*://localhost/*"
+        "*://*.supremenewyork.com/*"
       ],
       "js": [
         "extension.js"

@@ -1,17 +1,35 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppDrawer from './AppDrawer';
 import NotificationBar from '../components/NotificationBar';
 import { getTheme } from '../constants/Styles';
+import { setDrawerOpen } from '../actions/drawer';
+import * as Utils from '../constants/Utils';
 
 class App extends Component {
+  componentDidMount() {
+    window.onresize = () => this.handleResize();
+    this.handleResize();
+  }
+
+  handleResize() {
+    const { setDrawerOpen, drawerOpen } = this.props;
+    if (window.innerWidth <= Utils.WIDTH_DRAWER_OPEN_THRESOLD) {
+      setDrawerOpen(false);
+    } else if (!drawerOpen) {
+      setDrawerOpen(true);
+    }
+  }
+
   render() {
     const { children } = this.props;
+    const drawerOpen = this.props.drawerOpen;
     return (
       <MuiThemeProvider muiTheme={getTheme()}>
         <div style={{ height: '100%' }}>
-          <AppDrawer {...this.props} />
-          <div style={{ paddingLeft: 256, height: '100%' }}>{children}</div>
+          <AppDrawer {...this.props} open={drawerOpen} />
+          <div style={{ paddingLeft: drawerOpen ? 256 : 0, height: '100%' }}>{children}</div>
           <NotificationBar />
         </div>
       </MuiThemeProvider>
@@ -21,6 +39,20 @@ class App extends Component {
 
 App.propTypes = {
   children: PropTypes.element,
+  drawerOpen: PropTypes.bool,
+  setDrawerOpen: PropTypes.func,
 };
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    drawerOpen: state.drawer.open,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setDrawerOpen: open => dispatch(setDrawerOpen(open)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -15,7 +15,7 @@ import IconButton from 'material-ui/IconButton';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
 import RaisedButton from 'material-ui/RaisedButton';
 import { createProfile, setProfileEnabled, removeProfile } from '../actions/profiles';
-import Layout from '../containers/Layout.jsx';
+import Layout from '../containers/Layout';
 import ProfileCreateForm from './ProfileCreateForm';
 import ProfileToggle from './ProfileToggle';
 

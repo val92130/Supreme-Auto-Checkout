@@ -9,10 +9,10 @@ import Billing from './../menus/Billing';
 import Options from './../menus/Options';
 import Sizes from './../menus/Sizes';
 import Atc from './../menus/Atc';
-import Layout from '../../containers/Layout.jsx';
-import Badge from 'material-ui/Badge';
+import Layout from '../../containers/Layout';
 import { changeMenu } from '../../actions/menu';
 import { updateProfileSettings } from '../../actions/profiles';
+import * as Styles from '../../constants/Styles';
 
 export const SHOP_NAME = 'Supreme';
 
@@ -63,26 +63,8 @@ class Supreme extends Component {
   }
 
   getIconForTabMenu(menu) {
-    if (menu === menus.MENU_ATC) {
-      return (
-          <IconButton iconStyle={{ color: 'white' }} style={{ padding: 0 }} tooltipPosition="top-center" tooltipStyles={{ color: 'white' }}>
-            <Badge
-              badgeStyle={{ top: -24, right: 12 }}
-              badgeContent={this.props.atcProducts.length}
-              primary
-            >
-              <FontIcon style={{ color: 'white', top: -24, right: 12 }} className="material-icons" >done</FontIcon>
-            </Badge>
-          </IconButton>
-      );
-    }
-    const isIncomplete = !this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu];
-    const color = isIncomplete ? red300 : 'white';
-    const tip = isIncomplete ? 'This tab hasn\'t been configured yet' : '';
-    return (<IconButton iconStyle={{ color }} tooltip={tip} tooltipPosition="top-center" tooltipStyles={{color: 'white'}}>
-        <FontIcon style={{ color }} className="material-icons" >{isIncomplete ? 'error' : 'done'}</FontIcon>
-    </IconButton>
-    );
+    const isIncomplete = (menu !== menus.MENU_ATC) && (!this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu]);
+    return (<FontIcon className="material-icons" >{isIncomplete ? 'error' : 'done'}</FontIcon>);
   }
 
   static getDefaultMenu() {
@@ -92,6 +74,7 @@ class Supreme extends Component {
   getTabs() {
     return [
       <Tab
+        style={Styles.tab}
         label="Billing"
         key={1}
         icon={this.getIconForTabMenu(menus.MENU_BILLING)}

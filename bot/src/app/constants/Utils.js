@@ -9,3 +9,5 @@ export const japanRegions = [{"text":" 北海道","value":" 北海道"},{"text":
 export const categories = ['accessories', 't-shirts', 'pants', 'shorts', 'sweatshirts', 'tops-sweaters', 'shirts', 'jackets', 'shoes', 'skate'];
 export const creditCards = [{ text: 'Visa', value: 'visa' }, { text: 'American Express', value: 'american_express' }, { text: 'Mastercard', value: 'master' }, { text: 'Solo', value: 'solo'}];
 export const japanCreditCards = creditCards.concat([ { text: 'JCB', value: 'jcb' }, { text: '代金引換', value: 'cod' }]).filter(x => x.value !== 'solo');
+
+export const WIDTH_DRAWER_OPEN_THRESOLD = 1024;

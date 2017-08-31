@@ -20,14 +20,13 @@ const styles = {
     zIndex: 101,
   },
   tabs: {
-    marginLeft: -24,
-    marginRight: -24,
+    flex: 1,
+    marginLeft: 16,
+  },
+  tab: {
+    height: 64,
   },
   appBar: {
-    flex: 'none',
-    display: 'block',
-    flexWrap: 'wrap',
-    zIndex: 100,
     height: 64,
   },
   logo: {
