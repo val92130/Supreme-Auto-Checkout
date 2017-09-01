@@ -27163,13 +27163,13 @@ var _Atc = __webpack_require__(768);
 
 var _Atc2 = _interopRequireDefault(_Atc);
 
-var _Layout = __webpack_require__(784);
+var _Layout = __webpack_require__(785);
 
 var _Layout2 = _interopRequireDefault(_Layout);
 
-var _menu = __webpack_require__(792);
+var _menu = __webpack_require__(793);
 
-var _profiles = __webpack_require__(793);
+var _profiles = __webpack_require__(794);
 
 var _Styles = __webpack_require__(74);
 
@@ -67919,13 +67919,13 @@ var _Toggle = __webpack_require__(304);
 
 var _Toggle2 = _interopRequireDefault(_Toggle);
 
-var _launch = __webpack_require__(795);
+var _launch = __webpack_require__(776);
 
 var _launch2 = _interopRequireDefault(_launch);
 
-var _atc = __webpack_require__(776);
+var _atc = __webpack_require__(777);
 
-var _AtcCreateForm = __webpack_require__(777);
+var _AtcCreateForm = __webpack_require__(778);
 
 var _AtcCreateForm2 = _interopRequireDefault(_AtcCreateForm);
 
@@ -69839,6 +69839,44 @@ exports.default = ActionDelete;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(22);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(23);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ActionLaunch = function ActionLaunch(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z' })
+  );
+};
+ActionLaunch = (0, _pure2.default)(ActionLaunch);
+ActionLaunch.displayName = 'ActionLaunch';
+ActionLaunch.muiName = 'SvgIcon';
+
+exports.default = ActionLaunch;
+
+/***/ }),
+/* 777 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.addAtcProduct = addAtcProduct;
 exports.removeAtcProduct = removeAtcProduct;
 exports.setAtcProductEnabled = setAtcProductEnabled;
@@ -69887,7 +69925,7 @@ function setAtcProductEnabled(name) {
 }
 
 /***/ }),
-/* 777 */
+/* 778 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69929,7 +69967,7 @@ var _reduxForm = __webpack_require__(112);
 
 var _reactRedux = __webpack_require__(26);
 
-var _materialUiChipInput = __webpack_require__(778);
+var _materialUiChipInput = __webpack_require__(779);
 
 var _materialUiChipInput2 = _interopRequireDefault(_materialUiChipInput);
 
@@ -70130,7 +70168,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Form);
 
 /***/ }),
-/* 778 */
+/* 779 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70152,7 +70190,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(779);
+var _propTypes = __webpack_require__(780);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -70176,7 +70214,7 @@ var _transitions = __webpack_require__(12);
 
 var _transitions2 = _interopRequireDefault(_transitions);
 
-var _Chip = __webpack_require__(781);
+var _Chip = __webpack_require__(782);
 
 var _Chip2 = _interopRequireDefault(_Chip);
 
@@ -70834,7 +70872,7 @@ ChipInput.defaultProps = {
 exports.default = ChipInput;
 
 /***/ }),
-/* 779 */
+/* 780 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -70865,13 +70903,13 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(780)();
+  module.exports = __webpack_require__(781)();
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 780 */
+/* 781 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70937,7 +70975,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 781 */
+/* 782 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70948,7 +70986,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _Chip = __webpack_require__(782);
+var _Chip = __webpack_require__(783);
 
 var _Chip2 = _interopRequireDefault(_Chip);
 
@@ -70957,7 +70995,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _Chip2.default;
 
 /***/ }),
-/* 782 */
+/* 783 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71013,7 +71051,7 @@ var _EnhancedButton = __webpack_require__(44);
 
 var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 
-var _cancel = __webpack_require__(783);
+var _cancel = __webpack_require__(784);
 
 var _cancel2 = _interopRequireDefault(_cancel);
 
@@ -71300,7 +71338,7 @@ exports.default = Chip;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 783 */
+/* 784 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71338,7 +71376,7 @@ NavigationCancel.muiName = 'SvgIcon';
 exports.default = NavigationCancel;
 
 /***/ }),
-/* 784 */
+/* 785 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71376,11 +71414,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _AppBar = __webpack_require__(785);
+var _AppBar = __webpack_require__(786);
 
 var _AppBar2 = _interopRequireDefault(_AppBar);
 
-var _Tabs = __webpack_require__(788);
+var _Tabs = __webpack_require__(789);
 
 var _Tabs2 = _interopRequireDefault(_Tabs);
 
@@ -71394,7 +71432,7 @@ var _Styles = __webpack_require__(74);
 
 var _Styles2 = _interopRequireDefault(_Styles);
 
-var _drawer = __webpack_require__(791);
+var _drawer = __webpack_require__(792);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -71485,7 +71523,7 @@ function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Layout);
 
 /***/ }),
-/* 785 */
+/* 786 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71496,7 +71534,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _AppBar = __webpack_require__(786);
+var _AppBar = __webpack_require__(787);
 
 var _AppBar2 = _interopRequireDefault(_AppBar);
 
@@ -71505,7 +71543,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _AppBar2.default;
 
 /***/ }),
-/* 786 */
+/* 787 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71561,7 +71599,7 @@ var _IconButton = __webpack_require__(72);
 
 var _IconButton2 = _interopRequireDefault(_IconButton);
 
-var _menu = __webpack_require__(787);
+var _menu = __webpack_require__(788);
 
 var _menu2 = _interopRequireDefault(_menu);
 
@@ -71892,7 +71930,7 @@ exports.default = AppBar;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 787 */
+/* 788 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71930,7 +71968,7 @@ NavigationMenu.muiName = 'SvgIcon';
 exports.default = NavigationMenu;
 
 /***/ }),
-/* 788 */
+/* 789 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71980,11 +72018,11 @@ var _warning = __webpack_require__(27);
 
 var _warning2 = _interopRequireDefault(_warning);
 
-var _TabTemplate = __webpack_require__(789);
+var _TabTemplate = __webpack_require__(790);
 
 var _TabTemplate2 = _interopRequireDefault(_TabTemplate);
 
-var _InkBar = __webpack_require__(790);
+var _InkBar = __webpack_require__(791);
 
 var _InkBar2 = _interopRequireDefault(_InkBar);
 
@@ -72252,7 +72290,7 @@ exports.default = Tabs;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 789 */
+/* 790 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72306,7 +72344,7 @@ exports.default = TabTemplate;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 790 */
+/* 791 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72407,7 +72445,7 @@ exports.default = InkBar;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 791 */
+/* 792 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72432,7 +72470,7 @@ function setDrawerOpen(open) {
 }
 
 /***/ }),
-/* 792 */
+/* 793 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72471,7 +72509,7 @@ function changeMenu(newMenu) {
 }
 
 /***/ }),
-/* 793 */
+/* 794 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72541,45 +72579,6 @@ function updateProfileSettings(profileName, shop, key, value) {
     });
   };
 }
-
-/***/ }),
-/* 794 */,
-/* 795 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _pure = __webpack_require__(22);
-
-var _pure2 = _interopRequireDefault(_pure);
-
-var _SvgIcon = __webpack_require__(23);
-
-var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ActionLaunch = function ActionLaunch(props) {
-  return _react2.default.createElement(
-    _SvgIcon2.default,
-    props,
-    _react2.default.createElement('path', { d: 'M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z' })
-  );
-};
-ActionLaunch = (0, _pure2.default)(ActionLaunch);
-ActionLaunch.displayName = 'ActionLaunch';
-ActionLaunch.muiName = 'SvgIcon';
-
-exports.default = ActionLaunch;
 
 /***/ })
 /******/ ]);
