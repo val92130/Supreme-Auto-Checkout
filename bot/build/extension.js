@@ -25827,7 +25827,7 @@ var SupremeManager = function (_BaseManager) {
   }, {
     key: 'getSizesOptions',
     value: function getSizesOptions() {
-      var sizes = document.getElementById('size');
+      var sizes = document.getElementById('size') || document.querySelector('[name=size]') || document.querySelector('form.add').querySelector('select');
       if (!sizes || !sizes.options) return [];
       return [].concat((0, _toConsumableArray3.default)(sizes.options));
     }
