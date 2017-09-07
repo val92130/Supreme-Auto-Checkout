@@ -154,7 +154,7 @@ export default class SupremeManager extends BaseManager {
       if (sizesOptions.length) {
         let categorySize = this.sizings[productCategory];
         if (categorySize === undefined) {
-          this.setNotificationBarText('Unknown category "' + productCategory + '", cannot process');
+          this.setNotificationBarText(`Unknown category "${productCategory}", cannot process`);
           return;
         }
         let targetOption = sizesOptions.find(x => this.sizeMatch(categorySize, x.text, productCategory));
@@ -290,7 +290,7 @@ export default class SupremeManager extends BaseManager {
    * @return {Array}
    */
   getSizesOptions() {
-    const sizes = document.getElementById('size');
+    const sizes = document.getElementById('size') ||  document.querySelector('[name=size]') || (document.querySelector('form.add').querySelector('select'));
     if (!sizes || !sizes.options)
       return [];
     return [...sizes.options];
