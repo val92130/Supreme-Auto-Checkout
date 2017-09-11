@@ -37,7 +37,7 @@ async function processProducts(products) {
 }
 
 function isEnabled(settings) {
-  return settings[menus.MENU_OPTIONS] && settings[menus.MENU_OPTIONS].atcEnabled;
+  return settings && settings[menus.MENU_OPTIONS] && settings[menus.MENU_OPTIONS].atcEnabled;
 }
 
 function getAtcStartTime(settings) {
@@ -69,10 +69,13 @@ async function timeout(ms, callback) {
 }
 
 async function loop() {
-  const now = new Date();
   const settings = await getSettings();
+  if (!isEnabled(settings)) {
+    await timeout(1000, () => loop());
+  }
+  const now = new Date();
   const startTime = getAtcStartTime(settings);
-  if (!isEnabled(settings) || !startTime || !Helpers.sameDay(now, startTime)) {
+  if (!startTime || !Helpers.sameDay(now, startTime)) {
     await timeout(1000, () => loop());
     return;
   }

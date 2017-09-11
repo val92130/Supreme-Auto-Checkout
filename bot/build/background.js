@@ -16533,66 +16533,78 @@ var timeout = function () {
 
 var loop = function () {
   var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
-    var now, settings, startTime, diffTime, products;
+    var settings, now, startTime, diffTime, products;
     return _regenerator2.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            now = new Date();
-            _context6.next = 3;
+            _context6.next = 2;
             return getSettings();
 
-          case 3:
+          case 2:
             settings = _context6.sent;
-            startTime = getAtcStartTime(settings);
 
-            if (!(!isEnabled(settings) || !startTime || !Helpers.sameDay(now, startTime))) {
-              _context6.next = 9;
+            if (isEnabled(settings)) {
+              _context6.next = 6;
               break;
             }
 
-            _context6.next = 8;
+            _context6.next = 6;
             return timeout(1000, function () {
               return loop();
             });
 
-          case 8:
+          case 6:
+            now = new Date();
+            startTime = getAtcStartTime(settings);
+
+            if (!(!startTime || !Helpers.sameDay(now, startTime))) {
+              _context6.next = 12;
+              break;
+            }
+
+            _context6.next = 11;
+            return timeout(1000, function () {
+              return loop();
+            });
+
+          case 11:
             return _context6.abrupt('return');
 
-          case 9:
+          case 12:
             diffTime = (startTime.getTime() - now.getTime()) / 1000;
 
             console.log('ATC starting in ' + diffTime + ' seconds...');
 
             if (!(diffTime <= 0 && Math.abs(diffTime) < 3)) {
-              _context6.next = 20;
+              _context6.next = 23;
               break;
             }
 
-            _context6.next = 14;
+            _context6.next = 17;
             return getEnabledAtcProducts();
 
-          case 14:
+          case 17:
             products = _context6.sent;
-            _context6.next = 17;
+            _context6.next = 20;
             return processProducts(products);
 
-          case 17:
-            _context6.next = 19;
+          case 20:
+            _context6.next = 22;
             return timeout(4000, function () {
               return loop();
             });
 
-          case 19:
+          case 22:
             return _context6.abrupt('return');
 
-          case 20:
-            _context6.next = 22;
+          case 23:
+            _context6.next = 25;
             return timeout(1000, function () {
               return loop();
             });
 
-          case 22:
+          case 25:
           case 'end':
             return _context6.stop();
         }
@@ -16642,7 +16654,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function isEnabled(settings) {
-  return settings[menus.MENU_OPTIONS] && settings[menus.MENU_OPTIONS].atcEnabled;
+  return settings && settings[menus.MENU_OPTIONS] && settings[menus.MENU_OPTIONS].atcEnabled;
 }
 
 function getAtcStartTime(settings) {

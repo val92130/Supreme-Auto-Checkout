@@ -42095,15 +42095,15 @@ var BaseManager = function () {
       var notificationBar = document.createElement("div");
       notificationBar.style.width = '100%';
       notificationBar.style.textAlign = 'center';
-      notificationBar.style.backgroundColor = 'rgba(203, 255, 205, 0.38)';
-      notificationBar.style.lineHeight = '50px';
-      notificationBar.style.height = '50px';
-      notificationBar.style.fontSize = 'medium';
+      notificationBar.style.backgroundColor = 'rgb(255, 58, 58)';
+      notificationBar.style.lineHeight = '60px';
+      notificationBar.style.height = '60px';
+      notificationBar.style.fontSize = '2em';
       notificationBar.style.zIndex = '9999';
-      notificationBar.style.position = 'absolute';
       notificationBar.style.left = 0;
       notificationBar.style.top = 0;
-      notificationBar.id = "sup-notif-bar";
+      notificationBar.style.fontWeight = 'bold';
+      notificationBar.id = 'sup-notif-bar';
       document.body.prepend(notificationBar);
       return notificationBar;
     }
