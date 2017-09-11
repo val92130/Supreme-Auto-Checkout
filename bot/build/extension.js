@@ -41197,7 +41197,7 @@ var SupremeManager = function (_BaseManager) {
       var inputs = [].concat((0, _toConsumableArray3.default)(document.querySelectorAll('input, textarea, select'))).filter(function (x) {
         return ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1;
       });
-
+      InputProcessor.processFields(inputs, this.billing);
       var terms = document.getElementsByName('order[terms]');
       if (terms.length) {
         terms[0].click();
@@ -41315,6 +41315,27 @@ var SupremeManager = function (_BaseManager) {
       }
     }
   }, {
+    key: 'findArticles',
+    value: function findArticles() {
+      var articles = document.querySelectorAll('.inner-article');
+      if (!articles.length) {
+        articles = document.querySelectorAll('.inner-item');
+      }
+      return [].concat((0, _toConsumableArray3.default)(articles));
+    }
+  }, {
+    key: 'getArticleName',
+    value: function getArticleName(article) {
+      var nameNode = article.querySelector('h1') || article.querySelector('a.nl') || article.querySelector('a');
+      return nameNode ? nameNode.innerText.toLowerCase().trim() : null;
+    }
+  }, {
+    key: 'getArticleColor',
+    value: function getArticleColor(article) {
+      var colorNode = article.querySelector('.sn') || article.querySelector('.nl');
+      return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
+    }
+  }, {
     key: 'processAtc',
     value: function processAtc() {
       var queryString = Helpers.getQueryStringValue('atc-kw');
@@ -41323,26 +41344,21 @@ var SupremeManager = function (_BaseManager) {
       }
       var keywords = queryString.split(';');
       var kwColor = Helpers.getQueryStringValue('atc-color');
-      var innerArticles = [].concat((0, _toConsumableArray3.default)(document.querySelectorAll('.inner-article')));
+      var innerArticles = this.findArticles();
       var products = [];
       for (var i = 0; i < innerArticles.length; i += 1) {
-        var h1 = innerArticles[i].querySelector('h1');
+        var name = this.getArticleName(innerArticles[i]);
         var a = innerArticles[i].querySelector('a');
-        var p = innerArticles[i].querySelector('p');
+        var color = this.getArticleColor(innerArticles[i]);
         var soldOut = innerArticles[i].getElementsByClassName('sold_out_tag');
         if (soldOut.length) {
           continue;
         }
-        if (h1 && a && h1.innerText && a.href) {
+        if (name && a.href) {
           var product = {
             matches: 0,
             url: a.href
           };
-          var name = h1.innerText.toLowerCase().trim();
-          var color = null;
-          if (p && p.innerText) {
-            color = p.innerText.toLowerCase().trim();
-          }
           for (var j = 0; j < keywords.length; j += 1) {
             var keyword = keywords[j].toLowerCase().trim();
             var regexp = new RegExp(keyword);
@@ -83398,7 +83414,8 @@ var Options = function Options(props) {
           label: 'Action when out of stock in cart...',
           floatingLabelText: 'Action when out of stock in cart...',
           hintText: 'Action when out of stock in cart...',
-          style: _Styles2.default.fields.text
+          style: _Styles2.default.fields.text,
+          validate: Validators.required
         },
         _react2.default.createElement(_MenuItem2.default, { key: SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS, value: SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS, primaryText: 'Remove sold out products' }),
         _react2.default.createElement(_MenuItem2.default, { key: SupremeUtils.OnSoldOutCartActions.STOP, value: SupremeUtils.OnSoldOutCartActions.STOP, primaryText: 'Stop auto-checkout' })

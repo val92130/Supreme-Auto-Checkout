@@ -87672,7 +87672,8 @@ var Options = function Options(props) {
           label: 'Action when out of stock in cart...',
           floatingLabelText: 'Action when out of stock in cart...',
           hintText: 'Action when out of stock in cart...',
-          style: _Styles2.default.fields.text
+          style: _Styles2.default.fields.text,
+          validate: Validators.required
         },
         _react2.default.createElement(_MenuItem2.default, { key: SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS, value: SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS, primaryText: 'Remove sold out products' }),
         _react2.default.createElement(_MenuItem2.default, { key: SupremeUtils.OnSoldOutCartActions.STOP, value: SupremeUtils.OnSoldOutCartActions.STOP, primaryText: 'Stop auto-checkout' })

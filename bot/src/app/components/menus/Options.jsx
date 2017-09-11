@@ -112,6 +112,7 @@ const Options = props => {
           floatingLabelText="Action when out of stock in cart..."
           hintText="Action when out of stock in cart..."
           style={Styles.fields.text}
+          validate={Validators.required}
         >
           <MenuItem key={SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS} value={SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS} primaryText={'Remove sold out products'} />
           <MenuItem key={SupremeUtils.OnSoldOutCartActions.STOP} value={SupremeUtils.OnSoldOutCartActions.STOP} primaryText={'Stop auto-checkout'} />

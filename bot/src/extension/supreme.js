@@ -127,7 +127,7 @@ export default class SupremeManager extends BaseManager {
     const checkoutDelay = this.preferences.checkoutDelay;
     const inputs = [...document.querySelectorAll('input, textarea, select')]
       .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
-
+    InputProcessor.processFields(inputs, this.billing);
     const terms = document.getElementsByName('order[terms]');
     if (terms.length) {
       terms[0].click();
@@ -217,6 +217,24 @@ export default class SupremeManager extends BaseManager {
     }
   }
 
+  findArticles() {
+    let articles = document.querySelectorAll('.inner-article');
+    if (!articles.length) {
+      articles = document.querySelectorAll('.inner-item');
+    }
+    return [...articles];
+  }
+
+  getArticleName(article) {
+    const nameNode = article.querySelector('h1') || article.querySelector('a.nl') || article.querySelector('a');
+    return nameNode ? nameNode.innerText.toLowerCase().trim() : null;
+  }
+
+  getArticleColor(article) {
+    const colorNode = article.querySelector('.sn') || article.querySelector('.nl');
+    return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
+  }
+
   processAtc() {
     const queryString = Helpers.getQueryStringValue('atc-kw');
     if (!queryString) {
@@ -224,26 +242,21 @@ export default class SupremeManager extends BaseManager {
     }
     const keywords = queryString.split(';');
     const kwColor = Helpers.getQueryStringValue('atc-color');
-    const innerArticles = [...document.querySelectorAll('.inner-article')];
+    const innerArticles = this.findArticles();
     const products = [];
     for (let i = 0; i < innerArticles.length; i += 1) {
-      const h1 = innerArticles[i].querySelector('h1');
+      const name = this.getArticleName(innerArticles[i]);
       const a = innerArticles[i].querySelector('a');
-      const p = innerArticles[i].querySelector('p');
+      const color = this.getArticleColor(innerArticles[i]);
       const soldOut = innerArticles[i].getElementsByClassName('sold_out_tag');
       if (soldOut.length) {
         continue;
       }
-      if (h1 && a && h1.innerText && a.href) {
+      if (name && a.href) {
         const product = {
           matches: 0,
           url: a.href,
         };
-        const name = h1.innerText.toLowerCase().trim();
-        let color = null;
-        if (p && p.innerText) {
-          color = p.innerText.toLowerCase().trim();
-        }
         for (let j = 0; j < keywords.length; j += 1) {
           const keyword = keywords[j].toLowerCase().trim();
           const regexp = new RegExp(keyword);
