@@ -52,7 +52,7 @@ export function date(val) {
 
 export function time24(val) {
   const msg = 'Invalid time';
-  if (!Helpers.setTimeForToday(val)) {
+  if (!Helpers.isValidTime(val)) {
     return msg;
   }
 }

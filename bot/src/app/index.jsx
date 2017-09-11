@@ -13,7 +13,7 @@ import getRoutes from './routes';
 import { loadSavedState, saveState, saveToChromeStorage } from './utils/StorageManager';
 
 
-const VERSION = '0.0.1';
+const VERSION = '2.2.5';
 
 injectTapEventPlugin();
 

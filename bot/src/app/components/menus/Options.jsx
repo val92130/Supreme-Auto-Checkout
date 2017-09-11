@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {
   TextField,
   Toggle,
+  DatePicker,
   } from 'redux-form-material-ui';
 import Styles from '../../constants/Styles';
 import * as Validators from '../../constants/FormValidators';
@@ -89,6 +90,15 @@ const Options = props => {
               style={Styles.fields.text}
               validate={[Validators.required, Validators.time24]}
             />
+            <Field
+              name="atcStartDate"
+              component={DatePicker}
+              floatingLabelText="ATC Start date"
+              hintText="ATC Start date"
+              style={Styles.fields.text}
+              textFieldStyle={Styles.fields.text}
+              validate={[Validators.required]}
+            />
             <br />
           </div>
       }
@@ -157,8 +167,12 @@ const selector = formValueSelector('options');
 function mapStateToProps(state, ownProps) {
   const currentProfile = state.profiles.currentProfile;
   const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
+  const initialValues = Object.assign({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {});
+  if (initialValues['atcStartDate'] && initialValues['atcStartDate'] !== 'Invalid Date') {
+    initialValues['atcStartDate'] = new Date(initialValues['atcStartDate']);
+  }
   return {
-    initialValues: Object.assign({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
+    initialValues,
     atcEnabled: selector(state, 'atcEnabled'),
   };
 }

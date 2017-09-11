@@ -37,6 +37,9 @@ class Supreme extends Component {
     if (typeof value === 'string' && !isNaN(value) && menu !== menus.MENU_BILLING) {
       return +(value);
     }
+    if (value instanceof Date) {
+      return value.toString();
+    }
     return value;
   }
 
@@ -57,7 +60,7 @@ class Supreme extends Component {
   }
 
   componentWillMount() {
-    if (this.props.menu == null) {
+    if (this.props.menu === null) {
       this.props.changeMenu(Supreme.getDefaultMenu());
     }
   }

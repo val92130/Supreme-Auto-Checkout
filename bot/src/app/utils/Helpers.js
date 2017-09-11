@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function isObjectEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
@@ -28,29 +30,20 @@ export function openAtcTab(category, keywords, color) {
   win.focus();
 }
 
-export function setTimeForToday(time) {
-  const d = new Date();
-  const split = time.split(':');
-  if (!split.length || split.length > 3) {
+export function timeToDate(time) {
+  const d = moment(time, 'hh:mm:ss');
+  if (!d.isValid()) {
     return null;
   }
-  const hour = +split[0];
-  const minute = +split[1];
-  const seconds = +split[2];
-  if (isNaN(hour) || hour > 24) {
-    return null;
-  }
+  return d.toDate();
+}
 
-  if (isNaN(minute) || minute > 60 || (hour === 24 && minute > 0)) {
-    return null;
-  }
+export function isValidTime(time) {
+  return timeToDate(time) !== null;
+}
 
-  if (isNaN(seconds) || seconds > 60) {
-    return null;
-  }
-  if (hour < 0 || minute < 0 || seconds < 0) return null;
-  d.setHours(hour);
-  d.setMinutes(minute);
-  d.setSeconds(seconds);
-  return d;
+export function sameDay(d1, d2) {
+  return d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
 }
