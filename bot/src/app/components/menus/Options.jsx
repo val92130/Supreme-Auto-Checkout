@@ -6,10 +6,13 @@ import {
   TextField,
   Toggle,
   DatePicker,
+  SelectField,
   } from 'redux-form-material-ui';
+import MenuItem from 'material-ui/MenuItem';
 import Styles from '../../constants/Styles';
 import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
+import * as SupremeUtils from '../../utils/SupremeUtils';
 
 const defaultValues = {
   autoCheckout: false,
@@ -99,10 +102,21 @@ const Options = props => {
               textFieldStyle={Styles.fields.text}
               validate={[Validators.required]}
             />
-            <br />
           </div>
       }
-
+      <div>
+        <Field
+          name="onCartSoldOut"
+          component={SelectField}
+          label="Action when out of stock in cart..."
+          floatingLabelText="Action when out of stock in cart..."
+          hintText="Action when out of stock in cart..."
+          style={Styles.fields.text}
+        >
+          <MenuItem key={SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS} value={SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS} primaryText={'Remove sold out products'} />
+          <MenuItem key={SupremeUtils.OnSoldOutCartActions.STOP} value={SupremeUtils.OnSoldOutCartActions.STOP} primaryText={'Stop auto-checkout'} />
+        </Field>
+      </div>
       <div>
         <Field
           name="addToCartDelay"

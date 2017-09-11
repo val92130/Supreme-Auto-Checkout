@@ -87537,6 +87537,10 @@ var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
 var _reduxFormMaterialUi = __webpack_require__(99);
 
+var _MenuItem = __webpack_require__(98);
+
+var _MenuItem2 = _interopRequireDefault(_MenuItem);
+
 var _Styles = __webpack_require__(43);
 
 var _Styles2 = _interopRequireDefault(_Styles);
@@ -87548,6 +87552,10 @@ var Validators = _interopRequireWildcard(_FormValidators);
 var _Menus = __webpack_require__(85);
 
 var menus = _interopRequireWildcard(_Menus);
+
+var _SupremeUtils = __webpack_require__(989);
+
+var SupremeUtils = _interopRequireWildcard(_SupremeUtils);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -87651,8 +87659,24 @@ var Options = function Options(props) {
         style: _Styles2.default.fields.text,
         textFieldStyle: _Styles2.default.fields.text,
         validate: [Validators.required]
-      }),
-      _react2.default.createElement('br', null)
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        _reduxForm.Field,
+        {
+          name: 'onCartSoldOut',
+          component: _reduxFormMaterialUi.SelectField,
+          label: 'Action when out of stock in cart...',
+          floatingLabelText: 'Action when out of stock in cart...',
+          hintText: 'Action when out of stock in cart...',
+          style: _Styles2.default.fields.text
+        },
+        _react2.default.createElement(_MenuItem2.default, { key: SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS, value: SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS, primaryText: 'Remove sold out products' }),
+        _react2.default.createElement(_MenuItem2.default, { key: SupremeUtils.OnSoldOutCartActions.STOP, value: SupremeUtils.OnSoldOutCartActions.STOP, primaryText: 'Stop auto-checkout' })
+      )
     ),
     _react2.default.createElement(
       'div',
@@ -94995,6 +95019,22 @@ var core  = __webpack_require__(22)
   , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
 module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
   return $JSON.stringify.apply($JSON, arguments);
+};
+
+/***/ }),
+/* 988 */,
+/* 989 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var OnSoldOutCartActions = exports.OnSoldOutCartActions = {
+  REMOVE_SOLD_OUT_PRODUCTS: 'REMOVE_SOLD_OUT_PRODUCTS',
+  STOP: 'STOP'
 };
 
 /***/ })

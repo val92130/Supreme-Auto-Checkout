@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "browser-request": "^0.3.3",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "material-ui": "^0.16.7",
     "material-ui-chip-input": "^0.17.0",

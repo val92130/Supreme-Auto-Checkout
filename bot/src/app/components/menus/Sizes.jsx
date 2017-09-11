@@ -1,11 +1,10 @@
-import React, {PropTypes} from 'react';
-import {reduxForm, Field} from 'redux-form';
-import {connect} from 'react-redux';
+import React, { PropTypes } from 'react';
+import { reduxForm, Field } from 'redux-form';
+import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
   SelectField,
-  TextField,
 } from 'redux-form-material-ui';
 import Styles from '../../constants/Styles';
 import * as Utils from '../../constants/Utils';
@@ -13,7 +12,7 @@ import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
 
 const Sizes = props => {
-  const {handleSubmit, pristine, submitting} = props;
+  const { handleSubmit, pristine, submitting } = props;
   return (
     <form onSubmit={handleSubmit} id="biling-form">
       <div>
