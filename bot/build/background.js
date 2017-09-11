@@ -16545,7 +16545,7 @@ var loop = function () {
             settings = _context6.sent;
 
             if (isEnabled(settings)) {
-              _context6.next = 6;
+              _context6.next = 7;
               break;
             }
 
@@ -16555,56 +16555,59 @@ var loop = function () {
             });
 
           case 6:
+            return _context6.abrupt('return');
+
+          case 7:
             now = new Date();
             startTime = getAtcStartTime(settings);
 
             if (!(!startTime || !Helpers.sameDay(now, startTime))) {
-              _context6.next = 12;
+              _context6.next = 13;
               break;
             }
 
-            _context6.next = 11;
+            _context6.next = 12;
             return timeout(1000, function () {
               return loop();
             });
 
-          case 11:
+          case 12:
             return _context6.abrupt('return');
 
-          case 12:
+          case 13:
             diffTime = (startTime.getTime() - now.getTime()) / 1000;
 
             console.log('ATC starting in ' + diffTime + ' seconds...');
 
             if (!(diffTime <= 0 && Math.abs(diffTime) < 3)) {
-              _context6.next = 23;
+              _context6.next = 24;
               break;
             }
 
-            _context6.next = 17;
+            _context6.next = 18;
             return getEnabledAtcProducts();
 
-          case 17:
+          case 18:
             products = _context6.sent;
-            _context6.next = 20;
+            _context6.next = 21;
             return processProducts(products);
 
-          case 20:
-            _context6.next = 22;
+          case 21:
+            _context6.next = 23;
             return timeout(4000, function () {
               return loop();
             });
 
-          case 22:
+          case 23:
             return _context6.abrupt('return');
 
-          case 23:
-            _context6.next = 25;
+          case 24:
+            _context6.next = 26;
             return timeout(1000, function () {
               return loop();
             });
 
-          case 25:
+          case 26:
           case 'end':
             return _context6.stop();
         }

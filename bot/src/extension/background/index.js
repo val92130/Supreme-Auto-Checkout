@@ -72,6 +72,7 @@ async function loop() {
   const settings = await getSettings();
   if (!isEnabled(settings)) {
     await timeout(1000, () => loop());
+    return;
   }
   const now = new Date();
   const startTime = getAtcStartTime(settings);
