@@ -1,16 +1,16 @@
 import * as Helpers from '../utils/Helpers';
 
 export const initializeLocalStorageState = (initialState, version) => {
-  localStorage.setItem('state', JSON.stringify([{ value: initialState || {}, version }]));
+  localStorage.setItem('state', JSON.stringify({ value: initialState || {}, version }));
 };
 
 export const loadSavedState = (version) => {
   try {
-    const items = JSON.parse(localStorage.getItem('state')) || [];
-    const state = items.filter(x => x.version === version)[0];
-    if (state) {
+    const state = JSON.parse(localStorage.getItem('state')) || {};
+    if (state.version === version) {
       return state.value;
     }
+    initializeLocalStorageState({}, version);
     return {};
   } catch (err) {
     initializeLocalStorageState({}, version);
@@ -24,13 +24,12 @@ export const saveState = (state, version) => {
     if (!localStorage.getItem('state')) {
       initializeLocalStorageState(state, version);
     } else {
-      const currentState = JSON.parse(localStorage.getItem('state'));
-      const currentVersionState = currentState.filter(x => x.version === version)[0];
+      let currentState = JSON.parse(localStorage.getItem('state'));
       // If a state for the current version already exists, we update it
-      if (currentVersionState) {
-        currentVersionState.value = state;
+      if (currentState.version === version) {
+        currentState.value = state;
       } else {
-        currentState.push({ value: state, version });
+        currentState = { value: state, version };
       }
       localStorage.setItem('state', JSON.stringify(currentState));
     }

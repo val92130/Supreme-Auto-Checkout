@@ -36,15 +36,25 @@ async function processProducts(products) {
   }
 }
 
+function isEnabled(settings) {
+  return settings && settings[menus.MENU_OPTIONS] && settings[menus.MENU_OPTIONS].atcEnabled;
+}
+
 function getAtcStartTime(settings) {
-  if (!settings || !settings[menus.MENU_OPTIONS] || !settings[menus.MENU_OPTIONS].atcEnabled) {
+  if (!settings || !settings[menus.MENU_OPTIONS]) {
     return null;
   }
   const atcStartTime = settings[menus.MENU_OPTIONS].atcStartTime;
-  if (!atcStartTime) {
+  const atcStartDate = settings[menus.MENU_OPTIONS].atcStartDate;
+  if (!atcStartTime || !atcStartDate) {
     return null;
   }
-  return Helpers.setTimeForToday(atcStartTime);
+  const time = Helpers.timeToDate(atcStartTime);
+  const currDate = new Date(atcStartDate);
+  currDate.setHours(time.getHours());
+  currDate.setMinutes(time.getMinutes());
+  currDate.setSeconds(time.getSeconds());
+  return currDate;
 }
 
 async function sleep(ms) {
@@ -59,10 +69,14 @@ async function timeout(ms, callback) {
 }
 
 async function loop() {
-  const now = new Date();
   const settings = await getSettings();
+  if (!isEnabled(settings)) {
+    await timeout(1000, () => loop());
+    return;
+  }
+  const now = new Date();
   const startTime = getAtcStartTime(settings);
-  if (!startTime) {
+  if (!startTime || !Helpers.sameDay(now, startTime)) {
     await timeout(1000, () => loop());
     return;
   }

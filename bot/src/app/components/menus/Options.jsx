@@ -5,10 +5,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {
   TextField,
   Toggle,
+  DatePicker,
+  SelectField,
   } from 'redux-form-material-ui';
+import MenuItem from 'material-ui/MenuItem';
 import Styles from '../../constants/Styles';
 import * as Validators from '../../constants/FormValidators';
 import * as menus from '../../constants/Menus';
+import * as SupremeUtils from '../../utils/SupremeUtils';
 
 const defaultValues = {
   autoCheckout: false,
@@ -89,10 +93,31 @@ const Options = props => {
               style={Styles.fields.text}
               validate={[Validators.required, Validators.time24]}
             />
-            <br />
+            <Field
+              name="atcStartDate"
+              component={DatePicker}
+              floatingLabelText="ATC Start date"
+              hintText="ATC Start date"
+              style={Styles.fields.text}
+              textFieldStyle={Styles.fields.text}
+              validate={[Validators.required]}
+            />
           </div>
       }
-
+      <div>
+        <Field
+          name="onCartSoldOut"
+          component={SelectField}
+          label="Action when out of stock in cart..."
+          floatingLabelText="Action when out of stock in cart..."
+          hintText="Action when out of stock in cart..."
+          style={Styles.fields.text}
+          validate={Validators.required}
+        >
+          <MenuItem key={SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS} value={SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS} primaryText={'Remove sold out products'} />
+          <MenuItem key={SupremeUtils.OnSoldOutCartActions.STOP} value={SupremeUtils.OnSoldOutCartActions.STOP} primaryText={'Stop auto-checkout'} />
+        </Field>
+      </div>
       <div>
         <Field
           name="addToCartDelay"
@@ -157,8 +182,12 @@ const selector = formValueSelector('options');
 function mapStateToProps(state, ownProps) {
   const currentProfile = state.profiles.currentProfile;
   const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
+  const initialValues = Object.assign({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {});
+  if (initialValues['atcStartDate'] && initialValues['atcStartDate'] !== 'Invalid Date') {
+    initialValues['atcStartDate'] = new Date(initialValues['atcStartDate']);
+  }
   return {
-    initialValues: Object.assign({}, defaultValues, (settings[ownProps.shop] || {})[menus.MENU_OPTIONS] || {}),
+    initialValues,
     atcEnabled: selector(state, 'atcEnabled'),
   };
 }
