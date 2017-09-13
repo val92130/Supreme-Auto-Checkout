@@ -1,4 +1,5 @@
-import { getFromChromeStorage } from '../../app/utils/StorageManager';
+import { getCurrentProfileSettings } from '../../app/utils/StorageManager';
+import version from '../../app/version';
 import * as menus from '../../app/constants/Menus';
 import * as Helpers from '../../app/utils/Helpers';
 
@@ -12,11 +13,13 @@ async function getEnabledAtcProducts() {
 }
 
 async function getSettings() {
-  const settings = await getFromChromeStorage('settings');
-  if (settings && settings['Supreme']) {
-    return settings['Supreme'];
+  try {
+    return getCurrentProfileSettings(version);
+  } catch(e) {
+    console.info('Error while getting settings');
+    console.info(e);
+    return null;
   }
-  return null;
 }
 
 async function processProducts(products) {

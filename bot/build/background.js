@@ -1896,7 +1896,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(198)("./" + name);
+            __webpack_require__(196)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -4531,7 +4531,7 @@ return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(197)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(195)(module)))
 
 /***/ }),
 /* 1 */
@@ -5196,7 +5196,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _keys = __webpack_require__(193);
+var _keys = __webpack_require__(191);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -16378,7 +16378,7 @@ var getEnabledAtcProducts = function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return (0, _StorageManager.getFromChromeStorage)('atc');
+            return getFromChromeStorage('atc');
 
           case 2:
             atc = _context.sent;
@@ -16410,33 +16410,27 @@ var getEnabledAtcProducts = function () {
 
 var getSettings = function () {
   var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-    var settings;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            _context2.next = 2;
-            return (0, _StorageManager.getFromChromeStorage)('settings');
+            _context2.prev = 0;
+            return _context2.abrupt('return', (0, _StorageManager.getCurrentProfileSettings)(_version2.default));
 
-          case 2:
-            settings = _context2.sent;
+          case 4:
+            _context2.prev = 4;
+            _context2.t0 = _context2['catch'](0);
 
-            if (!(settings && settings['Supreme'])) {
-              _context2.next = 5;
-              break;
-            }
-
-            return _context2.abrupt('return', settings['Supreme']);
-
-          case 5:
+            console.info('Error while getting settings');
+            console.info(_context2.t0);
             return _context2.abrupt('return', null);
 
-          case 6:
+          case 9:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee2, this, [[0, 4]]);
   }));
 
   return function getSettings() {
@@ -16644,7 +16638,11 @@ var start = function () {
 
 var _StorageManager = __webpack_require__(190);
 
-var _Menus = __webpack_require__(199);
+var _version = __webpack_require__(197);
+
+var _version2 = _interopRequireDefault(_version);
+
+var _Menus = __webpack_require__(198);
 
 var menus = _interopRequireWildcard(_Menus);
 
@@ -18492,7 +18490,7 @@ process.umask = function() { return 0; };
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.saveState = exports.loadSavedState = exports.initializeLocalStorageState = undefined;
+exports.getCurrentProfileSettings = exports.saveState = exports.loadSavedState = exports.initializeStorageState = undefined;
 
 var _regenerator = __webpack_require__(35);
 
@@ -18506,12 +18504,47 @@ var _promise = __webpack_require__(13);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _stringify = __webpack_require__(191);
+var getCurrentProfileSettings = exports.getCurrentProfileSettings = function () {
+  var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(version) {
+    var state, currentProfile;
+    return _regenerator2.default.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return loadSavedState(version);
 
-var _stringify2 = _interopRequireDefault(_stringify);
+          case 2:
+            state = _context5.sent;
 
-exports.saveToChromeStorage = saveToChromeStorage;
-exports.getFromChromeStorage = getFromChromeStorage;
+            if (!(!state || !state.profiles)) {
+              _context5.next = 5;
+              break;
+            }
+
+            return _context5.abrupt('return', null);
+
+          case 5:
+            currentProfile = state.profiles.currentProfile;
+            return _context5.abrupt('return', state.profiles.profiles.filter(function (x) {
+              return x.name === currentProfile;
+            })[0].settings);
+
+          case 7:
+          case 'end':
+            return _context5.stop();
+        }
+      }
+    }, _callee5, this);
+  }));
+
+  return function getCurrentProfileSettings(_x7) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+exports.getItem = getItem;
+exports.setItem = setItem;
 
 var _Helpers = __webpack_require__(38);
 
@@ -18521,56 +18554,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var initializeLocalStorageState = exports.initializeLocalStorageState = function initializeLocalStorageState(initialState, version) {
-  localStorage.setItem('state', (0, _stringify2.default)({ value: initialState || {}, version: version }));
-};
-
-var loadSavedState = exports.loadSavedState = function loadSavedState(version) {
-  try {
-    var state = JSON.parse(localStorage.getItem('state')) || {};
-    if (state.version === version) {
-      return state.value;
-    }
-    initializeLocalStorageState({}, version);
-    return {};
-  } catch (err) {
-    initializeLocalStorageState({}, version);
-    return {};
-  }
-};
-
-var saveState = exports.saveState = function saveState(state, version) {
-  try {
-    // If no state is saved, we create it using the current version number
-    if (!localStorage.getItem('state')) {
-      initializeLocalStorageState(state, version);
-    } else {
-      var currentState = JSON.parse(localStorage.getItem('state'));
-      // If a state for the current version already exists, we update it
-      if (currentState.version === version) {
-        currentState.value = state;
-      } else {
-        currentState = { value: state, version: version };
-      }
-      localStorage.setItem('state', (0, _stringify2.default)(currentState));
-    }
-  } catch (err) {
-    console.info('Possible corrupted or incompatible state found in the localstorage, reinitializing the state...');
-    initializeLocalStorageState({}, version);
-  }
-};
-
-function saveToChromeStorage(key, value) {
-  return new _promise2.default(function (resolve) {
-    var obj = {};
-    obj[key] = value;
-    chrome.storage.local.set(obj, function () {
-      resolve();
-    });
-  });
-}
-
-function getFromChromeStorage(key) {
+function getItem(key) {
   var _this = this;
 
   return new _promise2.default(function (resolve) {
@@ -18580,7 +18564,7 @@ function getFromChromeStorage(key) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                resolve(Helpers.isObjectEmpty(settings) ? {} : settings[key]);
+                resolve(Helpers.isObjectEmpty(settings) ? null : settings[key]);
 
               case 1:
               case 'end':
@@ -18597,6 +18581,162 @@ function getFromChromeStorage(key) {
   });
 }
 
+function setItem(key, value) {
+  return new _promise2.default(function (resolve) {
+    var obj = {};
+    obj[key] = value;
+    chrome.storage.local.set(obj, function () {
+      resolve();
+    });
+  });
+}
+
+var initializeStorageState = exports.initializeStorageState = function () {
+  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(initialState, version) {
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            return _context2.abrupt('return', setItem('state', { value: initialState || {}, version: version }));
+
+          case 1:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, undefined);
+  }));
+
+  return function initializeStorageState(_x2, _x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+var loadSavedState = exports.loadSavedState = function () {
+  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(version) {
+    var state;
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return getItem('state');
+
+          case 3:
+            _context3.t0 = _context3.sent;
+
+            if (_context3.t0) {
+              _context3.next = 6;
+              break;
+            }
+
+            _context3.t0 = {};
+
+          case 6:
+            state = _context3.t0;
+
+            if (!(state.version === version)) {
+              _context3.next = 9;
+              break;
+            }
+
+            return _context3.abrupt('return', state.value);
+
+          case 9:
+            _context3.next = 11;
+            return initializeStorageState({}, version);
+
+          case 11:
+            return _context3.abrupt('return', {});
+
+          case 14:
+            _context3.prev = 14;
+            _context3.t1 = _context3['catch'](0);
+            _context3.next = 18;
+            return initializeStorageState({}, version);
+
+          case 18:
+            return _context3.abrupt('return', {});
+
+          case 19:
+          case 'end':
+            return _context3.stop();
+        }
+      }
+    }, _callee3, undefined, [[0, 14]]);
+  }));
+
+  return function loadSavedState(_x4) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+var saveState = exports.saveState = function () {
+  var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(state, version) {
+    var currentState;
+    return _regenerator2.default.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            _context4.next = 3;
+            return getItem('state');
+
+          case 3:
+            if (_context4.sent) {
+              _context4.next = 8;
+              break;
+            }
+
+            _context4.next = 6;
+            return initializeStorageState(state, version);
+
+          case 6:
+            _context4.next = 14;
+            break;
+
+          case 8:
+            _context4.next = 10;
+            return getItem('state');
+
+          case 10:
+            currentState = _context4.sent;
+
+            // If a state for the current version already exists, we update it
+            if (currentState.version === version) {
+              currentState.value = state;
+            } else {
+              currentState = { value: state, version: version };
+            }
+            _context4.next = 14;
+            return setItem('state', currentState);
+
+          case 14:
+            _context4.next = 21;
+            break;
+
+          case 16:
+            _context4.prev = 16;
+            _context4.t0 = _context4['catch'](0);
+
+            console.info('Possible corrupted or incompatible state found in the localstorage, reinitializing the state...');
+            _context4.next = 21;
+            return initializeStorageState({}, version);
+
+          case 21:
+          case 'end':
+            return _context4.stop();
+        }
+      }
+    }, _callee4, undefined, [[0, 16]]);
+  }));
+
+  return function saveState(_x5, _x6) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
 /***/ }),
 /* 191 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -18607,41 +18747,25 @@ module.exports = { "default": __webpack_require__(192), __esModule: true };
 /* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var core  = __webpack_require__(3)
-  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-
-/***/ }),
-/* 193 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(194), __esModule: true };
-
-/***/ }),
-/* 194 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(195);
+__webpack_require__(193);
 module.exports = __webpack_require__(3).Object.keys;
 
 /***/ }),
-/* 195 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 Object.keys(O)
 var toObject = __webpack_require__(32)
   , $keys    = __webpack_require__(26);
 
-__webpack_require__(196)('keys', function(){
+__webpack_require__(194)('keys', function(){
   return function keys(it){
     return $keys(toObject(it));
   };
 });
 
 /***/ }),
-/* 196 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
@@ -18656,7 +18780,7 @@ module.exports = function(KEY, exec){
 };
 
 /***/ }),
-/* 197 */
+/* 195 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -18684,7 +18808,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 198 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -18933,10 +19057,22 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 198;
+webpackContext.id = 196;
 
 /***/ }),
-/* 199 */
+/* 197 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = '2.2.5';
+
+/***/ }),
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
