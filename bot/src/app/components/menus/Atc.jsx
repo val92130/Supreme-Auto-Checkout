@@ -12,10 +12,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { red300 } from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
+import EditIcon from 'material-ui/svg-icons/image/edit';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
 import Toggle from 'material-ui/Toggle';
 import LaunchIcon from 'material-ui/svg-icons/action/launch';
-import { addAtcProduct, removeAtcProduct, setAtcProductEnabled } from '../../actions/atc';
+import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct } from '../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
 import * as Helpers from '../../utils/Helpers';
 
@@ -24,18 +25,21 @@ class Atc extends Component {
     super(props);
     this.state = {
       createModalOpen: false,
+      editingAtc: null,
     };
   }
 
   requestCloseModal() {
     this.setState({
       createModalOpen: false,
+      editingAtc: null,
     });
   }
 
-  requestModalOpen() {
+  requestModalOpen(editingAtc = null) {
     this.setState({
       createModalOpen: true,
+      editingAtc,
     });
   }
 
@@ -44,8 +48,12 @@ class Atc extends Component {
   }
 
   handleSubmit(data) {
+    if (this.state.editingAtc) {
+      this.props.editAtcProduct(this.state.editingAtc.name, data);
+    } else {
+      this.props.addAtcProduct(data);
+    }
     this.requestCloseModal();
-    this.props.addAtcProduct(data);
   }
 
   toggleAtc(name, enabled) {
@@ -54,17 +62,18 @@ class Atc extends Component {
 
   render() {
     const { atcProducts } = this.props;
-
+    const isEditing = this.state.editingAtc !== null;
+    const title = isEditing ? `Edit ${this.state.editingAtc.name}` : 'Add a new product';
     return (
       <div>
         <Dialog
           open={this.state.createModalOpen}
-          title="Add a new atc product"
+          title={title}
           modal={false}
           onRequestClose={() => this.requestCloseModal()}
           autoScrollBodyContent
         >
-          <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} />
+          <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} initialValues={this.state.editingAtc} />
         </Dialog>
         <RaisedButton label="Add new" onTouchTap={() => this.requestModalOpen()} primary />
         <Table selectable={false}>
@@ -72,10 +81,9 @@ class Atc extends Component {
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
               <TableHeaderColumn>Keywords</TableHeaderColumn>
-              <TableHeaderColumn>Color</TableHeaderColumn>
-              <TableHeaderColumn>Category</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
               <TableHeaderColumn>Run now</TableHeaderColumn>
+              <TableHeaderColumn>Edit</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -86,14 +94,17 @@ class Atc extends Component {
                   <TableRow key={x.name}>
                     <TableRowColumn>{x.name}</TableRowColumn>
                     <TableRowColumn>{x.keywords.join(', ')}</TableRowColumn>
-                    <TableRowColumn>{x.color || 'ANY'}</TableRowColumn>
-                    <TableRowColumn>{x.category}</TableRowColumn>
                     <TableRowColumn>
                       <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
                     </TableRowColumn>
                     <TableRowColumn>
                       <IconButton onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)}>
                         <LaunchIcon />
+                      </IconButton>
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      <IconButton onTouchTap={() => this.requestModalOpen(x)}>
+                        <EditIcon />
                       </IconButton>
                     </TableRowColumn>
                     <TableRowColumn>
@@ -121,6 +132,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addAtcProduct: data => dispatch(addAtcProduct(data)),
+    editAtcProduct: (name, data) => dispatch(editAtcProduct(name, data)),
     removeAtcProduct: data => dispatch(removeAtcProduct(data)),
     setAtcProductEnabled: (name, enabled) => dispatch(setAtcProductEnabled(name, enabled)),
   };

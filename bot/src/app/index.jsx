@@ -10,7 +10,7 @@ import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import getRoutes from './routes';
-import { loadSavedState, saveState, saveToChromeStorage } from './utils/StorageManager';
+import { loadSavedState, saveState } from './utils/StorageManager';
 import version from './version';
 
 
