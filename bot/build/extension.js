@@ -93996,7 +93996,8 @@ var Options = function Options(props) {
   var handleSubmit = props.handleSubmit,
       pristine = props.pristine,
       submitting = props.submitting,
-      atcEnabled = props.atcEnabled;
+      atcEnabled = props.atcEnabled,
+      change = props.change;
 
   return _react2.default.createElement(
     'form',
@@ -94008,7 +94009,12 @@ var Options = function Options(props) {
         name: 'autoCheckout',
         component: _reduxFormMaterialUi.Toggle,
         label: 'Enable auto checkout',
-        style: _Styles2.default.fields.text
+        style: _Styles2.default.fields.text,
+        onChange: function onChange(e, v) {
+          if (!v) {
+            change('atcEnabled', false);
+          }
+        }
       })
     ),
     _react2.default.createElement(
@@ -94058,7 +94064,12 @@ var Options = function Options(props) {
         name: 'atcEnabled',
         component: _reduxFormMaterialUi.Toggle,
         label: 'Enable AutoCop (Autocheckout required)',
-        style: _Styles2.default.fields.text
+        style: _Styles2.default.fields.text,
+        onChange: function onChange(e, v) {
+          if (v) {
+            change('autoCheckout', true);
+          }
+        }
       })
     ),
     atcEnabled && _react2.default.createElement(
