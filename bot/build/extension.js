@@ -11213,10 +11213,6 @@ var _keys = __webpack_require__(55);
 var _keys2 = _interopRequireDefault(_keys);
 
 exports.isObjectEmpty = isObjectEmpty;
-exports.getQueryStringValue = getQueryStringValue;
-exports.pageHasNodeOfClass = pageHasNodeOfClass;
-exports.hasStringInPath = hasStringInPath;
-exports.pathCount = pathCount;
 exports.openAtcTab = openAtcTab;
 exports.timeToDate = timeToDate;
 exports.isValidTime = isValidTime;
@@ -11230,25 +11226,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function isObjectEmpty(obj) {
   return (0, _keys2.default)(obj).length === 0 && obj.constructor === Object;
-}
-
-function getQueryStringValue(key) {
-  var urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(key);
-}
-
-function pageHasNodeOfClass(className) {
-  return document.getElementsByClassName(className).length > 0;
-}
-
-function hasStringInPath(value) {
-  return location.pathname.substring(1).split('/').filter(function (x) {
-    return !!x && x === value;
-  }).length > 0;
-}
-
-function pathCount() {
-  return location.pathname.substring(1).split('/').length;
 }
 
 function openAtcTab(category, keywords, color) {
@@ -39462,13 +39439,11 @@ var Start = function () {
           case 2:
             profile = _context.sent;
             settings = profile[_Supreme.SHOP_NAME] || {};
-
-            console.log(settings);
             manager = new _supreme2.default(settings.Options, settings.Sizes, settings.Billing);
 
             manager.start();
 
-          case 7:
+          case 6:
           case 'end':
             return _context.stop();
         }
@@ -40885,18 +40860,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof2 = __webpack_require__(43);
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _toConsumableArray2 = __webpack_require__(54);
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-var _promise = __webpack_require__(130);
-
-var _promise2 = _interopRequireDefault(_promise);
-
 var _getIterator2 = __webpack_require__(146);
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
@@ -40909,10 +40872,6 @@ var _asyncToGenerator2 = __webpack_require__(129);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _getPrototypeOf = __webpack_require__(5);
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
 var _classCallCheck2 = __webpack_require__(3);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -40921,58 +40880,66 @@ var _createClass2 = __webpack_require__(4);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(6);
+var _helpers = __webpack_require__(917);
 
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+var Helpers = _interopRequireWildcard(_helpers);
 
-var _inherits2 = __webpack_require__(7);
+var _productProcessor = __webpack_require__(913);
 
-var _inherits3 = _interopRequireDefault(_inherits2);
+var _productProcessor2 = _interopRequireDefault(_productProcessor);
 
-var _jquery = __webpack_require__(480);
+var _cartProcessor = __webpack_require__(916);
 
-var _jquery2 = _interopRequireDefault(_jquery);
+var _cartProcessor2 = _interopRequireDefault(_cartProcessor);
 
-var _BaseManager2 = __webpack_require__(481);
+var _checkoutProcessor = __webpack_require__(918);
 
-var _BaseManager3 = _interopRequireDefault(_BaseManager2);
+var _checkoutProcessor2 = _interopRequireDefault(_checkoutProcessor);
 
-var _Helpers = __webpack_require__(99);
+var _atcProcessor = __webpack_require__(919);
 
-var Helpers = _interopRequireWildcard(_Helpers);
+var _atcProcessor2 = _interopRequireDefault(_atcProcessor);
 
-var _InputProcessor = __webpack_require__(485);
-
-var InputProcessor = _interopRequireWildcard(_InputProcessor);
-
-var _SupremeUtils = __webpack_require__(331);
-
-var SupremeUtils = _interopRequireWildcard(_SupremeUtils);
+var _notification = __webpack_require__(914);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SupremeManager = function (_BaseManager) {
-  (0, _inherits3.default)(SupremeManager, _BaseManager);
-
+var SupremeManager = function () {
   function SupremeManager(preferences, sizings, billing) {
     (0, _classCallCheck3.default)(this, SupremeManager);
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, (SupremeManager.__proto__ || (0, _getPrototypeOf2.default)(SupremeManager)).call(this));
-
-    _this.preferences = preferences;
-    _this.sizings = sizings;
-    _this.billing = billing;
-    return _this;
+    this.preferences = preferences;
+    this.sizings = sizings;
+    this.billing = billing;
   }
 
-  /**
-   * This function is called whenever a new page change occurs
-   */
-
-
   (0, _createClass3.default)(SupremeManager, [{
+    key: 'start',
+    value: function start() {
+      var _this = this;
+
+      // Checks for page change by repeatedly checking the current page location and tracking change
+      (function () {
+        var currentPage = window.location.href;
+        setInterval(function () {
+          if (currentPage !== window.location.href) {
+            currentPage = window.location.href;
+            setTimeout(function () {
+              return _this.onPageChange();
+            }, 100);
+          }
+        }, 50);
+        _this.onPageChange();
+      })();
+    }
+
+    /**
+     * This function is called whenever a new page change occurs
+     */
+
+  }, {
     key: 'onPageChange',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
@@ -40981,7 +40948,7 @@ var SupremeManager = function (_BaseManager) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                this.processLinks();
+                SupremeManager.processLinks();
 
                 // if stores are not configured yet..
 
@@ -40990,18 +40957,20 @@ var SupremeManager = function (_BaseManager) {
                   break;
                 }
 
-                this.setNotificationBarText('Bot not yet configured');
+                (0, _notification.notify)('Bot not yet configured');
                 return _context.abrupt('return');
 
               case 4:
                 hideSoldOut = this.preferences.hideSoldOut;
 
-                this.processSoldOutProducts(hideSoldOut);
+                if (hideSoldOut) {
+                  SupremeManager.processSoldOutProducts();
+                }
 
                 autoCheckout = this.preferences.autoCheckout;
                 autoPay = this.preferences.autoPay;
 
-                this.setNotificationBarText('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
+                (0, _notification.notify)('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
 
                 if (this.preferences.autoCheckout) {
                   _context.next = 11;
@@ -41011,14 +40980,15 @@ var SupremeManager = function (_BaseManager) {
                 return _context.abrupt('return');
 
               case 11:
-                if (this.isProductPage()) {
-                  this.processProduct();
-                } else if (this.isCart()) {
-                  this.processCart();
-                } else if (this.isCheckout()) {
-                  this.processCheckout();
-                } else if (this.isShopCategoryPage()) {
-                  this.processAtc();
+
+                if (Helpers.isProductPage()) {
+                  _productProcessor2.default.start(this.preferences, this.sizings, this.billing);
+                } else if (Helpers.isCart()) {
+                  _cartProcessor2.default.start(this.preferences, this.sizings, this.billing);
+                } else if (Helpers.isCheckout()) {
+                  _checkoutProcessor2.default.start(this.preferences, this.sizings, this.billing);
+                } else if (Helpers.isShopCategoryPage()) {
+                  _atcProcessor2.default.start(this.preferences, this.sizings, this.billing);
                 }
 
               case 12:
@@ -41047,7 +41017,7 @@ var SupremeManager = function (_BaseManager) {
      * Attach an event on product links of the page to reload the page instead of loading in ajax
      */
 
-  }, {
+  }], [{
     key: 'processLinks',
     value: function processLinks() {
       var links = document.links;
@@ -41062,7 +41032,9 @@ var SupremeManager = function (_BaseManager) {
 
           link.addEventListener('click', function (e) {
             window.location.href = this.href;
-            if (!e) e = window.event;
+            if (!e) {
+              e = window.event;
+            }
 
             if (e.stopPropagation) {
               e.stopPropagation();
@@ -41087,393 +41059,42 @@ var SupremeManager = function (_BaseManager) {
       }
     }
   }, {
-    key: 'processSoldOutProducts',
-    value: function processSoldOutProducts(hideSoldOut) {
+    key: 'hideSoldOutProducts',
+    value: function hideSoldOutProducts() {
       Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), function (x) {
         return x.style.display = 'block';
       });
-      if (hideSoldOut) {
-        var sold_outs = Array.prototype.filter.call(document.getElementsByTagName('article'), function (x) {
-          return x.getElementsByClassName('sold_out_tag').length;
-        });
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = (0, _getIterator3.default)(sold_outs), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var node = _step2.value;
-
-            node.remove();
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-      }
-    }
-
-    /**
-     * This function should be called when the user is on the 'cart' page, it will then redirect the user
-     * to the checkout page after the delay configured in the options
-     * @param  {Object} preferencesStore Object that stores the preference options
-     */
-
-  }, {
-    key: 'processCart',
-    value: function processCart() {
-      var _this2 = this;
-
-      var outOfStockItems = document.querySelectorAll('.out_of_stock');
-      var outOfStockAction = this.preferences.onCartSoldOut;
-      if (!outOfStockItems.length) {
-        this.timeout(function () {
-          document.location.href = '/checkout';
-        }, 100, 'Going to checkout');
-        return;
-      }
-      if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.STOP) {
-        this.setNotificationBarText('A product is sold out, aborting...');
-      } else if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS) {
-        var promises = [];
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          var _loop = function _loop() {
-            var product = _step3.value;
-
-            var form = product.querySelector('form');
-            if (form) {
-              promises.push(new _promise2.default(function (resolve, reject) {
-                _jquery2.default.ajax({
-                  type: 'POST',
-                  url: (0, _jquery2.default)(form).attr('action'),
-                  data: (0, _jquery2.default)(form).serializeArray(),
-                  success: resolve,
-                  error: reject
-                });
-              }));
-            }
-          };
-
-          for (var _iterator3 = (0, _getIterator3.default)(outOfStockItems), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            _loop();
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-              _iterator3.return();
-            }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
-            }
-          }
-        }
-
-        _promise2.default.all(promises).then(function () {
-          _this2.timeout(function () {
-            document.location.href = '/checkout';
-          }, 100, 'Going to checkout');
-        });
-      }
-    }
-
-    /**
-     * This function should be called when the user is on the 'checkout' page, it will fill
-     * the checkout form with the values defined by the user in the options and then checkout after a delay
-     * @param  {Object} preferencesStore Object that stores the preference options
-     * @param  {Object} billingStore Object that stores the billings options
-     */
-
-  }, {
-    key: 'processCheckout',
-    value: function processCheckout() {
-      var checkoutDelay = this.preferences.checkoutDelay;
-      var inputs = [].concat((0, _toConsumableArray3.default)(document.querySelectorAll('input, textarea, select'))).filter(function (x) {
-        return ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1;
+      var soldOuts = Array.prototype.filter.call(document.getElementsByTagName('article'), function (x) {
+        return x.getElementsByClassName('sold_out_tag').length;
       });
-      InputProcessor.processFields(inputs, this.billing);
-      var terms = document.getElementsByName('order[terms]');
-      if (terms.length) {
-        terms[0].click();
-      }
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
-      if (this.preferences.captchaBypass) {
-        var captcha = document.querySelector('.g-recaptcha');
-        if (captcha) {
-          captcha.remove();
+      try {
+        for (var _iterator2 = (0, _getIterator3.default)(soldOuts), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var node = _step2.value;
+
+          node.remove();
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
         }
       }
-      if (this.preferences.autoPay) {
-        this.timeout(function () {
-          var commitBtn = document.getElementsByName('commit')[0];
-          if (commitBtn) {
-            commitBtn.click();
-          }
-        }, checkoutDelay, 'Checking out');
-      }
-    }
-
-    /**
-     * This function should be called when the user is on a product page, it will
-     * try to figure out if the product is sold out or not, and if not, it will find the best available size
-     * based on the user's preferences and then it will add the item to cart
-     */
-
-  }, {
-    key: 'processProduct',
-    value: function processProduct() {
-      var _this3 = this;
-
-      if (!this.isSoldOut()) {
-        var _ret2 = function () {
-          var maxPrice = _this3.preferences.maxPrice;
-          var minPrice = _this3.preferences.minPrice;
-          var itemPrice = document.querySelector('[itemprop=price]');
-
-          if (itemPrice !== null) {
-            var price = +itemPrice.innerHTML.replace(/\D/g, '');
-            if (!isNaN(price)) {
-              if (maxPrice !== undefined && price > maxPrice) {
-                _this3.setNotificationBarText('Product price is too high, not checking out');
-                return {
-                  v: void 0
-                };
-              }
-
-              if (minPrice !== undefined && price < minPrice) {
-                _this3.setNotificationBarText('Product price is too low, not checking out');
-                return {
-                  v: void 0
-                };
-              }
-            }
-          }
-
-          var submitBtn = document.querySelector('[name=commit]');
-          var productCategory = _this3.getProductCategory();
-          var sizesOptions = _this3.getSizesOptions();
-
-          // If sizes options are available
-          if (sizesOptions.length) {
-            var _ret3 = function () {
-              var categorySize = _this3.sizings[productCategory];
-              if (categorySize === undefined) {
-                _this3.setNotificationBarText('Unknown category "' + productCategory + '", cannot process');
-                return {
-                  v: {
-                    v: void 0
-                  }
-                };
-              }
-              var targetOption = sizesOptions.find(function (x) {
-                return _this3.sizeMatch(categorySize, x.text, productCategory);
-              });
-
-              if (!targetOption) {
-                if (_this3.preferences.strictSize) {
-                  _this3.setNotificationBarText('The desired size is not available');
-                  return {
-                    v: {
-                      v: void 0
-                    }
-                  };
-                }
-                targetOption = sizesOptions[0];
-              }
-              targetOption.selected = true;
-            }();
-
-            if ((typeof _ret3 === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret3)) === "object") return _ret3.v;
-          }
-
-          var atcDelay = _this3.preferences.addToCartDelay;
-          _this3.timeout(function () {
-            var process = function process() {
-              if (document.querySelector('.in-cart') && document.getElementById('cart')) {
-                setTimeout(function () {
-                  window.location.href = '/checkout';
-                }, 200);
-              } else {
-                submitBtn.click();
-                _this3.timeout(function () {
-                  return process();
-                }, 500, 'Waiting for product to be in cart...');
-              }
-            };
-
-            process();
-          }, atcDelay, 'Adding to cart');
-        }();
-
-        if ((typeof _ret2 === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret2)) === "object") return _ret2.v;
-      }
-    }
-  }, {
-    key: 'findArticles',
-    value: function findArticles() {
-      var articles = document.querySelectorAll('.inner-article');
-      if (!articles.length) {
-        articles = document.querySelectorAll('.inner-item');
-      }
-      return [].concat((0, _toConsumableArray3.default)(articles));
-    }
-  }, {
-    key: 'getArticleName',
-    value: function getArticleName(article) {
-      var nameNode = article.querySelector('h1') || article.querySelector('a.nl') || article.querySelector('a');
-      return nameNode ? nameNode.innerText.toLowerCase().trim() : null;
-    }
-  }, {
-    key: 'getArticleColor',
-    value: function getArticleColor(article) {
-      var colorNode = article.querySelector('.sn') || article.querySelector('.nl');
-      return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
-    }
-  }, {
-    key: 'processAtc',
-    value: function processAtc() {
-      var queryString = Helpers.getQueryStringValue('atc-kw');
-      if (!queryString) {
-        return;
-      }
-      var keywords = queryString.split(';');
-      var kwColor = Helpers.getQueryStringValue('atc-color');
-      var innerArticles = this.findArticles();
-      var products = [];
-      for (var i = 0; i < innerArticles.length; i += 1) {
-        var name = this.getArticleName(innerArticles[i]);
-        var a = innerArticles[i].querySelector('a');
-        var color = this.getArticleColor(innerArticles[i]);
-        var soldOut = innerArticles[i].getElementsByClassName('sold_out_tag');
-        if (soldOut.length) {
-          continue;
-        }
-        if (name && a.href) {
-          var product = {
-            matches: 0,
-            url: a.href
-          };
-          for (var j = 0; j < keywords.length; j += 1) {
-            var keyword = keywords[j].toLowerCase().trim();
-            var regexp = new RegExp(keyword);
-            // name matches
-            if (regexp.test(name)) {
-              if (kwColor && color) {
-                var regexColor = new RegExp(color);
-                if (regexColor.test(kwColor.toLowerCase().trim())) {
-                  product.matches += 1;
-                }
-              }
-              product.matches += 1;
-            }
-          }
-
-          products.push(product);
-        }
-      }
-      var bestMatch = products.filter(function (x) {
-        return x.matches > 0;
-      }).sort(function (a, b) {
-        return b.matches - a.matches;
-      })[0];
-      if (bestMatch) {
-        window.location.href = bestMatch.url;
-      } else {
-        setTimeout(function () {
-          window.location.reload();
-        }, 1000);
-      }
-    }
-  }, {
-    key: 'isShopCategoryPage',
-    value: function isShopCategoryPage() {
-      return Helpers.hasStringInPath('shop') && Helpers.hasStringInPath('all') && Helpers.pathCount() === 3;
-    }
-
-    /**
-     * Check if the user is currently on a product page
-     */
-
-  }, {
-    key: 'isProductPage',
-    value: function isProductPage() {
-      return Helpers.hasStringInPath('shop') && (Helpers.pageHasNodeOfClass('styles') || Helpers.pageHasNodeOfClass('price') || Helpers.pageHasNodeOfClass('style'));
-    }
-
-    /**
-     * Check if the user is currently on the 'cart' page
-     */
-
-  }, {
-    key: 'isCart',
-    value: function isCart() {
-      return Helpers.pageHasNodeOfClass('cart') && Helpers.hasStringInPath('cart');
-    }
-
-    /**
-     * Check if the user is currently at the checkout page
-     */
-
-  }, {
-    key: 'isCheckout',
-    value: function isCheckout() {
-      return Helpers.hasStringInPath('checkout');
-    }
-
-    /**
-     * Returns the product category when the user is on a product page
-     */
-
-  }, {
-    key: 'getProductCategory',
-    value: function getProductCategory() {
-      var category = Helpers.getQueryStringValue('atc-category');
-      return !category ? location.pathname.substring(1).split('/')[1] : category;
-    }
-
-    /**
-     * Check if the current product is sold out
-     * @return {Boolean}
-     */
-
-  }, {
-    key: 'isSoldOut',
-    value: function isSoldOut() {
-      return document.querySelector('input[name=commit]') === null;
-    }
-
-    /**
-     * Return the available sizes for the current product
-     * @return {Array}
-     */
-
-  }, {
-    key: 'getSizesOptions',
-    value: function getSizesOptions() {
-      var sizes = document.getElementById('size') || document.querySelector('[name=size]') || document.querySelector('form.add').querySelector('select');
-      if (!sizes || !sizes.options) return [];
-      return [].concat((0, _toConsumableArray3.default)(sizes.options));
     }
   }]);
   return SupremeManager;
-}(_BaseManager3.default);
+}();
 
 exports.default = SupremeManager;
 
@@ -52349,184 +51970,7 @@ return jQuery;
 
 
 /***/ }),
-/* 481 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof2 = __webpack_require__(43);
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _classCallCheck2 = __webpack_require__(3);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(4);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var BaseManager = function () {
-  function BaseManager() {
-    (0, _classCallCheck3.default)(this, BaseManager);
-
-    this.notificationBar = this.createNotificationBar();
-  }
-
-  (0, _createClass3.default)(BaseManager, [{
-    key: 'start',
-    value: function start() {
-      var _this = this;
-
-      // Checks for page change by repeatedly checking the current page location and tracking change
-      (function () {
-        var currentPage = window.location.href;
-        setInterval(function () {
-          _this.updateNotificationBar();
-          if (currentPage != window.location.href) {
-            currentPage = window.location.href;
-            setTimeout(function () {
-              return _this.onPageChange();
-            }, 100);
-          }
-        }, 50);
-        _this.updateNotificationBar();
-        _this.onPageChange();
-      })();
-    }
-  }, {
-    key: 'updateNotificationBar',
-    value: function updateNotificationBar() {
-      if (document.getElementById('sup-notif-bar')) return;
-      return this.createNotificationBar();
-    }
-
-    /**
-     * Helper timeout function to add a timer in the notification bar
-     * @param  {Function} fn Function to be called after the delay
-     * @param  {Number} ms Delay before calling the function
-     * @param  {String} actionName Optional, an action name that will be displayed in the notification bar
-     */
-
-  }, {
-    key: 'timeout',
-    value: function timeout(fn, ms, actionName) {
-      var _this2 = this;
-
-      var now = new Date();
-      var shouldAbort = false;
-      var currentLocation = document.location.href;
-
-      var interval = setInterval(function () {
-        if (currentLocation !== document.location.href) {
-          shouldAbort = true;
-          clearInterval(interval);
-          return;
-        }
-        var d = new Date();
-        var diff = d.getTime() - now.getTime();
-        _this2.setNotificationBarText((actionName || 'Action') + ' in : ' + (ms - diff) / 1000);
-      }, 100);
-
-      setTimeout(function () {
-        clearInterval(interval);
-        if (shouldAbort || currentLocation !== document.location.href) {
-          return;
-        }
-        _this2.setNotificationBarText('Done');
-        fn();
-      }, ms);
-    }
-  }, {
-    key: 'createNotificationBar',
-    value: function createNotificationBar() {
-      var notificationBar = document.createElement("div");
-      notificationBar.style.width = '100%';
-      notificationBar.style.textAlign = 'center';
-      notificationBar.style.backgroundColor = 'rgb(255, 58, 58)';
-      notificationBar.style.lineHeight = '60px';
-      notificationBar.style.height = '60px';
-      notificationBar.style.fontSize = '2em';
-      notificationBar.style.zIndex = '9999';
-      notificationBar.style.left = 0;
-      notificationBar.style.top = 0;
-      notificationBar.style.fontWeight = 'bold';
-      notificationBar.id = 'sup-notif-bar';
-      document.body.prepend(notificationBar);
-      return notificationBar;
-    }
-
-    /**
-     * Sets top notification bar text
-     * @param  {} text The new text for the notification bar
-     */
-
-  }, {
-    key: 'setNotificationBarText',
-    value: function setNotificationBarText(text) {
-      this.notificationBar.textContent = text;
-    }
-  }, {
-    key: 'onPageChange',
-    value: function onPageChange() {}
-  }, {
-    key: 'sizeMatch',
-    value: function sizeMatch(sizeA, sizeB, category) {
-      sizeA = sizeA.toString().toLowerCase();
-      sizeB = sizeB.toString().toLowerCase();
-      if (!sizeB || !sizeA) return false;
-
-      if (sizeA === sizeB) {
-        return true;
-      }
-
-      if (category === "shoes") {
-        var _ret = function () {
-          // Match sizes like UK10/US10.5'
-          var a = sizeA.split(/(?:\/)+/);
-          var b = sizeB.split(/(?:\/)+/);
-
-          if (a.some(function (x) {
-            return b.indexOf(x) !== -1;
-          })) {
-            return {
-              v: true
-            };
-          }
-          return {
-            v: a[0].replace(/\D/g, '') === b[0].replace(/\D/g, '')
-          };
-        }();
-
-        if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
-      }
-
-      if (!isNaN(sizeA) || !isNaN(sizeB)) return false;
-
-      // Match sizes like 'S/M';
-      var splitA = sizeA.split('/');
-      var splitB = sizeB.split('/');
-
-      return splitA.some(function (x) {
-        return sizeB[0] === x[0];
-      }) || splitB.some(function (x) {
-        return sizeA[0] === x[0];
-      });
-    }
-  }]);
-  return BaseManager;
-}();
-
-exports.default = BaseManager;
-
-/***/ }),
+/* 481 */,
 /* 482 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -98905,6 +98349,845 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = '2.2.5';
+
+/***/ }),
+/* 913 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _toConsumableArray2 = __webpack_require__(54);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _typeof2 = __webpack_require__(43);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _getPrototypeOf = __webpack_require__(5);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(3);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(6);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(7);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _notification = __webpack_require__(914);
+
+var _helpers = __webpack_require__(917);
+
+var Helpers = _interopRequireWildcard(_helpers);
+
+var _baseProcessor = __webpack_require__(915);
+
+var _baseProcessor2 = _interopRequireDefault(_baseProcessor);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ProductProcessor = function (_BaseProcessor) {
+  (0, _inherits3.default)(ProductProcessor, _BaseProcessor);
+
+  function ProductProcessor() {
+    (0, _classCallCheck3.default)(this, ProductProcessor);
+    return (0, _possibleConstructorReturn3.default)(this, (ProductProcessor.__proto__ || (0, _getPrototypeOf2.default)(ProductProcessor)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(ProductProcessor, [{
+    key: 'beginProcess',
+    value: function beginProcess() {
+      this.processProduct();
+    }
+
+    /**
+    * Check if the current product is sold out
+    * @return {Boolean}
+    */
+
+  }, {
+    key: 'processProduct',
+
+
+    /**
+    * This function should be called when the user is on a product page, it will
+    * try to figure out if the product is sold out or not, and if not, it will find the best available size
+    * based on the user's preferences and then it will add the item to cart
+    */
+    value: function processProduct() {
+      var _this2 = this;
+
+      if (!ProductProcessor.isSoldOut()) {
+        var _ret = function () {
+          var maxPrice = _this2.preferences.maxPrice;
+          var minPrice = _this2.preferences.minPrice;
+          var itemPrice = document.querySelector('[itemprop=price]');
+
+          if (itemPrice !== null) {
+            var price = +itemPrice.innerHTML.replace(/\D/g, '');
+            if (!isNaN(price)) {
+              if (maxPrice !== undefined && price > maxPrice) {
+                (0, _notification.notify)('Product price is too high, not checking out');
+                return {
+                  v: void 0
+                };
+              }
+
+              if (minPrice !== undefined && price < minPrice) {
+                (0, _notification.notify)('Product price is too low, not checking out');
+                return {
+                  v: void 0
+                };
+              }
+            }
+          }
+
+          var submitBtn = document.querySelector('[name=commit]');
+          var productCategory = ProductProcessor.getProductCategory();
+          var sizesOptions = ProductProcessor.getSizesOptions();
+
+          // If sizes options are available
+          if (sizesOptions.length) {
+            var _ret2 = function () {
+              var categorySize = _this2.sizings[productCategory];
+              if (categorySize === undefined) {
+                (0, _notification.notify)('Unknown category "' + productCategory + '", cannot process');
+                return {
+                  v: {
+                    v: void 0
+                  }
+                };
+              }
+              var targetOption = sizesOptions.find(function (x) {
+                return ProductProcessor.sizeMatch(categorySize, x.text, productCategory);
+              });
+
+              if (!targetOption) {
+                if (_this2.preferences.strictSize) {
+                  (0, _notification.notify)('The desired size is not available');
+                  return {
+                    v: {
+                      v: void 0
+                    }
+                  };
+                }
+                targetOption = sizesOptions[0];
+              }
+              targetOption.selected = true;
+            }();
+
+            if ((typeof _ret2 === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret2)) === "object") return _ret2.v;
+          }
+
+          var atcDelay = _this2.preferences.addToCartDelay;
+          Helpers.timeout(function () {
+            var process = function process() {
+              if (document.querySelector('.in-cart') && document.getElementById('cart')) {
+                setTimeout(function () {
+                  window.location.href = '/checkout';
+                }, 200);
+              } else {
+                submitBtn.click();
+                Helpers.timeout(function () {
+                  return process();
+                }, 500, 'Waiting for product to be in cart...');
+              }
+            };
+
+            process();
+          }, atcDelay, 'Adding to cart');
+        }();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
+      }
+    }
+  }], [{
+    key: 'start',
+    value: function start(preferences, sizings, billing) {
+      var processor = new ProductProcessor(preferences, sizings, billing);
+      processor.beginProcess();
+      return processor;
+    }
+  }, {
+    key: 'isSoldOut',
+    value: function isSoldOut() {
+      return document.querySelector('input[name=commit]') === null;
+    }
+
+    /**
+    * Returns the product category when the user is on a product page
+    */
+
+  }, {
+    key: 'getProductCategory',
+    value: function getProductCategory() {
+      var category = Helpers.getQueryStringValue('atc-category');
+      return !category ? location.pathname.substring(1).split('/')[1] : category;
+    }
+  }, {
+    key: 'sizeMatch',
+    value: function sizeMatch(sA, sB, category) {
+      var sizeA = sA.toString().toLowerCase();
+      var sizeB = sB.toString().toLowerCase();
+      if (!sizeB || !sizeA) return false;
+
+      if (sizeA === sizeB) {
+        return true;
+      }
+
+      if (category === 'shoes') {
+        var _ret3 = function () {
+          // Match sizes like UK10/US10.5'
+          var a = sizeA.split(/(?:\/)+/);
+          var b = sizeB.split(/(?:\/)+/);
+
+          if (a.some(function (x) {
+            return b.indexOf(x) !== -1;
+          })) {
+            return {
+              v: true
+            };
+          }
+          return {
+            v: a[0].replace(/\D/g, '') === b[0].replace(/\D/g, '')
+          };
+        }();
+
+        if ((typeof _ret3 === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret3)) === "object") return _ret3.v;
+      }
+
+      if (!isNaN(sizeA) || !isNaN(sizeB)) return false;
+
+      // Match sizes like 'S/M';
+      var splitA = sizeA.split('/');
+      var splitB = sizeB.split('/');
+
+      return splitA.some(function (x) {
+        return sizeB[0] === x[0];
+      }) || splitB.some(function (x) {
+        return sizeA[0] === x[0];
+      });
+    }
+
+    /**
+    * Return the available sizes for the current product
+    * @return {Array}
+    */
+
+  }, {
+    key: 'getSizesOptions',
+    value: function getSizesOptions() {
+      var sizes = document.getElementById('size') || document.querySelector('[name=size]') || document.querySelector('form.add').querySelector('select');
+      if (!sizes || !sizes.options) {
+        return [];
+      }
+      return [].concat((0, _toConsumableArray3.default)(sizes.options));
+    }
+  }]);
+  return ProductProcessor;
+}(_baseProcessor2.default);
+
+exports.default = ProductProcessor;
+
+/***/ }),
+/* 914 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getOrCreateNotificationBar = getOrCreateNotificationBar;
+exports.notify = notify;
+function createNotificationBar() {
+  var notificationBar = document.createElement('div');
+  notificationBar.style.width = '100%';
+  notificationBar.style.textAlign = 'center';
+  notificationBar.style.backgroundColor = 'rgb(255, 58, 58)';
+  notificationBar.style.lineHeight = '60px';
+  notificationBar.style.height = '60px';
+  notificationBar.style.fontSize = '2em';
+  notificationBar.style.zIndex = '9999';
+  notificationBar.style.left = 0;
+  notificationBar.style.top = 0;
+  notificationBar.style.fontWeight = 'bold';
+  notificationBar.id = 'sup-notif-bar';
+  document.body.prepend(notificationBar);
+  return notificationBar;
+}
+
+function getOrCreateNotificationBar() {
+  if (!document.getElementById('sup-notif-bar')) {
+    createNotificationBar();
+  }
+  return document.getElementById('sup-notif-bar');
+}
+
+function notify(text) {
+  var notificationBar = getOrCreateNotificationBar();
+  notificationBar.textContent = text;
+}
+
+/***/ }),
+/* 915 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(3);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var BaseProcessor = function BaseProcessor(preferences, sizings, billing) {
+  (0, _classCallCheck3.default)(this, BaseProcessor);
+
+  this.preferences = preferences;
+  this.sizings = sizings;
+  this.billing = billing;
+};
+
+exports.default = BaseProcessor;
+
+/***/ }),
+/* 916 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getIterator2 = __webpack_require__(146);
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+var _promise = __webpack_require__(130);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _getPrototypeOf = __webpack_require__(5);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(3);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(6);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(7);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _jquery = __webpack_require__(480);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _SupremeUtils = __webpack_require__(331);
+
+var SupremeUtils = _interopRequireWildcard(_SupremeUtils);
+
+var _baseProcessor = __webpack_require__(915);
+
+var _baseProcessor2 = _interopRequireDefault(_baseProcessor);
+
+var _notification = __webpack_require__(914);
+
+var _helpers = __webpack_require__(917);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CartProcessor = function (_BaseProcessor) {
+  (0, _inherits3.default)(CartProcessor, _BaseProcessor);
+
+  function CartProcessor() {
+    (0, _classCallCheck3.default)(this, CartProcessor);
+    return (0, _possibleConstructorReturn3.default)(this, (CartProcessor.__proto__ || (0, _getPrototypeOf2.default)(CartProcessor)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(CartProcessor, [{
+    key: 'beginProcess',
+    value: function beginProcess() {
+      this.processCart();
+    }
+
+    /**
+    * This function should be called when the user is on the 'cart' page, it will then redirect the user
+    * to the checkout page after the delay configured in the options
+    * @param  {Object} preferencesStore Object that stores the preference options
+    */
+
+  }, {
+    key: 'processCart',
+    value: function processCart() {
+      var outOfStockItems = document.querySelectorAll('.out_of_stock');
+      var outOfStockAction = this.preferences.onCartSoldOut;
+      if (!outOfStockItems.length) {
+        (0, _helpers.timeout)(function () {
+          document.location.href = '/checkout';
+        }, 100, 'Going to checkout');
+        return;
+      }
+      if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.STOP) {
+        (0, _notification.notify)('A product is sold out, aborting...');
+      } else if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS) {
+        var promises = [];
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          var _loop = function _loop() {
+            var product = _step.value;
+
+            var form = product.querySelector('form');
+            if (form) {
+              promises.push(new _promise2.default(function (resolve, reject) {
+                _jquery2.default.ajax({
+                  type: 'POST',
+                  url: (0, _jquery2.default)(form).attr('action'),
+                  data: (0, _jquery2.default)(form).serializeArray(),
+                  success: resolve,
+                  error: reject
+                });
+              }));
+            }
+          };
+
+          for (var _iterator = (0, _getIterator3.default)(outOfStockItems), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            _loop();
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        _promise2.default.all(promises).then(function () {
+          (0, _helpers.timeout)(function () {
+            document.location.href = '/checkout';
+          }, 100, 'Going to checkout');
+        });
+      }
+    }
+  }], [{
+    key: 'start',
+    value: function start(preferences, sizings, billing) {
+      var processor = new CartProcessor(preferences, sizings, billing);
+      processor.beginProcess();
+      return processor;
+    }
+  }]);
+  return CartProcessor;
+}(_baseProcessor2.default);
+
+exports.default = CartProcessor;
+
+/***/ }),
+/* 917 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _toConsumableArray2 = __webpack_require__(54);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+exports.timeout = timeout;
+exports.getQueryStringValue = getQueryStringValue;
+exports.pageHasNodeOfClass = pageHasNodeOfClass;
+exports.hasStringInPath = hasStringInPath;
+exports.pathCount = pathCount;
+exports.isShopCategoryPage = isShopCategoryPage;
+exports.isProductPage = isProductPage;
+exports.isCart = isCart;
+exports.isCheckout = isCheckout;
+exports.findArticles = findArticles;
+exports.getArticleName = getArticleName;
+exports.getArticleColor = getArticleColor;
+
+var _notification = __webpack_require__(914);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Helper timeout function to add a timer in the notification bar
+ * @param  {Function} fn Function to be called after the delay
+ * @param  {Number} ms Delay before calling the function
+ * @param  {String} actionName Optional, an action name that will be displayed in the notification bar
+*/
+function timeout(fn, ms, actionName) {
+  var now = new Date();
+  var shouldAbort = false;
+  var currentLocation = document.location.href;
+
+  var interval = setInterval(function () {
+    if (currentLocation !== document.location.href) {
+      shouldAbort = true;
+      clearInterval(interval);
+      return;
+    }
+    var d = new Date();
+    var diff = d.getTime() - now.getTime();
+    (0, _notification.notify)((actionName || 'Action') + ' in : ' + (ms - diff) / 1000);
+  }, 100);
+
+  setTimeout(function () {
+    clearInterval(interval);
+    if (shouldAbort || currentLocation !== document.location.href) {
+      return;
+    }
+    (0, _notification.notify)('Done');
+    fn();
+  }, ms);
+}
+
+function getQueryStringValue(key) {
+  var urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key);
+}
+
+function pageHasNodeOfClass(className) {
+  return document.getElementsByClassName(className).length > 0;
+}
+
+function hasStringInPath(value) {
+  return location.pathname.substring(1).split('/').filter(function (x) {
+    return !!x && x === value;
+  }).length > 0;
+}
+
+function pathCount() {
+  return location.pathname.substring(1).split('/').length;
+}
+
+function isShopCategoryPage() {
+  return hasStringInPath('shop') && hasStringInPath('all') && pathCount() === 3;
+}
+
+/**
+ * Check if the user is currently on a product page
+ */
+function isProductPage() {
+  return hasStringInPath('shop') && (pageHasNodeOfClass('styles') || pageHasNodeOfClass('price') || pageHasNodeOfClass('style'));
+}
+
+/**
+ * Check if the user is currently on the 'cart' page
+ */
+function isCart() {
+  return pageHasNodeOfClass('cart') && hasStringInPath('cart');
+}
+
+/**
+ * Check if the user is currently at the checkout page
+ */
+function isCheckout() {
+  return hasStringInPath('checkout');
+}
+
+function findArticles() {
+  var articles = document.querySelectorAll('.inner-article');
+  if (!articles.length) {
+    articles = document.querySelectorAll('.inner-item');
+  }
+  return [].concat((0, _toConsumableArray3.default)(articles));
+}
+
+function getArticleName(articleNode) {
+  var nameNode = articleNode.querySelector('h1') || articleNode.querySelector('a.nl') || articleNode.querySelector('a');
+  return nameNode ? nameNode.innerText.toLowerCase().trim() : null;
+}
+
+function getArticleColor(articleNode) {
+  var colorNode = articleNode.querySelector('.sn') || articleNode.querySelector('.nl');
+  return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
+}
+
+/***/ }),
+/* 918 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _toConsumableArray2 = __webpack_require__(54);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _getPrototypeOf = __webpack_require__(5);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(3);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(6);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(7);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _baseProcessor = __webpack_require__(915);
+
+var _baseProcessor2 = _interopRequireDefault(_baseProcessor);
+
+var _InputProcessor = __webpack_require__(485);
+
+var InputProcessor = _interopRequireWildcard(_InputProcessor);
+
+var _helpers = __webpack_require__(917);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CheckoutProcessor = function (_BaseProcessor) {
+  (0, _inherits3.default)(CheckoutProcessor, _BaseProcessor);
+
+  function CheckoutProcessor() {
+    (0, _classCallCheck3.default)(this, CheckoutProcessor);
+    return (0, _possibleConstructorReturn3.default)(this, (CheckoutProcessor.__proto__ || (0, _getPrototypeOf2.default)(CheckoutProcessor)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(CheckoutProcessor, [{
+    key: 'beginProcess',
+    value: function beginProcess() {
+      this.processCheckout();
+    }
+
+    /**
+     * This function should be called when the user is on the 'checkout' page, it will fill
+     * the checkout form with the values defined by the user in the options and then checkout after a delay
+     * @param  {Object} preferencesStore Object that stores the preference options
+     * @param  {Object} billingStore Object that stores the billings options
+     */
+
+  }, {
+    key: 'processCheckout',
+    value: function processCheckout() {
+      var checkoutDelay = this.preferences.checkoutDelay;
+      var inputs = [].concat((0, _toConsumableArray3.default)(document.querySelectorAll('input, textarea, select'))).filter(function (x) {
+        return ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1;
+      });
+      InputProcessor.processFields(inputs, this.billing);
+      var terms = document.getElementsByName('order[terms]');
+      if (terms.length) {
+        terms[0].click();
+      }
+
+      if (this.preferences.captchaBypass) {
+        var captcha = document.querySelector('.g-recaptcha');
+        if (captcha) {
+          captcha.remove();
+        }
+      }
+      if (this.preferences.autoPay) {
+        (0, _helpers.timeout)(function () {
+          var commitBtn = document.getElementsByName('commit')[0];
+          if (commitBtn) {
+            commitBtn.click();
+          }
+        }, checkoutDelay, 'Checking out');
+      }
+    }
+  }], [{
+    key: 'start',
+    value: function start(preferences, sizings, billing) {
+      var processor = new CheckoutProcessor(preferences, sizings, billing);
+      processor.beginProcess();
+      return processor;
+    }
+  }]);
+  return CheckoutProcessor;
+}(_baseProcessor2.default);
+
+exports.default = CheckoutProcessor;
+
+/***/ }),
+/* 919 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getPrototypeOf = __webpack_require__(5);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(3);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(6);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(7);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _baseProcessor = __webpack_require__(915);
+
+var _baseProcessor2 = _interopRequireDefault(_baseProcessor);
+
+var _helpers = __webpack_require__(917);
+
+var Helpers = _interopRequireWildcard(_helpers);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CheckoutProcessor = function (_BaseProcessor) {
+  (0, _inherits3.default)(CheckoutProcessor, _BaseProcessor);
+
+  function CheckoutProcessor() {
+    (0, _classCallCheck3.default)(this, CheckoutProcessor);
+    return (0, _possibleConstructorReturn3.default)(this, (CheckoutProcessor.__proto__ || (0, _getPrototypeOf2.default)(CheckoutProcessor)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(CheckoutProcessor, [{
+    key: 'beginProcess',
+    value: function beginProcess() {
+      this.processAtc();
+    }
+  }, {
+    key: 'processAtc',
+    value: function processAtc() {
+      var queryString = Helpers.getQueryStringValue('atc-kw');
+      if (!queryString) {
+        return;
+      }
+      var keywords = queryString.split(';');
+      var kwColor = Helpers.getQueryStringValue('atc-color');
+      var innerArticles = Helpers.findArticles();
+      var products = [];
+      for (var i = 0; i < innerArticles.length; i += 1) {
+        var name = Helpers.getArticleName(innerArticles[i]);
+        var a = innerArticles[i].querySelector('a');
+        var color = Helpers.getArticleColor(innerArticles[i]);
+        var soldOut = innerArticles[i].getElementsByClassName('sold_out_tag');
+        if (soldOut.length) {
+          continue;
+        }
+        if (name && a.href) {
+          var product = {
+            matches: 0,
+            url: a.href
+          };
+          for (var j = 0; j < keywords.length; j += 1) {
+            var keyword = keywords[j].toLowerCase().trim();
+            var regexp = new RegExp(keyword);
+            // name matches
+            if (regexp.test(name)) {
+              if (kwColor && color) {
+                var regexColor = new RegExp(color);
+                if (regexColor.test(kwColor.toLowerCase().trim())) {
+                  product.matches += 1;
+                }
+              }
+              product.matches += 1;
+            }
+          }
+
+          products.push(product);
+        }
+      }
+      var bestMatch = products.filter(function (x) {
+        return x.matches > 0;
+      }).sort(function (a, b) {
+        return b.matches - a.matches;
+      })[0];
+      if (bestMatch) {
+        window.location.href = bestMatch.url;
+      } else {
+        setTimeout(function () {
+          window.location.reload();
+        }, 1000);
+      }
+    }
+  }], [{
+    key: 'start',
+    value: function start(preferences, sizings, billing) {
+      var processor = new CheckoutProcessor(preferences, sizings, billing);
+      processor.beginProcess();
+      return processor;
+    }
+  }]);
+  return CheckoutProcessor;
+}(_baseProcessor2.default);
+
+exports.default = CheckoutProcessor;
 
 /***/ })
 /******/ ]);

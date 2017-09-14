@@ -5201,10 +5201,6 @@ var _keys = __webpack_require__(191);
 var _keys2 = _interopRequireDefault(_keys);
 
 exports.isObjectEmpty = isObjectEmpty;
-exports.getQueryStringValue = getQueryStringValue;
-exports.pageHasNodeOfClass = pageHasNodeOfClass;
-exports.hasStringInPath = hasStringInPath;
-exports.pathCount = pathCount;
 exports.openAtcTab = openAtcTab;
 exports.timeToDate = timeToDate;
 exports.isValidTime = isValidTime;
@@ -5218,25 +5214,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function isObjectEmpty(obj) {
   return (0, _keys2.default)(obj).length === 0 && obj.constructor === Object;
-}
-
-function getQueryStringValue(key) {
-  var urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(key);
-}
-
-function pageHasNodeOfClass(className) {
-  return document.getElementsByClassName(className).length > 0;
-}
-
-function hasStringInPath(value) {
-  return location.pathname.substring(1).split('/').filter(function (x) {
-    return !!x && x === value;
-  }).length > 0;
-}
-
-function pathCount() {
-  return location.pathname.substring(1).split('/').length;
 }
 
 function openAtcTab(category, keywords, color) {

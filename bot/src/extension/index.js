@@ -7,7 +7,6 @@ import version from '../app/version';
 async function Start() {
   const profile = await StorageManager.getCurrentProfileSettings(version);
   const settings = profile[SupremeName] || {};
-  console.log(settings);
   const manager = new SupremeManager(settings.Options, settings.Sizes, settings.Billing);
   manager.start();
 }
