@@ -119,12 +119,7 @@ First, you'll need to install the npm dependencies:
   $ yarn
  ```
 
-To build and run the dev server, type the following command in your terminal:
- ```bash
-  $ yarn start
- ```
-
- To package a new version of the application run the following command:
+ To build and watch the project run the following command:
   ```bash
    $ yarn build
   ```

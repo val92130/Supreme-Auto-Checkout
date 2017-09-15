@@ -1,22 +1,33 @@
-import { getFromChromeStorage } from '../../app/utils/StorageManager';
+import { getCurrentProfileSettings, getAtcProducts } from '../../app/utils/StorageManager';
+import version from '../../app/version';
 import * as menus from '../../app/constants/Menus';
 import * as Helpers from '../../app/utils/Helpers';
+import { SHOP_NAME as SupremeName } from '../../app/components/shops/Supreme';
+
 
 
 async function getEnabledAtcProducts() {
-  const atc = await getFromChromeStorage('atc');
-  if (atc && atc.atcProducts) {
-    return atc.atcProducts.filter(x => x.enabled);
+  try {
+    const atc = await getAtcProducts(version);
+    if (atc && atc.atcProducts) {
+      return atc.atcProducts.filter(x => x.enabled);
+    }
+    return [];
+  } catch (e) {
+    console.error(e);
+    return [];
   }
-  return [];
 }
 
 async function getSettings() {
-  const settings = await getFromChromeStorage('settings');
-  if (settings && settings['Supreme']) {
-    return settings['Supreme'];
+  try {
+    const profile = await getCurrentProfileSettings(version);
+    return profile[SupremeName];
+  } catch(e) {
+    console.info('Error while getting settings');
+    console.info(e);
+    return null;
   }
-  return null;
 }
 
 async function processProducts(products) {

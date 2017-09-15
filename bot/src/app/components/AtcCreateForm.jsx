@@ -16,7 +16,7 @@ import { categories } from '../constants/Utils';
 
 class AtcCreateForm extends Component {
   render() {
-    const { handleSubmit, pristine, submitting, onRequestClose, atcProducts } = this.props;
+    const { handleSubmit, pristine, submitting, onRequestClose, atcProducts, isEditing } = this.props;
     const renderChip = ({input, hintText, floatingLabelText, meta: {touched, error} }) => (
       <ChipInput
         {...input}
@@ -45,12 +45,16 @@ class AtcCreateForm extends Component {
       float: 'right',
     };
 
+    const formValidators = [Validators.required];
+    if (!isEditing) {
+      formValidators.push(Validators.unique(atcProducts.map(x => x.name)));
+    }
     return (
         <form onSubmit={handleSubmit} id="atc-form">
           <div>
             <Field
               name="name"
-              validate={[Validators.required, Validators.unique(atcProducts.map(x => x.name))]}
+              validate={formValidators}
               component={TextField}
               floatingLabelText="Name"
               hintText="Name"
@@ -137,12 +141,13 @@ const Form = reduxForm({
   form: 'atc-form',
 })(AtcCreateForm);
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     atcProducts: state.atc.atcProducts,
-    initialValues: {
+    initialValues: Object.assign({
       enabled: true,
-    },
+    }, ownProps.initialValues),
+    isEditing: !!ownProps.initialValues,
   };
 }
 

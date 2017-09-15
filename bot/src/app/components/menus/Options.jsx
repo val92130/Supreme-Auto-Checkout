@@ -25,7 +25,7 @@ const defaultValues = {
 };
 
 const Options = props => {
-  const { handleSubmit, pristine, submitting, atcEnabled } = props;
+  const { handleSubmit, pristine, submitting, atcEnabled, change } = props;
   return (
     <form onSubmit={handleSubmit} id="options-form">
       <div>
@@ -34,6 +34,11 @@ const Options = props => {
           component={Toggle}
           label="Enable auto checkout"
           style={Styles.fields.text}
+          onChange={(e, v) => {
+            if (!v) {
+              change('atcEnabled', false);
+            }
+          }}
         />
       </div>
 
@@ -79,6 +84,11 @@ const Options = props => {
           component={Toggle}
           label="Enable AutoCop (Autocheckout required)"
           style={Styles.fields.text}
+          onChange={(e, v) => {
+            if (v) {
+              change('autoCheckout', true);
+            }
+          }}
         />
       </div>
 

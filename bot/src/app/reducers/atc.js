@@ -17,13 +17,13 @@ export default function atc(state = {
     return {
       atcProducts: state.atcProducts.map(x => Object.assign({}, x)).filter(x => x.name !== action.name),
     };
-  } else if (action.type === types.ATC_SET_PRODUCT_ENABLED) {
+  } else if (action.type === types.ATC_PRODUCT_EDIT) {
     const atcProduct = state.atcProducts.filter(x => x.name === action.name)[0];
     if (!atcProduct) return state;
 
     const newList = state.atcProducts.map((x) => {
       if (x.name === action.name) {
-        return Object.assign({}, x, { enabled: action.enabled });
+        return Object.assign({}, x, action.data);
       }
       return Object.assign({}, x);
     });

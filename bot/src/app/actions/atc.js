@@ -12,6 +12,17 @@ export function addAtcProduct(data) {
   };
 }
 
+export function editAtcProduct(name, data) {
+  return function (dispatch) {
+    dispatch(addNotification(`Atc product ${name} edited`));
+    dispatch({
+      type: types.ATC_PRODUCT_EDIT,
+      name,
+      data,
+    });
+  };
+}
+
 export function removeAtcProduct(name) {
   return function (dispatch) {
     dispatch(addNotification(`Atc product ${name} removed`));
@@ -24,8 +35,8 @@ export function removeAtcProduct(name) {
 
 export function setAtcProductEnabled(name, enabled = true) {
   return {
-    type: types.ATC_SET_PRODUCT_ENABLED,
+    type: types.ATC_PRODUCT_EDIT,
     name,
-    enabled,
+    data: { enabled },
   };
 }

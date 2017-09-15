@@ -10,10 +10,9 @@ import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import getRoutes from './routes';
-import { loadSavedState, saveState, saveToChromeStorage } from './utils/StorageManager';
+import { loadSavedState, saveState } from './utils/StorageManager';
+import version from './version';
 
-
-const VERSION = '2.2.5';
 
 injectTapEventPlugin();
 
@@ -21,42 +20,39 @@ const middleware = [thunk, routerMiddleware(browserHistory)];
 if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
+async function init() {
+  const savedState = await loadSavedState(version);
+  const appReducer = combineReducers(Object.assign({}, reducers, {
+    routing: routerReducer,
+    form: formReducer,
+  }));
 
-const savedState = loadSavedState(VERSION);
-const appReducer = combineReducers(Object.assign({}, reducers, {
-  routing: routerReducer,
-  form: formReducer,
-}));
-
-const rootReducer = (state, action) => {
-  if (action.type === 'PROFILE_CHANGE') {
-    return appReducer(undefined, action);
-  }
-  return appReducer(state, action);
-};
-const store = createStore(rootReducer, savedState, applyMiddleware(...middleware));
+  const rootReducer = (state, action) => {
+    if (action.type === 'PROFILE_CHANGE') {
+      return appReducer(undefined, action);
+    }
+    return appReducer(state, action);
+  };
+  const store = createStore(rootReducer, savedState, applyMiddleware(...middleware));
 
 // Save state in localStorage automatically
-store.subscribe(() => {
-  const state = store.getState();
-  if (state) {
-    saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc }, VERSION);
-    const currentProfile = state.profiles.currentProfile;
-    const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
-    if (typeof (chrome) !== 'undefined' && typeof (chrome.storage) !== 'undefined') {
-      saveToChromeStorage('settings', settings || {});
-      saveToChromeStorage('atc', state.atc || {});
+  store.subscribe(async () => {
+    const state = store.getState();
+    if (state) {
+      await saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc }, version);
     }
-  }
-});
+  });
 
-const history = syncHistoryWithStore(hashHistory, store);
+  const history = syncHistoryWithStore(hashHistory, store);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      {getRoutes(store)}
-    </Router>
-  </Provider>,
-  document.getElementById('app'),
-);
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={history}>
+        {getRoutes(store)}
+      </Router>
+    </Provider>,
+    document.getElementById('app'),
+  );
+}
+
+init();
