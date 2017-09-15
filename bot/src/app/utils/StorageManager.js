@@ -22,6 +22,14 @@ export const initializeStorageState = async (initialState, version) => {
   return setItem('state', { value: initialState || {}, version });
 };
 
+export const getAtcProducts = async (version) => {
+  const state = await getItem('state') || {};
+  if (state.version === version) {
+    return state.value.atc;
+  }
+  return null;
+}
+
 export const loadSavedState = async (version) => {
   try {
     const state = await getItem('state') || {};

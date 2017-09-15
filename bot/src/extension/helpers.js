@@ -91,6 +91,6 @@ export function getArticleName(articleNode) {
 }
 
 export function getArticleColor(articleNode) {
-  const colorNode = articleNode.querySelector('.sn') || articleNode.querySelector('.nl');
+  const colorNode = articleNode.querySelector('.sn') || articleNode.querySelector('.nl') || articleNode.querySelector('p .name-link');
   return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
 }
