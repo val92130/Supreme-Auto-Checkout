@@ -3,7 +3,7 @@ import version from '../../app/version';
 import * as menus from '../../app/constants/Menus';
 import * as Helpers from '../../app/utils/Helpers';
 import { SHOP_NAME as SupremeName } from '../../app/components/shops/Supreme';
-
+import ProductMonitorWorker from './productMonitorWorker';
 
 
 async function getEnabledAtcProducts() {
@@ -105,6 +105,8 @@ async function loop() {
 
 
 async function start() {
+  const worker = new ProductMonitorWorker();
+  worker.start();
   await loop();
 }
 

@@ -28,7 +28,7 @@ export const getAtcProducts = async (version) => {
     return state.value.atc;
   }
   return null;
-}
+};
 
 export const loadSavedState = async (version) => {
   try {

@@ -2,13 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import Tab from 'material-ui/Tabs/Tab';
 import { connect } from 'react-redux';
 import FontIcon from 'material-ui/FontIcon';
-import IconButton from 'material-ui/IconButton';
-import { red300 } from 'material-ui/styles/colors';
 import * as menus from '../../constants/Menus';
 import Billing from './../menus/Billing';
 import Options from './../menus/Options';
 import Sizes from './../menus/Sizes';
 import Atc from './../menus/Atc';
+import Products from './../menus/Products';
 import Layout from '../../containers/Layout';
 import { changeMenu } from '../../actions/menu';
 import { updateProfileSettings } from '../../actions/profiles';
@@ -27,6 +26,8 @@ class Supreme extends Component {
         return (<Sizes onSubmit={data => this.onSubmit(menu, data)} shop={SHOP_NAME} />);
       case menus.MENU_ATC:
         return (<Atc shop={SHOP_NAME} />);
+      case menus.MENU_PRODUCTS:
+        return (<Products shop={SHOP_NAME} />);
       default:
         return null;
     }
@@ -66,7 +67,12 @@ class Supreme extends Component {
   }
 
   getIconForTabMenu(menu) {
-    const isIncomplete = (menu !== menus.MENU_ATC) && (!this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu]);
+    if (menu === menus.MENU_ATC) {
+      return (<FontIcon className="material-icons" >add_shopping_cart</FontIcon>);
+    } else if (menu === menus.MENU_PRODUCTS) {
+      return (<FontIcon className="material-icons" >list</FontIcon>);
+    }
+    const isIncomplete = (!this.props.settings[SHOP_NAME] || !this.props.settings[SHOP_NAME][menu]);
     return (<FontIcon className="material-icons" >{isIncomplete ? 'error' : 'done'}</FontIcon>);
   }
 
@@ -104,6 +110,13 @@ class Supreme extends Component {
         icon={this.getIconForTabMenu(menus.MENU_ATC)}
         value={menus.MENU_ATC}
         onClick={() => this.props.changeMenu(menus.MENU_ATC)}
+      />,
+      <Tab
+        label="Products"
+        key={5}
+        icon={this.getIconForTabMenu(menus.MENU_PRODUCTS)}
+        value={menus.MENU_PRODUCTS}
+        onClick={() => this.props.changeMenu(menus.MENU_PRODUCTS)}
       />,
     ];
   }

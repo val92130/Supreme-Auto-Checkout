@@ -89,32 +89,37 @@ class Atc extends Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false} stripedRows>
             {
-              atcProducts.map((x) => {
-                return (
-                  <TableRow key={x.name}>
-                    <TableRowColumn>{x.name}</TableRowColumn>
-                    <TableRowColumn>{x.keywords.join(', ')}</TableRowColumn>
-                    <TableRowColumn>
-                      <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      <IconButton onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)}>
-                        <LaunchIcon />
-                      </IconButton>
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      <IconButton onTouchTap={() => this.requestModalOpen(x)}>
-                        <EditIcon />
-                      </IconButton>
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>
-                        <DeleteButton color={red300} />
-                      </IconButton>
-                    </TableRowColumn>
-                  </TableRow>
-                );
-              })
+              (() => {
+                if (!atcProducts.length) {
+                  return (<p style={{ textAlign: 'center' }}>Click "Add new" to add a new Autocop Product"</p>);
+                }
+                return atcProducts.map((x) => {
+                  return (
+                    <TableRow key={x.name}>
+                      <TableRowColumn>{x.name}</TableRowColumn>
+                      <TableRowColumn>{x.keywords.join(', ')}</TableRowColumn>
+                      <TableRowColumn>
+                        <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
+                      </TableRowColumn>
+                      <TableRowColumn>
+                        <IconButton onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)}>
+                          <LaunchIcon />
+                        </IconButton>
+                      </TableRowColumn>
+                      <TableRowColumn>
+                        <IconButton onTouchTap={() => this.requestModalOpen(x)}>
+                          <EditIcon />
+                        </IconButton>
+                      </TableRowColumn>
+                      <TableRowColumn>
+                        <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>
+                          <DeleteButton color={red300} />
+                        </IconButton>
+                      </TableRowColumn>
+                    </TableRow>
+                  );
+                });
+              })()
             }
           </TableBody>
         </Table>

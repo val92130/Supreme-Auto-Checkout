@@ -76,6 +76,14 @@ export default class ProductProcessor extends BaseProcessor {
    * based on the user's preferences and then it will add the item to cart
    */
   processProduct() {
+    const atcStyleId = Helpers.getQueryStringValue('atc-style-id');
+    if (atcStyleId) {
+      const btn = document.querySelector(`[data-style-id="${atcStyleId}"]`);
+      if (btn) {
+        btn.click();
+        return;
+      }
+    }
     if (!ProductProcessor.isSoldOut()) {
       const maxPrice = this.preferences.maxPrice;
       const minPrice = this.preferences.minPrice;
