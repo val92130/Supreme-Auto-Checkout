@@ -99192,10 +99192,16 @@ var Products = function (_Component) {
               var _ret = function () {
                 var product = _this4.state.selectedProduct;
                 var productCards = product.styles.map(function (x) {
+                  var soldOut = !x.sizes.some(function (s) {
+                    return s.stock_level >= 1;
+                  });
                   var action = _react2.default.createElement(_FlatButton2.default, { label: 'Select', onTouchTap: function onTouchTap() {
                       return _this4.handleBuyItem(product.id, x.id);
                     } });
-                  return _this4.getProductCard(x, action);
+                  if (soldOut) {
+                    action = _react2.default.createElement(_FlatButton2.default, { label: 'SOLD OUT' });
+                  }
+                  return _this4.getProductCard(x, action, soldOut);
                 });
                 return {
                   v: _react2.default.createElement(

@@ -143,8 +143,12 @@ class Products extends Component {
               if (this.state.selectedProduct) {
                 const product = this.state.selectedProduct;
                 const productCards = product.styles.map(x => {
-                  const action = <FlatButton label="Select" onTouchTap={() => this.handleBuyItem(product.id, x.id)} />;
-                  return this.getProductCard(x, action);
+                  const soldOut = !x.sizes.some(s => s.stock_level >= 1);
+                  let action = <FlatButton label="Select" onTouchTap={() => this.handleBuyItem(product.id, x.id)} />;
+                  if (soldOut) {
+                    action = <FlatButton label="SOLD OUT" />;
+                  }
+                  return this.getProductCard(x, action, soldOut);
                 })
                 return (
                   <div style={style}>
