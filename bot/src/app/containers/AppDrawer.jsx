@@ -21,7 +21,7 @@ function openUrlInNewTab(url) {
 }
 
 function getIconForShop(settings, shopName) {
-  const menus = Object.keys(Menus).map(x => Menus[x]).filter(x => x !== 'AutoCop');
+  const menus = Object.keys(Menus).map(x => Menus[x]).filter(x => x !== 'AutoCop' && x !== 'Products');
   const isIncomplete = !settings[shopName] || menus.some(x => settings[shopName][x] === undefined);
   if (isIncomplete) {
     return <IncompleteIcon />;

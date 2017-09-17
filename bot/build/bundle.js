@@ -73884,7 +73884,7 @@ function getIconForShop(settings, shopName) {
   var menus = (0, _keys2.default)(Menus).map(function (x) {
     return Menus[x];
   }).filter(function (x) {
-    return x !== 'AutoCop';
+    return x !== 'AutoCop' && x !== 'Products';
   });
   var isIncomplete = !settings[shopName] || menus.some(function (x) {
     return settings[shopName][x] === undefined;
