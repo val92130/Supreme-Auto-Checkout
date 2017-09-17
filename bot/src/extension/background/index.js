@@ -1,7 +1,8 @@
-import { getCurrentProfileSettings, getAtcProducts } from '../../app/utils/StorageManager';
+import { getCurrentProfileSettings, getAtcProducts, getItem } from '../../app/utils/StorageManager';
 import version from '../../app/version';
 import * as menus from '../../app/constants/Menus';
 import * as Helpers from '../../app/utils/Helpers';
+import { findBestMatch } from '../helpers';
 import { SHOP_NAME as SupremeName } from '../../app/components/shops/Supreme';
 import ProductMonitorWorker from './productMonitorWorker';
 
@@ -44,6 +45,22 @@ async function processProducts(products) {
       url = `${url}&atc-color=${color}`;
     }
     chrome.tabs.create({ url });
+  }
+}
+
+async function processByMonitor(atcProducts) {
+  const monitorProducts = await getItem('products');
+  if (!monitorProducts) {
+    return;
+  }
+  for (let i = 0; i < atcProducts.length; i += 1) {
+    const product = atcProducts[i];
+    const keywords = product.keywords;
+    const color = product.color;
+    const bestMatch = findBestMatch(monitorProducts, keywords, product.category);
+    if (bestMatch) {
+      chrome.tabs.create({ url: `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${color}` });
+    }
   }
 }
 
@@ -96,7 +113,11 @@ async function loop() {
 
   if (diffTime <= 0 && Math.abs(diffTime) < 3) {
     const products = await getEnabledAtcProducts();
-    await processProducts(products);
+    if (settings.Options.atcUseMonitor) {
+      await processByMonitor(products);
+    } else {
+      await processProducts(products);
+    }
     await timeout(4000, () => loop());
     return;
   }

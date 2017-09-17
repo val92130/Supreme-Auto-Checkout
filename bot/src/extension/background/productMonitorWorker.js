@@ -43,7 +43,6 @@ export default class ProductWatcher {
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function (details) {
-    console.log(details);
     const userAgent = details.requestHeaders.filter(x => x.name === 'User-Agent')[0];
     if (userAgent) {
       userAgent.value = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13G34';

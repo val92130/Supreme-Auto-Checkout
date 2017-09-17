@@ -77,11 +77,22 @@ export default class ProductProcessor extends BaseProcessor {
    */
   processProduct() {
     const atcStyleId = Helpers.getQueryStringValue('atc-style-id');
+    const atcColor = Helpers.getQueryStringValue('atc-color');
     if (atcStyleId) {
       const btn = document.querySelector(`[data-style-id="${atcStyleId}"]`);
       if (btn) {
         btn.click();
         return;
+      }
+    }
+    if (atcColor) {
+      const nodes = Array.from(document.querySelectorAll('[data-style-name]'));
+      for (let i = 0; i < nodes.length; i += 1) {
+        const styleName = nodes[i].attributes['data-style-name'];
+        if (styleName && styleName.value.toLowerCase().trim() === atcColor.toLowerCase().trim()) {
+          nodes[i].click();
+          return;
+        }
       }
     }
     if (!ProductProcessor.isSoldOut()) {

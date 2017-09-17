@@ -96,6 +96,12 @@ const Options = props => {
         atcEnabled &&
           <div>
             <Field
+              name="atcUseMonitor"
+              component={Toggle}
+              label="Use product monitor to find products (Japan recommended)"
+              style={Styles.fields.text}
+            />
+            <Field
               name="atcStartTime"
               component={TextField}
               floatingLabelText="ATC Start time (hh:mm:ss) 24hour format"
