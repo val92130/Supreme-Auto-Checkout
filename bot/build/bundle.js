@@ -20306,7 +20306,6 @@ var _keys = __webpack_require__(54);
 var _keys2 = _interopRequireDefault(_keys);
 
 exports.isObjectEmpty = isObjectEmpty;
-exports.openAtcTab = openAtcTab;
 exports.timeToDate = timeToDate;
 exports.isValidTime = isValidTime;
 exports.sameDay = sameDay;
@@ -20315,19 +20314,12 @@ var _moment = __webpack_require__(1);
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _helpers = __webpack_require__(1005);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function isObjectEmpty(obj) {
   return (0, _keys2.default)(obj).length === 0 && obj.constructor === Object;
-}
-
-function openAtcTab(category, keywords, color) {
-  var url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
-  if (color) {
-    url = url + '&atc-color=' + color;
-  }
-  var win = window.open(url, '_blank');
-  win.focus();
 }
 
 function timeToDate(time) {
@@ -89448,6 +89440,16 @@ var Options = function Options(props) {
       'div',
       null,
       _react2.default.createElement(_reduxForm.Field, {
+        name: 'atcUseMonitor',
+        component: _reduxFormMaterialUi.Toggle,
+        label: 'Use product monitor for AutoCop and Buy Now button (Japan recommended)',
+        style: _Styles2.default.fields.text
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_reduxForm.Field, {
         name: 'atcEnabled',
         component: _reduxFormMaterialUi.Toggle,
         label: 'Enable AutoCop (Autocheckout required)',
@@ -89462,12 +89464,6 @@ var Options = function Options(props) {
     atcEnabled && _react2.default.createElement(
       'div',
       null,
-      _react2.default.createElement(_reduxForm.Field, {
-        name: 'atcUseMonitor',
-        component: _reduxFormMaterialUi.Toggle,
-        label: 'Use product monitor to find products (Japan recommended)',
-        style: _Styles2.default.fields.text
-      }),
       _react2.default.createElement(_reduxForm.Field, {
         name: 'atcStartTime',
         component: _reduxFormMaterialUi.TextField,
@@ -90372,6 +90368,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = __webpack_require__(138);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(149);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _getPrototypeOf = __webpack_require__(4);
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -90436,9 +90440,19 @@ var _AtcCreateForm = __webpack_require__(968);
 
 var _AtcCreateForm2 = _interopRequireDefault(_AtcCreateForm);
 
-var _Helpers = __webpack_require__(216);
+var _Supreme = __webpack_require__(331);
 
-var Helpers = _interopRequireWildcard(_Helpers);
+var _StorageManager = __webpack_require__(466);
+
+var StorageManager = _interopRequireWildcard(_StorageManager);
+
+var _helpers = __webpack_require__(1005);
+
+var ExtensionHelpers = _interopRequireWildcard(_helpers);
+
+var _version = __webpack_require__(1004);
+
+var _version2 = _interopRequireDefault(_version);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -90497,6 +90511,60 @@ var Atc = function (_Component) {
     value: function toggleAtc(name, enabled) {
       this.props.setAtcProductEnabled(name, enabled);
     }
+  }, {
+    key: 'runNow',
+    value: function () {
+      var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(category, keywords, color) {
+        var profile, useMonitor, monitorProducts;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return StorageManager.getCurrentProfileSettings(_version2.default);
+
+              case 2:
+                profile = _context.sent;
+                useMonitor = profile[_Supreme.SHOP_NAME].Options.atcUseMonitor;
+
+                if (useMonitor) {
+                  _context.next = 6;
+                  break;
+                }
+
+                return _context.abrupt('return', ExtensionHelpers.openAtcTab(category, keywords, color));
+
+              case 6:
+                _context.next = 8;
+                return StorageManager.getItem('products');
+
+              case 8:
+                monitorProducts = _context.sent;
+
+                if (monitorProducts) {
+                  _context.next = 11;
+                  break;
+                }
+
+                return _context.abrupt('return', false);
+
+              case 11:
+                return _context.abrupt('return', ExtensionHelpers.openAtcTabMonitor(monitorProducts, category, keywords, color));
+
+              case 12:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function runNow(_x2, _x3, _x4) {
+        return _ref.apply(this, arguments);
+      }
+
+      return runNow;
+    }()
   }, {
     key: 'render',
     value: function render() {
@@ -90607,9 +90675,24 @@ var Atc = function (_Component) {
                     null,
                     _react2.default.createElement(
                       _IconButton2.default,
-                      { onTouchTap: function onTouchTap() {
-                          return Helpers.openAtcTab(x.category, x.keywords, x.color);
-                        } },
+                      { onTouchTap: (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+                          return _regenerator2.default.wrap(function _callee2$(_context2) {
+                            while (1) {
+                              switch (_context2.prev = _context2.next) {
+                                case 0:
+                                  _context2.next = 2;
+                                  return _this2.runNow(x.category, x.keywords, x.color);
+
+                                case 2:
+                                  return _context2.abrupt('return', _context2.sent);
+
+                                case 3:
+                                case 'end':
+                                  return _context2.stop();
+                              }
+                            }
+                          }, _callee2, _this2);
+                        })) },
                       _react2.default.createElement(_launch2.default, null)
                     )
                   ),
@@ -98112,6 +98195,236 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = '2.3.0';
+
+/***/ }),
+/* 1005 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keys = __webpack_require__(54);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _toConsumableArray2 = __webpack_require__(100);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+exports.timeout = timeout;
+exports.getQueryStringValue = getQueryStringValue;
+exports.pageHasNodeOfClass = pageHasNodeOfClass;
+exports.hasStringInPath = hasStringInPath;
+exports.pathCount = pathCount;
+exports.isShopCategoryPage = isShopCategoryPage;
+exports.isProductPage = isProductPage;
+exports.isCart = isCart;
+exports.isCheckout = isCheckout;
+exports.findArticles = findArticles;
+exports.getArticleName = getArticleName;
+exports.getArticleColor = getArticleColor;
+exports.findBestMatch = findBestMatch;
+exports.openAtcTab = openAtcTab;
+exports.openAtcTabMonitor = openAtcTabMonitor;
+
+var _notification = __webpack_require__(1006);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Helper timeout function to add a timer in the notification bar
+ * @param  {Function} fn Function to be called after the delay
+ * @param  {Number} ms Delay before calling the function
+ * @param  {String} actionName Optional, an action name that will be displayed in the notification bar
+*/
+function timeout(fn, ms, actionName) {
+  var now = new Date();
+  var shouldAbort = false;
+  var currentLocation = document.location.href;
+
+  var interval = setInterval(function () {
+    if (currentLocation !== document.location.href) {
+      shouldAbort = true;
+      clearInterval(interval);
+      return;
+    }
+    var d = new Date();
+    var diff = d.getTime() - now.getTime();
+    (0, _notification.notify)((actionName || 'Action') + ' in : ' + (ms - diff) / 1000);
+  }, 100);
+
+  setTimeout(function () {
+    clearInterval(interval);
+    if (shouldAbort || currentLocation !== document.location.href) {
+      return;
+    }
+    (0, _notification.notify)('Done');
+    fn();
+  }, ms);
+}
+
+function getQueryStringValue(key) {
+  var urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key);
+}
+
+function pageHasNodeOfClass(className) {
+  return document.getElementsByClassName(className).length > 0;
+}
+
+function hasStringInPath(value) {
+  return location.pathname.substring(1).split('/').filter(function (x) {
+    return !!x && x === value;
+  }).length > 0;
+}
+
+function pathCount() {
+  return location.pathname.substring(1).split('/').length;
+}
+
+function isShopCategoryPage() {
+  return hasStringInPath('shop') && hasStringInPath('all') && pathCount() === 3;
+}
+
+/**
+ * Check if the user is currently on a product page
+ */
+function isProductPage() {
+  return hasStringInPath('shop') && (pageHasNodeOfClass('styles') || pageHasNodeOfClass('price') || pageHasNodeOfClass('style'));
+}
+
+/**
+ * Check if the user is currently on the 'cart' page
+ */
+function isCart() {
+  return pageHasNodeOfClass('cart') && hasStringInPath('cart');
+}
+
+/**
+ * Check if the user is currently at the checkout page
+ */
+function isCheckout() {
+  return hasStringInPath('checkout');
+}
+
+function findArticles() {
+  var articles = document.querySelectorAll('.inner-article');
+  if (!articles.length) {
+    articles = document.querySelectorAll('.inner-item');
+  }
+  return [].concat((0, _toConsumableArray3.default)(articles));
+}
+
+function getArticleName(articleNode) {
+  var nameNode = articleNode.querySelector('h1') || articleNode.querySelector('a.nl') || articleNode.querySelector('a');
+  return nameNode ? nameNode.innerText.toLowerCase().trim() : null;
+}
+
+function getArticleColor(articleNode) {
+  var colorNode = articleNode.querySelector('.sn') || articleNode.querySelector('.nl') || articleNode.querySelector('p .name-link');
+  return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
+}
+
+function findBestMatch(products, keywords, category) {
+  var matches = [];
+  var keys = (0, _keys2.default)(products);
+  var productsCategory = products[keys.filter(function (x) {
+    return x.toLowerCase() === category;
+  })[0]];
+  if (!productsCategory) {
+    return null;
+  }
+  for (var i = 0; i < productsCategory.length; i += 1) {
+    var name = productsCategory[i].name.toLowerCase().trim();
+    if (name) {
+      var product = {
+        matches: 0,
+        value: productsCategory[i]
+      };
+      for (var j = 0; j < keywords.length; j += 1) {
+        var keyword = keywords[j].toLowerCase().trim();
+        var regexp = new RegExp(keyword);
+        // name matches
+        if (regexp.test(name)) {
+          product.matches += 1;
+        }
+      }
+
+      matches.push(product);
+    }
+  }
+  var bestMatch = matches.filter(function (x) {
+    return x.matches > 0;
+  }).sort(function (a, b) {
+    return b.matches - a.matches;
+  })[0];
+  if (bestMatch && bestMatch.matches > 0) return bestMatch.value;
+  return null;
+}
+
+function openAtcTab(category, keywords, color) {
+  var url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
+  if (color) {
+    url = url + '&atc-color=' + color;
+  }
+  var win = window.open(url, '_blank');
+  win.focus();
+}
+
+function openAtcTabMonitor(monitorProducts, category, keywords, color) {
+  var bestMatch = findBestMatch(monitorProducts, keywords, category);
+  var atcColor = color || 'any';
+  if (bestMatch) {
+    chrome.tabs.create({ url: 'http://supremenewyork.com/shop/' + bestMatch.id + '?atc-color=' + atcColor });
+    return true;
+  }
+  return false;
+}
+
+/***/ }),
+/* 1006 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getOrCreateNotificationBar = getOrCreateNotificationBar;
+exports.notify = notify;
+function createNotificationBar() {
+  var notificationBar = document.createElement('div');
+  notificationBar.style.width = '100%';
+  notificationBar.style.textAlign = 'center';
+  notificationBar.style.backgroundColor = 'rgb(255, 58, 58)';
+  notificationBar.style.lineHeight = '60px';
+  notificationBar.style.height = '60px';
+  notificationBar.style.fontSize = '2em';
+  notificationBar.style.zIndex = '9999';
+  notificationBar.style.left = 0;
+  notificationBar.style.top = 0;
+  notificationBar.style.fontWeight = 'bold';
+  notificationBar.id = 'sup-notif-bar';
+  document.body.prepend(notificationBar);
+  return notificationBar;
+}
+
+function getOrCreateNotificationBar() {
+  if (!document.getElementById('sup-notif-bar')) {
+    createNotificationBar();
+  }
+  return document.getElementById('sup-notif-bar');
+}
+
+function notify(text) {
+  var notificationBar = getOrCreateNotificationBar();
+  notificationBar.textContent = text;
+}
 
 /***/ })
 /******/ ]);

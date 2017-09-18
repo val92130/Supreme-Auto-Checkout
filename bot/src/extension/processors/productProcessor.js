@@ -87,6 +87,10 @@ export default class ProductProcessor extends BaseProcessor {
     }
     if (atcColor) {
       const nodes = Array.from(document.querySelectorAll('[data-style-name]'));
+      if (nodes[0] && atcColor === 'any') {
+        nodes[0].click();
+        return;
+      }
       for (let i = 0; i < nodes.length; i += 1) {
         const styleName = nodes[i].attributes['data-style-name'];
         if (styleName && styleName.value.toLowerCase().trim() === atcColor.toLowerCase().trim()) {

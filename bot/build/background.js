@@ -11287,7 +11287,6 @@ var _keys = __webpack_require__(38);
 var _keys2 = _interopRequireDefault(_keys);
 
 exports.isObjectEmpty = isObjectEmpty;
-exports.openAtcTab = openAtcTab;
 exports.timeToDate = timeToDate;
 exports.isValidTime = isValidTime;
 exports.sameDay = sameDay;
@@ -11296,19 +11295,12 @@ var _moment = __webpack_require__(2);
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _helpers = __webpack_require__(459);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function isObjectEmpty(obj) {
   return (0, _keys2.default)(obj).length === 0 && obj.constructor === Object;
-}
-
-function openAtcTab(category, keywords, color) {
-  var url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
-  if (color) {
-    url = url + '&atc-color=' + color;
-  }
-  var win = window.open(url, '_blank');
-  win.focus();
 }
 
 function timeToDate(time) {
@@ -40511,7 +40503,7 @@ var getSettings = function () {
 
 var processProducts = function () {
   var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(products) {
-    var i, product, category, keywords, color, url;
+    var i, product, category, keywords, color;
     return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -40525,12 +40517,8 @@ var processProducts = function () {
               }
               keywords = product.keywords;
               color = product.color;
-              url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
 
-              if (color) {
-                url = url + '&atc-color=' + color;
-              }
-              chrome.tabs.create({ url: url });
+              (0, _helpers.openAtcTab)(category, keywords, color);
             }
 
           case 1:
@@ -40548,7 +40536,7 @@ var processProducts = function () {
 
 var processByMonitor = function () {
   var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(atcProducts) {
-    var monitorProducts, i, product, keywords, color, bestMatch;
+    var monitorProducts, i, product, keywords, color;
     return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
@@ -40567,18 +40555,26 @@ var processByMonitor = function () {
             return _context4.abrupt('return');
 
           case 5:
-            for (i = 0; i < atcProducts.length; i += 1) {
-              product = atcProducts[i];
-              keywords = product.keywords;
-              color = product.color;
-              bestMatch = (0, _helpers.findBestMatch)(monitorProducts, keywords, product.category);
-
-              if (bestMatch) {
-                chrome.tabs.create({ url: 'http://supremenewyork.com/shop/' + bestMatch.id + '?atc-color=' + color });
-              }
-            }
+            i = 0;
 
           case 6:
+            if (!(i < atcProducts.length)) {
+              _context4.next = 15;
+              break;
+            }
+
+            product = atcProducts[i];
+            keywords = product.keywords;
+            color = product.color;
+            _context4.next = 12;
+            return (0, _helpers.openAtcTabMonitor)(monitorProducts, product.category, keywords, color);
+
+          case 12:
+            i += 1;
+            _context4.next = 6;
+            break;
+
+          case 15:
           case 'end':
             return _context4.stop();
         }
@@ -42509,6 +42505,8 @@ exports.findArticles = findArticles;
 exports.getArticleName = getArticleName;
 exports.getArticleColor = getArticleColor;
 exports.findBestMatch = findBestMatch;
+exports.openAtcTab = openAtcTab;
+exports.openAtcTabMonitor = openAtcTabMonitor;
 
 var _notification = __webpack_require__(463);
 
@@ -42643,6 +42641,25 @@ function findBestMatch(products, keywords, category) {
   })[0];
   if (bestMatch && bestMatch.matches > 0) return bestMatch.value;
   return null;
+}
+
+function openAtcTab(category, keywords, color) {
+  var url = 'http://supremenewyork.com/shop/all/' + category + '?atc-kw=' + keywords.join(';');
+  if (color) {
+    url = url + '&atc-color=' + color;
+  }
+  var win = window.open(url, '_blank');
+  win.focus();
+}
+
+function openAtcTabMonitor(monitorProducts, category, keywords, color) {
+  var bestMatch = findBestMatch(monitorProducts, keywords, category);
+  var atcColor = color || 'any';
+  if (bestMatch) {
+    chrome.tabs.create({ url: 'http://supremenewyork.com/shop/' + bestMatch.id + '?atc-color=' + atcColor });
+    return true;
+  }
+  return false;
 }
 
 /***/ }),
@@ -83717,6 +83734,16 @@ var Options = function Options(props) {
       'div',
       null,
       _react2.default.createElement(_reduxForm.Field, {
+        name: 'atcUseMonitor',
+        component: _reduxFormMaterialUi.Toggle,
+        label: 'Use product monitor for AutoCop and Buy Now button (Japan recommended)',
+        style: _Styles2.default.fields.text
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_reduxForm.Field, {
         name: 'atcEnabled',
         component: _reduxFormMaterialUi.Toggle,
         label: 'Enable AutoCop (Autocheckout required)',
@@ -83731,12 +83758,6 @@ var Options = function Options(props) {
     atcEnabled && _react2.default.createElement(
       'div',
       null,
-      _react2.default.createElement(_reduxForm.Field, {
-        name: 'atcUseMonitor',
-        component: _reduxFormMaterialUi.Toggle,
-        label: 'Use product monitor to find products (Japan recommended)',
-        style: _Styles2.default.fields.text
-      }),
       _react2.default.createElement(_reduxForm.Field, {
         name: 'atcStartTime',
         component: _reduxFormMaterialUi.TextField,
@@ -84138,6 +84159,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = __webpack_require__(101);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(102);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _getPrototypeOf = __webpack_require__(5);
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -84202,9 +84231,19 @@ var _AtcCreateForm = __webpack_require__(897);
 
 var _AtcCreateForm2 = _interopRequireDefault(_AtcCreateForm);
 
-var _Helpers = __webpack_require__(103);
+var _Supreme = __webpack_require__(464);
 
-var Helpers = _interopRequireWildcard(_Helpers);
+var _StorageManager = __webpack_require__(145);
+
+var StorageManager = _interopRequireWildcard(_StorageManager);
+
+var _helpers = __webpack_require__(459);
+
+var ExtensionHelpers = _interopRequireWildcard(_helpers);
+
+var _version = __webpack_require__(458);
+
+var _version2 = _interopRequireDefault(_version);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -84263,6 +84302,60 @@ var Atc = function (_Component) {
     value: function toggleAtc(name, enabled) {
       this.props.setAtcProductEnabled(name, enabled);
     }
+  }, {
+    key: 'runNow',
+    value: function () {
+      var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(category, keywords, color) {
+        var profile, useMonitor, monitorProducts;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return StorageManager.getCurrentProfileSettings(_version2.default);
+
+              case 2:
+                profile = _context.sent;
+                useMonitor = profile[_Supreme.SHOP_NAME].Options.atcUseMonitor;
+
+                if (useMonitor) {
+                  _context.next = 6;
+                  break;
+                }
+
+                return _context.abrupt('return', ExtensionHelpers.openAtcTab(category, keywords, color));
+
+              case 6:
+                _context.next = 8;
+                return StorageManager.getItem('products');
+
+              case 8:
+                monitorProducts = _context.sent;
+
+                if (monitorProducts) {
+                  _context.next = 11;
+                  break;
+                }
+
+                return _context.abrupt('return', false);
+
+              case 11:
+                return _context.abrupt('return', ExtensionHelpers.openAtcTabMonitor(monitorProducts, category, keywords, color));
+
+              case 12:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function runNow(_x2, _x3, _x4) {
+        return _ref.apply(this, arguments);
+      }
+
+      return runNow;
+    }()
   }, {
     key: 'render',
     value: function render() {
@@ -84373,9 +84466,24 @@ var Atc = function (_Component) {
                     null,
                     _react2.default.createElement(
                       _IconButton2.default,
-                      { onTouchTap: function onTouchTap() {
-                          return Helpers.openAtcTab(x.category, x.keywords, x.color);
-                        } },
+                      { onTouchTap: (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+                          return _regenerator2.default.wrap(function _callee2$(_context2) {
+                            while (1) {
+                              switch (_context2.prev = _context2.next) {
+                                case 0:
+                                  _context2.next = 2;
+                                  return _this2.runNow(x.category, x.keywords, x.color);
+
+                                case 2:
+                                  return _context2.abrupt('return', _context2.sent);
+
+                                case 3:
+                                case 'end':
+                                  return _context2.stop();
+                              }
+                            }
+                          }, _callee2, _this2);
+                        })) },
                       _react2.default.createElement(_launch2.default, null)
                     )
                   ),

@@ -2,7 +2,7 @@ import { getCurrentProfileSettings, getAtcProducts, getItem } from '../../app/ut
 import version from '../../app/version';
 import * as menus from '../../app/constants/Menus';
 import * as Helpers from '../../app/utils/Helpers';
-import { findBestMatch } from '../helpers';
+import { openAtcTabMonitor, openAtcTab } from '../helpers';
 import { SHOP_NAME as SupremeName } from '../../app/components/shops/Supreme';
 import ProductMonitorWorker from './productMonitorWorker';
 
@@ -40,11 +40,7 @@ async function processProducts(products) {
     }
     const keywords = product.keywords;
     const color = product.color;
-    let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
-    if (color) {
-      url = `${url}&atc-color=${color}`;
-    }
-    chrome.tabs.create({ url });
+    openAtcTab(category, keywords, color);
   }
 }
 
@@ -57,10 +53,7 @@ async function processByMonitor(atcProducts) {
     const product = atcProducts[i];
     const keywords = product.keywords;
     const color = product.color;
-    const bestMatch = findBestMatch(monitorProducts, keywords, product.category);
-    if (bestMatch) {
-      chrome.tabs.create({ url: `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${color}` });
-    }
+    await openAtcTabMonitor(monitorProducts, product.category, keywords, color);
   }
 }
 

@@ -18,7 +18,10 @@ import Toggle from 'material-ui/Toggle';
 import LaunchIcon from 'material-ui/svg-icons/action/launch';
 import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct } from '../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
-import * as Helpers from '../../utils/Helpers';
+import { SHOP_NAME } from '../../components/shops/Supreme';
+import * as StorageManager from '../../utils/StorageManager';
+import * as ExtensionHelpers from '../../../extension/helpers';
+import version from '../../version';
 
 class Atc extends Component {
   constructor(props) {
@@ -58,6 +61,19 @@ class Atc extends Component {
 
   toggleAtc(name, enabled) {
     this.props.setAtcProductEnabled(name, enabled);
+  }
+
+  async runNow(category, keywords, color) {
+    const profile = await StorageManager.getCurrentProfileSettings(version);
+    const useMonitor = profile[SHOP_NAME].Options.atcUseMonitor;
+    if (!useMonitor) {
+      return ExtensionHelpers.openAtcTab(category, keywords, color);
+    }
+    const monitorProducts = await StorageManager.getItem('products');
+    if (!monitorProducts) {
+      return false;
+    }
+    return ExtensionHelpers.openAtcTabMonitor(monitorProducts, category, keywords, color);
   }
 
   render() {
@@ -102,7 +118,7 @@ class Atc extends Component {
                         <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={() => Helpers.openAtcTab(x.category, x.keywords, x.color)}>
+                        <IconButton onTouchTap={async () => await this.runNow(x.category, x.keywords, x.color)}>
                           <LaunchIcon />
                         </IconButton>
                       </TableRowColumn>

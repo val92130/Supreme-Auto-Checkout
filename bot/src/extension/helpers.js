@@ -125,3 +125,23 @@ export function findBestMatch(products, keywords, category) {
   if (bestMatch && bestMatch.matches > 0) return bestMatch.value;
   return null;
 }
+
+
+export function openAtcTab(category, keywords, color) {
+  let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
+  if (color) {
+    url = `${url}&atc-color=${color}`;
+  }
+  const win = window.open(url, '_blank');
+  win.focus();
+}
+
+export function openAtcTabMonitor(monitorProducts, category, keywords, color) {
+  const bestMatch = findBestMatch(monitorProducts, keywords, category);
+  const atcColor = color || 'any';
+  if (bestMatch) {
+    chrome.tabs.create({ url: `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${atcColor}` });
+    return true;
+  }
+  return false;
+}

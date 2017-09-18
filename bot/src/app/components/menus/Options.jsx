@@ -77,7 +77,14 @@ const Options = props => {
           style={Styles.fields.text}
         />
       </div>
-
+      <div>
+      <Field
+        name="atcUseMonitor"
+        component={Toggle}
+        label="Use product monitor for AutoCop and Buy Now button (Japan recommended)"
+        style={Styles.fields.text}
+      />
+      </div>
       <div>
         <Field
           name="atcEnabled"
@@ -95,12 +102,6 @@ const Options = props => {
       {
         atcEnabled &&
           <div>
-            <Field
-              name="atcUseMonitor"
-              component={Toggle}
-              label="Use product monitor to find products (Japan recommended)"
-              style={Styles.fields.text}
-            />
             <Field
               name="atcStartTime"
               component={TextField}
