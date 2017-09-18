@@ -134,7 +134,7 @@ export default class ProductProcessor extends BaseProcessor {
         let targetOption = sizesOptions.find(x => ProductProcessor.sizeMatch(categorySize, x.text, productCategory));
 
         if (!targetOption) {
-          if (this.preferences.strictSize) {
+          if (this.preferences.strictSize && categorySize !== 'Any') {
             notify('The desired size is not available');
             return;
           }
