@@ -39,7 +39,7 @@ export default class SupremeManager {
     }
     const hideSoldOut = this.preferences.hideSoldOut;
     if (hideSoldOut) {
-      SupremeManager.processSoldOutProducts();
+      SupremeManager.hideSoldOutProducts();
     }
 
     const autoCheckout = this.preferences.autoCheckout;

@@ -76,6 +76,29 @@ export default class ProductProcessor extends BaseProcessor {
    * based on the user's preferences and then it will add the item to cart
    */
   processProduct() {
+    const atcStyleId = Helpers.getQueryStringValue('atc-style-id');
+    const atcColor = Helpers.getQueryStringValue('atc-color');
+    if (atcStyleId) {
+      const btn = document.querySelector(`[data-style-id="${atcStyleId}"]`);
+      if (btn) {
+        btn.click();
+        return;
+      }
+    }
+    if (atcColor) {
+      const nodes = Array.from(document.querySelectorAll('[data-style-name]'));
+      if (nodes[0] && atcColor === 'any') {
+        nodes[0].click();
+        return;
+      }
+      for (let i = 0; i < nodes.length; i += 1) {
+        const styleName = nodes[i].attributes['data-style-name'];
+        if (styleName && styleName.value.toLowerCase().trim() === atcColor.toLowerCase().trim()) {
+          nodes[i].click();
+          return;
+        }
+      }
+    }
     if (!ProductProcessor.isSoldOut()) {
       const maxPrice = this.preferences.maxPrice;
       const minPrice = this.preferences.minPrice;
@@ -111,7 +134,7 @@ export default class ProductProcessor extends BaseProcessor {
         let targetOption = sizesOptions.find(x => ProductProcessor.sizeMatch(categorySize, x.text, productCategory));
 
         if (!targetOption) {
-          if (this.preferences.strictSize) {
+          if (this.preferences.strictSize && categorySize !== 'Any') {
             notify('The desired size is not available');
             return;
           }

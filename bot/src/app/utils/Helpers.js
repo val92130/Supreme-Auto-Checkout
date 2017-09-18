@@ -1,16 +1,8 @@
 import moment from 'moment';
+import { findBestMatch } from '../../extension/helpers';
 
 export function isObjectEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
-}
-
-export function openAtcTab(category, keywords, color) {
-  let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
-  if (color) {
-    url = `${url}&atc-color=${color}`;
-  }
-  const win = window.open(url, '_blank');
-  win.focus();
 }
 
 export function timeToDate(time) {

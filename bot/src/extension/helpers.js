@@ -94,3 +94,54 @@ export function getArticleColor(articleNode) {
   const colorNode = articleNode.querySelector('.sn') || articleNode.querySelector('.nl') || articleNode.querySelector('p .name-link');
   return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
 }
+
+export function findBestMatch(products, keywords, category) {
+  const matches = [];
+  const keys = Object.keys(products);
+  const productsCategory = products[keys.filter(x => x.toLowerCase() === category)[0]];
+  if (!productsCategory) {
+    return null;
+  }
+  for (let i = 0; i < productsCategory.length; i += 1) {
+    const name = productsCategory[i].name.toLowerCase().trim() ;
+    if (name) {
+      const product = {
+        matches: 0,
+        value: productsCategory[i],
+      };
+      for (let j = 0; j < keywords.length; j += 1) {
+        const keyword = keywords[j].toLowerCase().trim();
+        const regexp = new RegExp(keyword);
+        // name matches
+        if (regexp.test(name)) {
+          product.matches += 1;
+        }
+      }
+
+      matches.push(product);
+    }
+  }
+  const bestMatch = matches.filter(x => x.matches > 0).sort((a, b) => b.matches - a.matches)[0];
+  if (bestMatch && bestMatch.matches > 0) return bestMatch.value;
+  return null;
+}
+
+
+export function openAtcTab(category, keywords, color) {
+  let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
+  if (color) {
+    url = `${url}&atc-color=${color}`;
+  }
+  const win = window.open(url, '_blank');
+  win.focus();
+}
+
+export function openAtcTabMonitor(monitorProducts, category, keywords, color) {
+  const bestMatch = findBestMatch(monitorProducts, keywords, category);
+  const atcColor = color || 'any';
+  if (bestMatch) {
+    chrome.tabs.create({ url: `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${atcColor}` });
+    return true;
+  }
+  return false;
+}
