@@ -99185,7 +99185,7 @@ var Products = function (_Component) {
     }
   }, {
     key: 'getProductCard',
-    value: function getProductCard(product, actions) {
+    value: function getProductCard(product, onTouchTap, soldOut) {
       var style = {
         width: 200,
         minWidth: 250,
@@ -99202,7 +99202,7 @@ var Products = function (_Component) {
 
       return _react2.default.createElement(
         _Card.Card,
-        { style: style },
+        { style: style, onTouchTap: onTouchTap },
         _react2.default.createElement(
           'div',
           { style: { textAlign: 'center' } },
@@ -99225,14 +99225,14 @@ var Products = function (_Component) {
               'Price: ',
               product.price
             )
+          ),
+          soldOut && _react2.default.createElement(
+            'p',
+            null,
+            'SOLD OUT'
           )
         ),
-        _react2.default.createElement(_Divider2.default, null),
-        _react2.default.createElement(
-          _Card.CardActions,
-          null,
-          actions
-        )
+        _react2.default.createElement(_Divider2.default, null)
       );
     }
   }, {
@@ -99259,15 +99259,16 @@ var Products = function (_Component) {
         return x.name.toLowerCase().indexOf(_this4.state.filter.toLowerCase()) !== -1;
       });
       var cards = allProducts.map(function (x) {
-        return _this4.getProductCard(x, _react2.default.createElement(_FlatButton2.default, { label: 'Buy now', onTouchTap: function onTouchTap() {
-            return _this4.handleClickBuyNow(x);
-          } }));
+        return _this4.getProductCard(x, function () {
+          return _this4.handleClickBuyNow(x);
+        });
       });
       var style = {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        cursor: 'pointer'
       };
       if (!cards.length && !this.state.filter) {
         return _react2.default.createElement(
@@ -99303,13 +99304,9 @@ var Products = function (_Component) {
                   var soldOut = !x.sizes.some(function (s) {
                     return s.stock_level >= 1;
                   });
-                  var action = _react2.default.createElement(_FlatButton2.default, { label: 'Select', onTouchTap: function onTouchTap() {
-                      return _this4.handleBuyItem(product.id, x.id);
-                    } });
-                  if (soldOut) {
-                    action = _react2.default.createElement(_FlatButton2.default, { label: 'SOLD OUT' });
-                  }
-                  return _this4.getProductCard(x, action, soldOut);
+                  return _this4.getProductCard(x, soldOut ? null : function () {
+                    return _this4.handleBuyItem(product.id, x.id);
+                  }, soldOut);
                 });
                 return {
                   v: _react2.default.createElement(

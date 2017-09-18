@@ -61,7 +61,7 @@ class Products extends Component {
     clearInterval(this.state.interval);
   }
 
-  getProductCard(product, actions) {
+  getProductCard(product, onTouchTap, soldOut) {
     const style = {
       width: 200,
       minWidth: 250,
@@ -77,7 +77,7 @@ class Products extends Component {
     }
 
     return (
-      <Card style={style}>
+      <Card style={style} onTouchTap={onTouchTap}>
         <div style={{ textAlign: 'center' }}>
           <h4>
             {product.name}
@@ -88,11 +88,9 @@ class Products extends Component {
           <CardText>
             {product.price && <p>Price: {product.price}</p>}
           </CardText>
+          { soldOut && <p>SOLD OUT</p> }
         </div>
         <Divider />
-        <CardActions>
-          { actions }
-        </CardActions>
       </Card>
     );
   }
@@ -114,12 +112,13 @@ class Products extends Component {
       }
     }
     allProducts = allProducts.filter(x => x.name.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1);
-    const cards = allProducts.map(x => this.getProductCard(x, <FlatButton label="Buy now" onTouchTap={() => this.handleClickBuyNow(x)} />));
+    const cards = allProducts.map(x => this.getProductCard(x, () => this.handleClickBuyNow(x)));
     const style = {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       flexWrap: 'wrap',
+      cursor: 'pointer',
     };
     if (!cards.length && !this.state.filter) {
       return (
@@ -144,11 +143,7 @@ class Products extends Component {
                 const product = this.state.selectedProduct;
                 const productCards = product.styles.map(x => {
                   const soldOut = !x.sizes.some(s => s.stock_level >= 1);
-                  let action = <FlatButton label="Select" onTouchTap={() => this.handleBuyItem(product.id, x.id)} />;
-                  if (soldOut) {
-                    action = <FlatButton label="SOLD OUT" />;
-                  }
-                  return this.getProductCard(x, action, soldOut);
+                  return this.getProductCard(x, soldOut ? null : () => this.handleBuyItem(product.id, x.id), soldOut);
                 })
                 return (
                   <div style={style}>
