@@ -73861,6 +73861,10 @@ var _Menus = __webpack_require__(86);
 
 var Menus = _interopRequireWildcard(_Menus);
 
+var _version = __webpack_require__(1004);
+
+var _version2 = _interopRequireDefault(_version);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -73914,7 +73918,13 @@ var AppDrawer = function (_Component) {
         _react2.default.createElement(
           'div',
           { style: _Styles2.default.logo },
-          'Supreme Auto Checkout'
+          'Supreme Auto Checkout',
+          _react2.default.createElement(
+            'span',
+            null,
+            ' ',
+            _version2.default
+          )
         ),
         _react2.default.createElement(
           SelectableList,

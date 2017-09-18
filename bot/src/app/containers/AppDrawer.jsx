@@ -12,6 +12,7 @@ import IncompleteIcon from 'material-ui/svg-icons/alert/error';
 import Styles from '../constants/Styles';
 import { SHOP_NAME as SupremeShopName } from '../components/shops/Supreme';
 import * as Menus from '../constants/Menus';
+import version from '../version';
 
 const SelectableList = makeSelectable(List);
 
@@ -39,6 +40,7 @@ class AppDrawer extends Component {
       <Drawer open={open}>
         <div style={Styles.logo}>
           Supreme Auto Checkout
+          <span> { version }</span>
         </div>
         <SelectableList value={currentPage}>
           <Subheader>Shops</Subheader>
