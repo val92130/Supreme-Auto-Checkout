@@ -156,11 +156,11 @@ export default class Products extends Component {
           }
         </Dialog>
         <div style={{ textAlign: 'center' }}>
+          <p>Click on a product to check availability</p>
           <TextField
             hintText="filter..."
             floatingLabelText="Filter"
             onChange={(e, val) => this.onChange(val)}
-            style={{ width: 512 }}
           />
         </div>
         <div style={style}>
