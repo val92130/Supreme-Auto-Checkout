@@ -1,13 +1,18 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router';
 import App from './containers/App';
-import Supreme from './components/shops/Supreme';
+import Configuration from './components/shops/supreme/Configuration';
+import Atc from './components/shops/supreme/pages/Atc';
+import Products from './components/shops/supreme/pages/Products';
 import Profile from './components/Profile';
 
 export default () => {
   return (
     <Route component={App}>
-      <Route path="supreme/" component={Supreme} />
+      <Route path="supreme/" component={Configuration} />
+      <Route path="supreme/configuration" component={Configuration} />
+      <Route path="supreme/autocop" component={Atc} />
+      <Route path="supreme/products" component={Products} />
       <Route path="profiles/" component={Profile} />
       <Redirect from="/" to="supreme/" />
     </Route>

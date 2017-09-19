@@ -6,14 +6,15 @@ import { Card, CardActions, CardMedia, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
-import { fetchProductInfo } from '../../utils/SupremeUtils';
-import * as StorageManager from '../../utils/StorageManager';
+import Layout from '../../../../containers/Layout';
+import { fetchProductInfo } from '../../../../utils/SupremeUtils';
+import * as StorageManager from '../../../../utils/StorageManager';
 
 async function getProducts() {
   return await StorageManager.getItem('products') || {};
 }
 
-class Products extends Component {
+export default class Products extends Component {
   constructor(props) {
     super(props);
     const interval = setInterval(async () => {
@@ -39,7 +40,7 @@ class Products extends Component {
 
   handleClickBuyNow(product) {
     fetchProductInfo(product.id)
-    .then(prod => {
+    .then((prod) => {
       this.setState({
         buyModalOpen: true,
         selectedProduct: prod,
@@ -74,7 +75,7 @@ class Products extends Component {
       height: 81,
       maxWidth: 81,
       minWidth: 81,
-    }
+    };
 
     return (
       <Card style={style} onTouchTap={onTouchTap}>
@@ -122,14 +123,16 @@ class Products extends Component {
     };
     if (!cards.length && !this.state.filter) {
       return (
-        <div style={{ textAlign: 'center' }}>
-          <p>Loading...</p>
-          <CircularProgress />
-        </div>
-      )
+        <Layout>
+          <div style={{ textAlign: 'center' }}>
+            <p>Loading...</p>
+            <CircularProgress />
+          </div>
+        </Layout>
+      );
     }
     return (
-      <div>
+      <Layout>
         <Dialog
           title="Buy now"
           actions={actions}
@@ -144,7 +147,7 @@ class Products extends Component {
                 const productCards = product.styles.map(x => {
                   const soldOut = !x.sizes.some(s => s.stock_level >= 1);
                   return this.getProductCard(x, soldOut ? null : () => this.handleBuyItem(product.id, x.id), soldOut);
-                })
+                });
                 return (
                   <div style={style}>
                     {productCards}
@@ -156,28 +159,17 @@ class Products extends Component {
           }
         </Dialog>
         <div style={{ textAlign: 'center' }}>
+          <p>Click on a product to check availability</p>
           <TextField
             hintText="filter..."
             floatingLabelText="Filter"
             onChange={(e, val) => this.onChange(val)}
-            style={{ width: 512 }}
           />
         </div>
         <div style={style}>
           {cards}
         </div>
-      </div>
+      </Layout>
     );
   }
 }
-Products.propTypes = {
-  shop: PropTypes.string.isRequired,
-};
-
-function mapStateToProps(state, ownProps) {
-  return {
-
-  };
-}
-
-export default connect(mapStateToProps)(Products);

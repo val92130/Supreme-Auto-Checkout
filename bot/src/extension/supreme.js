@@ -67,7 +67,7 @@ export default class SupremeManager {
    */
   static processLinks() {
     const links = document.links;
-
+    document.body.setAttribute('data-no-turbolink', true);
     for (const link of links) {
       link.addEventListener('click', function (e) {
         window.location.href = this.href;
