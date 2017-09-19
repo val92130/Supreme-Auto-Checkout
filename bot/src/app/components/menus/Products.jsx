@@ -39,7 +39,7 @@ class Products extends Component {
 
   handleClickBuyNow(product) {
     fetchProductInfo(product.id)
-    .then(prod => {
+    .then((prod) => {
       this.setState({
         buyModalOpen: true,
         selectedProduct: prod,
@@ -74,7 +74,7 @@ class Products extends Component {
       height: 81,
       maxWidth: 81,
       minWidth: 81,
-    }
+    };
 
     return (
       <Card style={style} onTouchTap={onTouchTap}>
@@ -126,7 +126,7 @@ class Products extends Component {
           <p>Loading...</p>
           <CircularProgress />
         </div>
-      )
+      );
     }
     return (
       <div>
@@ -144,7 +144,7 @@ class Products extends Component {
                 const productCards = product.styles.map(x => {
                   const soldOut = !x.sizes.some(s => s.stock_level >= 1);
                   return this.getProductCard(x, soldOut ? null : () => this.handleBuyItem(product.id, x.id), soldOut);
-                })
+                });
                 return (
                   <div style={style}>
                     {productCards}
@@ -173,11 +173,5 @@ class Products extends Component {
 Products.propTypes = {
   shop: PropTypes.string.isRequired,
 };
-
-function mapStateToProps(state, ownProps) {
-  return {
-
-  };
-}
 
 export default connect(mapStateToProps)(Products);

@@ -21,10 +21,12 @@ Supreme Auto Checkout provides many features such as:
   - **Option to hide sold out products.**
   - **Easy configuration.**
   - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
+  - **Product Monitor**
 
 # Coming soon
 Features that will be added in the future:
-  - **Product Monitor** - Be notified when new products are added to the shop.
+  - **Proxies support**
+  - **Drop list**
 
 # Installation
 
@@ -35,7 +37,7 @@ Or you can also download the latest release [here](https://github.com/val92130/S
 Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
-  >- Drag the **bot/build** folder containing the extension into Google Chrome.
+  >- Drag the extracted folder containing the extension into Google Chrome.
 
 
 # Updating
@@ -108,7 +110,7 @@ This temporary works because Supreme doesn't seems to validate Google's Re-captc
 
 This option is **NOT** recommended, use with caution.
 
- # Development
+# Development
 
 Requirements:
 - node.js 7+
@@ -119,10 +121,17 @@ First, you'll need to install the npm dependencies:
   $ yarn
  ```
 
- To build and watch the project run the following command:
+ To build and watch for changes run the following command:
   ```bash
-   $ yarn build
+   $ yarn watch
   ```
+
+  To build the project, run:
+  ```bash
+  $ yarn build
+  ```
+
+ Those commands will create a `build` folder containing the packaged application
 
 ## Donation
 This project will always be supported for free but any donation would be greatly appreciated!
