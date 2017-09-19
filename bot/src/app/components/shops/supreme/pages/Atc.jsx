@@ -16,12 +16,12 @@ import EditIcon from 'material-ui/svg-icons/image/edit';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
 import Toggle from 'material-ui/Toggle';
 import LaunchIcon from 'material-ui/svg-icons/action/launch';
-import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct } from '../../actions/atc';
+import Layout from '../../../../containers/Layout';
+import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct } from '../../../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
-import { SHOP_NAME } from '../../components/shops/Supreme';
-import * as StorageManager from '../../utils/StorageManager';
-import * as ExtensionHelpers from '../../../extension/helpers';
-import version from '../../version';
+import * as StorageManager from '../../../../utils/StorageManager';
+import * as ExtensionHelpers from '../../../../../extension/helpers';
+import version from '../../../../version';
 
 class Atc extends Component {
   constructor(props) {
@@ -65,7 +65,7 @@ class Atc extends Component {
 
   async runNow(category, keywords, color) {
     const profile = await StorageManager.getCurrentProfileSettings(version);
-    const useMonitor = profile[SHOP_NAME].Options.atcUseMonitor;
+    const useMonitor = profile['Supreme'].Options.atcUseMonitor;
     if (!useMonitor) {
       return ExtensionHelpers.openAtcTab(category, keywords, color);
     }
@@ -81,7 +81,7 @@ class Atc extends Component {
     const isEditing = this.state.editingAtc !== null;
     const title = isEditing ? `Edit ${this.state.editingAtc.name}` : 'Add a new product';
     return (
-      <div>
+      <Layout>
         <Dialog
           open={this.state.createModalOpen}
           title={title}
@@ -139,7 +139,7 @@ class Atc extends Component {
             }
           </TableBody>
         </Table>
-      </div>
+      </Layout>
     );
   }
 }

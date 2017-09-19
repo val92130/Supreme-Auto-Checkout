@@ -6,8 +6,9 @@ import { Card, CardActions, CardMedia, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
-import { fetchProductInfo } from '../../utils/SupremeUtils';
-import * as StorageManager from '../../utils/StorageManager';
+import Layout from '../../../../containers/Layout';
+import { fetchProductInfo } from '../../../../utils/SupremeUtils';
+import * as StorageManager from '../../../../utils/StorageManager';
 
 async function getProducts() {
   return await StorageManager.getItem('products') || {};
@@ -122,14 +123,16 @@ export default class Products extends Component {
     };
     if (!cards.length && !this.state.filter) {
       return (
-        <div style={{ textAlign: 'center' }}>
-          <p>Loading...</p>
-          <CircularProgress />
-        </div>
+        <Layout>
+          <div style={{ textAlign: 'center' }}>
+            <p>Loading...</p>
+            <CircularProgress />
+          </div>
+        </Layout>
       );
     }
     return (
-      <div>
+      <Layout>
         <Dialog
           title="Buy now"
           actions={actions}
@@ -166,10 +169,7 @@ export default class Products extends Component {
         <div style={style}>
           {cards}
         </div>
-      </div>
+      </Layout>
     );
   }
 }
-Products.propTypes = {
-  shop: PropTypes.string.isRequired,
-};

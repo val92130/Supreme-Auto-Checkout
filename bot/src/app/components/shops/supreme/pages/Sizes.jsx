@@ -6,10 +6,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {
   SelectField,
 } from 'redux-form-material-ui';
-import Styles from '../../constants/Styles';
-import * as Utils from '../../constants/Utils';
-import * as Validators from '../../constants/FormValidators';
-import * as menus from '../../constants/Menus';
+import Styles from '../../../../constants/Styles';
+import * as Utils from '../../../../constants/Utils';
+import * as Validators from '../../../../constants/FormValidators';
+import * as menus from '../../../../constants/Menus';
 
 const Sizes = props => {
   const { handleSubmit, pristine, submitting } = props;

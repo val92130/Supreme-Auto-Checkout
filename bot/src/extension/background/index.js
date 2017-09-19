@@ -3,7 +3,6 @@ import version from '../../app/version';
 import * as menus from '../../app/constants/Menus';
 import * as Helpers from '../../app/utils/Helpers';
 import { openAtcTabMonitor, openAtcTab } from '../helpers';
-import { SHOP_NAME as SupremeName } from '../../app/components/shops/Supreme';
 import ProductMonitorWorker from './productMonitorWorker';
 
 
@@ -23,7 +22,7 @@ async function getEnabledAtcProducts() {
 async function getSettings() {
   try {
     const profile = await getCurrentProfileSettings(version);
-    return profile[SupremeName];
+    return profile['Supreme'];
   } catch(e) {
     console.info('Error while getting settings');
     console.info(e);

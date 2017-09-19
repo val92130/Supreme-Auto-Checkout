@@ -23,7 +23,7 @@ class Layout extends Component {
     );
     return (
       <div style={Styles.container}>
-        <AppBar title={tabContainer} style={appBarStyles} onLeftIconButtonTouchTap={() => this.toggleMenu()} />
+        <AppBar title={tabs ? tabContainer : title} style={appBarStyles} onLeftIconButtonTouchTap={() => this.toggleMenu()} />
         <div style={{ width: '100%' }}>
           <div style={Object.assign({}, Styles.content, contentStyle)}>
             <Paper style={Styles.paper}>
@@ -38,7 +38,7 @@ class Layout extends Component {
 
 Layout.propTypes = {
   children: PropTypes.element,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   contentStyle: PropTypes.object,
   tabs: PropTypes.arrayOf(PropTypes.node),
   currentTab: PropTypes.any,
@@ -59,4 +59,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);
-

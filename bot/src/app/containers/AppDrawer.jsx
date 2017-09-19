@@ -6,11 +6,13 @@ import Drawer from 'material-ui/Drawer';
 import Subheader from 'material-ui/Subheader';
 import CodeIcon from 'material-ui/svg-icons/action/code';
 import ShopIcon from 'material-ui/svg-icons/action/shop';
+import SettingsIcon from 'material-ui/svg-icons/action/add-shopping-cart';
+import CartIcon from 'material-ui/svg-icons/action/settings';
+import ListIcon from 'material-ui/svg-icons/action/view-list';
 import AccountIcon from 'material-ui/svg-icons/action/account-circle';
 import PaymentIcon from 'material-ui/svg-icons/action/payment';
 import IncompleteIcon from 'material-ui/svg-icons/alert/error';
 import Styles from '../constants/Styles';
-import { SHOP_NAME as SupremeShopName } from '../components/shops/Supreme';
 import * as Menus from '../constants/Menus';
 import version from '../version';
 
@@ -21,34 +23,77 @@ function openUrlInNewTab(url) {
   win.focus();
 }
 
-function getIconForShop(settings, shopName) {
+function isIncomplete(settings, shopName) {
   const menus = Object.keys(Menus).map(x => Menus[x]).filter(x => x !== 'AutoCop' && x !== 'Products');
-  const isIncomplete = !settings[shopName] || menus.some(x => settings[shopName][x] === undefined);
-  if (isIncomplete) {
+  return !settings[shopName] || menus.some(x => settings[shopName][x] === undefined);
+}
+
+function getIconForShop(settings, shopName) {
+  if (isIncomplete(settings, shopName)) {
     return <IncompleteIcon />;
   }
   return <ShopIcon />;
 }
 
 class AppDrawer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      supremeMenuOpen: true,
+    };
+  }
+
+  toggleSupremeMenu() {
+    this.setState({
+      supremeMenuOpen: !this.state.supremeMenuOpen,
+    });
+  }
 
   render() {
     const { location, currentProfile, settings, open } = this.props;
     const paths = location.pathname.split('/').filter(x => !!x);
     const currentPage = paths[0];
+    const subPage = paths[1];
+    const page = subPage ? `${currentPage}/${subPage}` : currentPage;
     return (
       <Drawer open={open}>
         <div style={Styles.logo}>
           Supreme Auto Checkout
           <span> { version }</span>
         </div>
-        <SelectableList value={currentPage}>
+        <SelectableList value={page}>
           <Subheader>Shops</Subheader>
           <ListItem
             value="supreme"
             primaryText="Supreme"
-            containerElement={<Link to={'/supreme/'} />}
-            leftIcon={getIconForShop(settings, SupremeShopName)}
+            containerElement={<Link to={'/supreme/configuration'} />}
+            leftIcon={getIconForShop(settings, 'Supreme')}
+            open={this.state.supremeMenuOpen}
+            onTouchTap={() => this.toggleSupremeMenu()}
+            onNestedListToggle={() => this.toggleSupremeMenu()}
+            nestedItems={[
+              <ListItem
+                key={1}
+                containerElement={<Link to={'/supreme/configuration'} />}
+                value="supreme/configuration"
+                primaryText="Configuration"
+                leftIcon={isIncomplete(settings, 'Supreme') ? <IncompleteIcon /> : <SettingsIcon />}
+              />,
+              <ListItem
+                key={2}
+                value="supreme/autocop"
+                containerElement={<Link to={'/supreme/autocop'} />}
+                primaryText="AutoCop"
+                leftIcon={<CartIcon />}
+              />,
+              <ListItem
+                key={3}
+                value="supreme/products"
+                containerElement={<Link to={'/supreme/products'} />}
+                primaryText="Product listing"
+                leftIcon={<ListIcon />}
+              />,
+            ]}
           />
           <Subheader>Settings</Subheader>
           <ListItem
