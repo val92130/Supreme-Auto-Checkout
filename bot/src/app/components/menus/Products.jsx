@@ -13,7 +13,7 @@ async function getProducts() {
   return await StorageManager.getItem('products') || {};
 }
 
-class Products extends Component {
+export default class Products extends Component {
   constructor(props) {
     super(props);
     const interval = setInterval(async () => {
@@ -173,5 +173,3 @@ class Products extends Component {
 Products.propTypes = {
   shop: PropTypes.string.isRequired,
 };
-
-export default connect(mapStateToProps)(Products);
