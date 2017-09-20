@@ -64,16 +64,24 @@ class Atc extends Component {
   }
 
   async runNow(category, keywords, color) {
+    let atcCategory = category;
     const profile = await StorageManager.getCurrentProfileSettings(version);
     const useMonitor = profile['Supreme'].Options.atcUseMonitor;
     if (!useMonitor) {
-      return ExtensionHelpers.openAtcTab(category, keywords, color);
+      if (atcCategory === 'tops-sweaters') {
+        atcCategory = 'tops_sweaters';
+      }
+      return ExtensionHelpers.openAtcTab(atcCategory, keywords, color);
     }
     const monitorProducts = await StorageManager.getItem('products');
     if (!monitorProducts) {
       return false;
     }
-    return ExtensionHelpers.openAtcTabMonitor(monitorProducts, category, keywords, color);
+    if (atcCategory === 'tops-sweaters') {
+      atcCategory = 'Tops/Sweaters';
+    }
+    console.log(atcCategory);
+    return ExtensionHelpers.openAtcTabMonitor(monitorProducts, atcCategory, keywords, color);
   }
 
   render() {
@@ -96,7 +104,6 @@ class Atc extends Component {
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Keywords</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
               <TableHeaderColumn>Run now</TableHeaderColumn>
               <TableHeaderColumn>Edit</TableHeaderColumn>
@@ -113,7 +120,6 @@ class Atc extends Component {
                   return (
                     <TableRow key={x.name}>
                       <TableRowColumn>{x.name}</TableRowColumn>
-                      <TableRowColumn>{x.keywords.join(', ')}</TableRowColumn>
                       <TableRowColumn>
                         <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
                       </TableRowColumn>
