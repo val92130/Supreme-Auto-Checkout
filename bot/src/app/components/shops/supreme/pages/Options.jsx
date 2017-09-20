@@ -50,7 +50,6 @@ const Options = props => {
           style={Styles.fields.text}
         />
       </div>
-
       <div>
         <Field
           name="strictSize"

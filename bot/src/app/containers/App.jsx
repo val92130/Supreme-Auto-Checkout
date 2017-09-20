@@ -10,7 +10,6 @@ import * as Utils from '../constants/Utils';
 class App extends Component {
   componentDidMount() {
     window.onresize = () => this.handleResize();
-    this.handleResize();
   }
 
   handleResize() {

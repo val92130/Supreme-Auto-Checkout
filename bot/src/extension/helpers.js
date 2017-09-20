@@ -98,7 +98,7 @@ export function getArticleColor(articleNode) {
 export function findBestMatch(products, keywords, category) {
   const matches = [];
   const keys = Object.keys(products);
-  const productsCategory = products[keys.filter(x => x.toLowerCase() === category)[0]];
+  const productsCategory = products[keys.filter(x => x.toLowerCase() === category.toLowerCase())[0]];
   if (!productsCategory) {
     return null;
   }

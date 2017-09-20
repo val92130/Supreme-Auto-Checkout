@@ -48,11 +48,16 @@ async function processByMonitor(atcProducts) {
   if (!monitorProducts) {
     return;
   }
+  console.log(atcProducts);
   for (let i = 0; i < atcProducts.length; i += 1) {
     const product = atcProducts[i];
     const keywords = product.keywords;
     const color = product.color;
-    await openAtcTabMonitor(monitorProducts, product.category, keywords, color);
+    let category = product.category;
+    if (category === 'tops-sweaters'){
+      category = 'Tops/Sweaters';
+    }
+    await openAtcTabMonitor(monitorProducts, category, keywords, color);
   }
 }
 
