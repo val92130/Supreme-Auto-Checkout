@@ -19,8 +19,8 @@ import LaunchIcon from 'material-ui/svg-icons/action/launch';
 import Layout from '../../../../containers/Layout';
 import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct } from '../../../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
-import * as StorageManager from '../../../../utils/StorageManager';
-import * as ExtensionHelpers from '../../../../../extension/helpers';
+import StorageService from '../../../../../services/StorageService';
+import * as ExtensionHelpers from '../../../../../extension/content/supreme/helpers';
 import version from '../../../../version';
 
 class Atc extends Component {
@@ -65,7 +65,7 @@ class Atc extends Component {
 
   async runNow(category, keywords, color) {
     let atcCategory = category;
-    const profile = await StorageManager.getCurrentProfileSettings(version);
+    const profile = await StorageService.getCurrentProfileSettings(version);
     const useMonitor = profile['Supreme'].Options.atcUseMonitor;
     if (!useMonitor) {
       if (atcCategory === 'tops-sweaters') {
@@ -73,7 +73,7 @@ class Atc extends Component {
       }
       return ExtensionHelpers.openAtcTab(atcCategory, keywords, color);
     }
-    const monitorProducts = await StorageManager.getItem('products');
+    const monitorProducts = await StorageService.getItem('products');
     if (!monitorProducts) {
       return false;
     }

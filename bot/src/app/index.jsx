@@ -10,8 +10,7 @@ import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import getRoutes from './routes';
-import { loadSavedState, saveState } from './utils/StorageManager';
-import version from './version';
+import StorageService from '../services/StorageService';
 
 
 injectTapEventPlugin();
@@ -21,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
 async function init() {
-  const savedState = await loadSavedState(version);
+  const savedState = await StorageService.getOrCreateState();
   const appReducer = combineReducers(Object.assign({}, reducers, {
     routing: routerReducer,
     form: formReducer,
@@ -39,7 +38,7 @@ async function init() {
   store.subscribe(async () => {
     const state = store.getState();
     if (state) {
-      await saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc }, version);
+      await StorageService.saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc });
     }
   });
 

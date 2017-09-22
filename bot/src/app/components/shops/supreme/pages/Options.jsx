@@ -10,7 +10,7 @@ import {
   } from 'redux-form-material-ui';
 import MenuItem from 'material-ui/MenuItem';
 import Styles from '../../../../constants/Styles';
-import * as Validators from '../../../../constants/FormValidators';
+import * as Validators from '../../../../utils/FormValidators';
 import * as menus from '../../../../constants/Menus';
 import * as SupremeUtils from '../../../../utils/SupremeUtils';
 

@@ -7,18 +7,15 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import Layout from '../../../../containers/Layout';
-import { fetchProductInfo } from '../../../../utils/SupremeUtils';
-import * as StorageManager from '../../../../utils/StorageManager';
-
-async function getProducts() {
-  return await StorageManager.getItem('products') || {};
-}
+import ProductsService from '../../../../../services/supreme/ProductsService';
+import StorageService from '../../../../../services/StorageService';
+import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
 
 export default class Products extends Component {
   constructor(props) {
     super(props);
     const interval = setInterval(async () => {
-      const products = await getProducts();
+      const products = await ProductWatcherService.getProducts();
       this.setState({
         products,
       });
@@ -39,13 +36,13 @@ export default class Products extends Component {
   }
 
   handleClickBuyNow(product) {
-    fetchProductInfo(product.id)
-    .then((prod) => {
-      this.setState({
-        buyModalOpen: true,
-        selectedProduct: prod,
+    ProductsService.fetchProductInfo(product.id)
+      .then((prod) => {
+        this.setState({
+          buyModalOpen: true,
+          selectedProduct: prod,
+        });
       });
-    });
   }
 
   handleBuyItem(productId, styleId) {

@@ -5,7 +5,6 @@ import AppDrawer from './AppDrawer';
 import NotificationBar from '../components/NotificationBar';
 import { getTheme } from '../constants/Styles';
 import { setDrawerOpen } from '../actions/drawer';
-import * as Utils from '../constants/Utils';
 
 class App extends Component {
   componentDidMount() {
@@ -14,7 +13,7 @@ class App extends Component {
 
   handleResize() {
     const { setDrawerOpen, drawerOpen } = this.props;
-    if (window.innerWidth <= Utils.WIDTH_DRAWER_OPEN_THRESOLD) {
+    if (window.innerWidth <= 1024) {
       setDrawerOpen(false);
     } else if (!drawerOpen) {
       setDrawerOpen(true);

@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const extConfig = {
   entry: [
-    './src/extension/index.js',
+    './src/extension/content/index.js',
   ],
   output: {
     path: __dirname + '/dist',

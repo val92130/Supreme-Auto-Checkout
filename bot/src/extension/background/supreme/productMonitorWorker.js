@@ -1,6 +1,7 @@
 import request from 'browser-request';
-import * as StorageManager from '../../app/utils/StorageManager';
-import { fetchProducts } from '../../app/utils/SupremeUtils';
+import StorageService from '../../../services/StorageService';
+import ProductsService from '../../../services/supreme/ProductsService';
+import ProductWatcherService from '../../../services/supreme/ProductWatcherService';
 
 
 export default class ProductWatcher {
@@ -11,9 +12,8 @@ export default class ProductWatcher {
   }
 
   async start() {
-    const products = await this.updateProducts(true);
+    await this.updateProducts(true);
     this.interval = setInterval(() => this.updateProducts(true), 1500);
-    console.log(products);
   }
 
   stop() {
@@ -27,12 +27,12 @@ export default class ProductWatcher {
     if (diff >= 10 || !Object.keys(this.products).length || force) {
       this.lastUpdate = now;
       try {
-        this.products = await fetchProducts();
+        this.products = await ProductsService.fetchProducts();
       } catch (e) {
         return e;
       }
     }
-    StorageManager.setItem('products', this.products);
+    ProductWatcherService.setProducts(this.products);
     return this.products;
   }
 

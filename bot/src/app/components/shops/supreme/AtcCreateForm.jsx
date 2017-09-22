@@ -10,7 +10,7 @@ import {
 } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import * as Validators from '../../../constants/FormValidators';
+import * as Validators from '../../../utils/FormValidators';
 import Styles from '../../../constants/Styles';
 import { categories } from '../../../constants/Utils';
 
