@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import { notify } from '../notification';
 import * as Helpers from '../helpers';
 import BaseProcessor from './baseProcessor';
@@ -70,6 +71,18 @@ export default class ProductProcessor extends BaseProcessor {
     return [...sizes.options];
   }
 
+  static getAvailableColors() {
+    const colors = Array.from(document.querySelectorAll('[data-style-name]')).map(x => ({ name: x.attributes['data-style-name'].value, node: x }));
+    const data = [];
+    // remove dups
+    for (let i = 0; i < colors.length; i += 1) {
+      if (!data.find(x => x.name === colors[i].name)) {
+        data.push(colors[i]);
+      }
+    }
+    return data;
+  }
+
     /**
    * This function should be called when the user is on a product page, it will
    * try to figure out if the product is sold out or not, and if not, it will find the best available size
@@ -86,24 +99,22 @@ export default class ProductProcessor extends BaseProcessor {
       }
     }
     if (atcColor) {
-      const nodes = Array.from(document.querySelectorAll('[data-style-name]'));
-      if (nodes[0] && atcColor === 'any') {
-        nodes[0].click();
+      const colors = ProductProcessor.getAvailableColors();
+      if (colors[0] && atcColor === 'any') {
+        colors[0].node.click();
         return;
       }
-      for (let i = 0; i < nodes.length; i += 1) {
-        const styleName = nodes[i].attributes['data-style-name'];
-        if (styleName && styleName.value.toLowerCase().trim() === atcColor.toLowerCase().trim()) {
-          nodes[i].click();
-          return;
-        }
+      const fuse = new Fuse(colors, { keys: ['name'] });
+      const matches = fuse.search(atcColor);
+      if (matches.length) {
+        matches[0].node.click();
+        return;
       }
     }
     if (!ProductProcessor.isSoldOut()) {
       const maxPrice = this.preferences.maxPrice;
       const minPrice = this.preferences.minPrice;
       const itemPrice = document.querySelector('[itemprop=price]');
-
 
       if (itemPrice !== null) {
         const price = +(itemPrice.innerHTML.replace(/\D/g, ''));

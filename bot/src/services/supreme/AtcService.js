@@ -2,7 +2,10 @@ import KeywordsService from '../KeywordsService';
 import StorageService from '../StorageService';
 
 export default class AtcService {
-  static openAtcTab(category: number, keywords, color) {
+  static openAtcTab(category, keywords, color) {
+    if (category === 'tops-sweaters') {
+      category = 'tops_sweaters';
+    }
     let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
     if (color) {
       url = `${url}&atc-color=${color}`;

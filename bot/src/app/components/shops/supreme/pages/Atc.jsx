@@ -20,8 +20,10 @@ import Layout from '../../../../containers/Layout';
 import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct } from '../../../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
 import StorageService from '../../../../../services/StorageService';
-import * as ExtensionHelpers from '../../../../../extension/content/supreme/helpers';
+import AtcService from '../../../../../services/supreme/AtcService';
+import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
 import version from '../../../../version';
+import addNotification from '../../../../actions/notification';
 
 class Atc extends Component {
   constructor(props) {
@@ -66,22 +68,22 @@ class Atc extends Component {
   async runNow(category, keywords, color) {
     let atcCategory = category;
     const profile = await StorageService.getCurrentProfileSettings(version);
-    const useMonitor = profile['Supreme'].Options.atcUseMonitor;
-    if (!useMonitor) {
-      if (atcCategory === 'tops-sweaters') {
-        atcCategory = 'tops_sweaters';
-      }
-      return ExtensionHelpers.openAtcTab(atcCategory, keywords, color);
+    if (!profile || !profile.Supreme) {
+      this.props.notify('Please configure your bot before running ATC');
+      return false;
     }
-    const monitorProducts = await StorageService.getItem('products');
+    const useMonitor = profile.Supreme.Options.atcUseMonitor;
+    if (!useMonitor) {
+      return AtcService.openAtcTab(atcCategory, keywords, color);
+    }
+    const monitorProducts = await ProductWatcherService.getProducts();
     if (!monitorProducts) {
       return false;
     }
-    if (atcCategory === 'tops-sweaters') {
-      atcCategory = 'Tops/Sweaters';
+    const hasFound = AtcService.openAtcTabMonitor(monitorProducts, atcCategory, keywords, color);
+    if (!hasFound) {
+      this.props.notify('No matching product found');
     }
-    console.log(atcCategory);
-    return ExtensionHelpers.openAtcTabMonitor(monitorProducts, atcCategory, keywords, color);
   }
 
   render() {
@@ -162,6 +164,7 @@ function mapDispatchToProps(dispatch) {
     editAtcProduct: (name, data) => dispatch(editAtcProduct(name, data)),
     removeAtcProduct: data => dispatch(removeAtcProduct(data)),
     setAtcProductEnabled: (name, enabled) => dispatch(setAtcProductEnabled(name, enabled)),
+    notify: msg => dispatch(addNotification(msg)),
   };
 }
 

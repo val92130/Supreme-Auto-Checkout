@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import BaseProcessor from './baseProcessor';
 import * as Helpers from '../helpers';
 
@@ -13,49 +14,42 @@ export default class CheckoutProcessor extends BaseProcessor {
     this.processAtc();
   }
 
+  static findArticles() {
+    let articles = document.querySelectorAll('.inner-article');
+    if (!articles.length) {
+      articles = document.querySelectorAll('.inner-item');
+    }
+    return [...articles].map(x => ({
+      name: Helpers.getArticleName(x),
+      color: Helpers.getArticleColor(x),
+      soldOut: !!x.getElementsByClassName('sold_out_tag').length,
+      url: x.querySelector('a').href,
+    }));
+  }
+
   processAtc() {
     const queryString = Helpers.getQueryStringValue('atc-kw');
     if (!queryString) {
       return;
     }
+    let match = null;
     const keywords = queryString.split(';');
     const kwColor = Helpers.getQueryStringValue('atc-color');
-    const innerArticles = Helpers.findArticles();
-    const products = [];
-    for (let i = 0; i < innerArticles.length; i += 1) {
-      const name = Helpers.getArticleName(innerArticles[i]);
-      const a = innerArticles[i].querySelector('a');
-      const color = Helpers.getArticleColor(innerArticles[i]);
-      const soldOut = innerArticles[i].getElementsByClassName('sold_out_tag');
-      if (soldOut.length) {
-        continue;
+    const innerArticles = CheckoutProcessor.findArticles();
+    const fuse = new Fuse(innerArticles, { keys: ['name'] });
+    const bestMatches = fuse.search(keywords.join(' '));
+    if (kwColor) {
+      const fuseColor = new Fuse(bestMatches, { keys: ['color'] });
+      const matchesColor = fuseColor.search(kwColor);
+      if (matchesColor.length) {
+        match = matchesColor[0];
       }
-      if (name && a.href) {
-        const product = {
-          matches: 0,
-          url: a.href,
-        };
-        for (let j = 0; j < keywords.length; j += 1) {
-          const keyword = keywords[j].toLowerCase().trim();
-          const regexp = new RegExp(keyword);
-          // name matches
-          if (regexp.test(name)) {
-            if (kwColor && color) {
-              const regexColor = new RegExp(color);
-              if (regexColor.test(kwColor.toLowerCase().trim())) {
-                product.matches += 1;
-              }
-            }
-            product.matches += 1;
-          }
-        }
-
-        products.push(product);
-      }
+    } else if (bestMatches) {
+      match = bestMatches[0];
     }
-    const bestMatch = products.filter(x => x.matches > 0).sort((a, b) => b.matches - a.matches)[0];
-    if (bestMatch) {
-      window.location.href = bestMatch.url;
+
+    if (match && !match.soldOut) {
+      window.location.href = match.url;
     } else {
       setTimeout(() => {
         window.location.reload();
