@@ -26,7 +26,7 @@ export default class StorageService {
 
   static async getOrCreateState() {
     try {
-      const state = this.loadSavedState();
+      const state = await this.loadSavedState();
       if (!state) {
         await this.initializeStorageState({});
         return {};
