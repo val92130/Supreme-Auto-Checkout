@@ -84,7 +84,7 @@ export default class Products extends Component {
             <img style={imgStyle} src={product.image_url_hi.replace('//', 'https://')} alt={product.name} />
           </CardMedia>
           <CardText>
-            {product.price && <p>Price: {product.price}</p>}
+            {product.price && <p>Price: {product.price / 100}</p>}
           </CardText>
           { soldOut && <p>SOLD OUT</p> }
         </div>
