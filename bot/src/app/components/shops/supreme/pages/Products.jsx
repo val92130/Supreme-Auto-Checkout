@@ -1,24 +1,20 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import Fuse from 'fuse.js';
 import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
-import { Card, CardActions, CardMedia, CardText } from 'material-ui/Card';
+import { Card, CardMedia, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import Layout from '../../../../containers/Layout';
-import { fetchProductInfo } from '../../../../utils/SupremeUtils';
-import * as StorageManager from '../../../../utils/StorageManager';
-
-async function getProducts() {
-  return await StorageManager.getItem('products') || {};
-}
+import ProductsService from '../../../../../services/supreme/ProductsService';
+import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
 
 export default class Products extends Component {
   constructor(props) {
     super(props);
     const interval = setInterval(async () => {
-      const products = await getProducts();
+      const products = await ProductWatcherService.getProducts();
       this.setState({
         products,
       });
@@ -39,13 +35,13 @@ export default class Products extends Component {
   }
 
   handleClickBuyNow(product) {
-    fetchProductInfo(product.id)
-    .then((prod) => {
-      this.setState({
-        buyModalOpen: true,
-        selectedProduct: prod,
+    ProductsService.fetchProductInfo(product.id)
+      .then((prod) => {
+        this.setState({
+          buyModalOpen: true,
+          selectedProduct: prod,
+        });
       });
-    });
   }
 
   handleBuyItem(productId, styleId) {
@@ -80,14 +76,14 @@ export default class Products extends Component {
     return (
       <Card style={style} onTouchTap={onTouchTap}>
         <div style={{ textAlign: 'center' }}>
-          <h4>
+          <p style={{ fontSize: '0.9em' }}>
             {product.name}
-          </h4>
+          </p>
           <CardMedia>
             <img style={imgStyle} src={product.image_url_hi.replace('//', 'https://')} alt={product.name} />
           </CardMedia>
           <CardText>
-            {product.price && <p>Price: {product.price}</p>}
+            {product.price && <p>Price: {product.price / 100}</p>}
           </CardText>
           { soldOut && <p>SOLD OUT</p> }
         </div>
@@ -112,7 +108,11 @@ export default class Products extends Component {
         allProducts.push(products[j]);
       }
     }
-    allProducts = allProducts.filter(x => x.name.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1);
+    if (this.state.filter) {
+      const fuse = new Fuse(allProducts, { keys: ['name'] });
+      allProducts = fuse.search(this.state.filter);
+    }
+
     const cards = allProducts.map(x => this.getProductCard(x, () => this.handleClickBuyNow(x)));
     const style = {
       display: 'flex',
@@ -140,6 +140,7 @@ export default class Products extends Component {
           open={this.state.buyModalOpen}
           autoScrollBodyContent
         >
+          <p>Click on an option to buy</p>
           {
             (() => {
               if (this.state.selectedProduct) {
@@ -159,7 +160,7 @@ export default class Products extends Component {
           }
         </Dialog>
         <div style={{ textAlign: 'center' }}>
-          <p>Click on a product to check availability</p>
+          <p>Click on a product to check availability and quick buy an item</p>
           <TextField
             hintText="filter..."
             floatingLabelText="Filter"

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import * as SupremeUtils from '../../app/utils/SupremeUtils';
+import * as SupremeUtils from '../../../../app/utils/SupremeUtils';
 import BaseProcessor from './baseProcessor';
 import { notify } from '../notification';
 import { timeout } from '../helpers';
@@ -18,7 +18,6 @@ export default class CartProcessor extends BaseProcessor {
     /**
    * This function should be called when the user is on the 'cart' page, it will then redirect the user
    * to the checkout page after the delay configured in the options
-   * @param  {Object} preferencesStore Object that stores the preference options
    */
   processCart() {
     const outOfStockItems = document.querySelectorAll('.out_of_stock');
@@ -30,7 +29,7 @@ export default class CartProcessor extends BaseProcessor {
       return;
     }
     if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.STOP) {
-      notify('A product is sold out, aborting...');
+      notify('A product is sold out, aborting...', true);
     } else if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS) {
       const promises = [];
       for (const product of outOfStockItems) {

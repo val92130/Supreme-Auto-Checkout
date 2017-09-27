@@ -34,11 +34,11 @@ export default class SupremeManager {
 
     // if stores are not configured yet..
     if (!this.isConfigured()) {
-      notify('Bot not yet configured');
+      notify('Bot not yet configured', true);
       return;
     }
-    const hideSoldOut = this.preferences.hideSoldOut;
-    if (hideSoldOut) {
+    Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), x => x.style.display = 'block');
+    if (this.preferences.hideSoldOut) {
       SupremeManager.hideSoldOutProducts();
     }
 
@@ -85,7 +85,6 @@ export default class SupremeManager {
   }
 
   static hideSoldOutProducts() {
-    Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), x => x.style.display = 'block');
     const soldOuts = Array.prototype.filter.call(document.getElementsByTagName('article'), x => x.getElementsByClassName('sold_out_tag').length);
     for (let node of soldOuts) {
       node.remove();

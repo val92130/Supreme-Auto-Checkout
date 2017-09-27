@@ -5,7 +5,7 @@ import { spacing, typography } from 'material-ui/styles';
 const styles = {
   paper: {
     margin: spacing.desktopGutter,
-    padding: spacing.desktopGutter,
+    padding: spacing.desktopGutter / 2,
   },
   container: {
     display: 'flex',
@@ -35,9 +35,9 @@ const styles = {
     lineHeight: `${spacing.desktopKeylineIncrement}px`,
     fontWeight: typography.fontWeightLight,
     backgroundColor: 'rgb(72, 72, 72)',
-    marginBottom: 8,
     height: 64,
     textAlign: 'center',
+    cursor: 'pointer',
   },
   fields: {
     text: {

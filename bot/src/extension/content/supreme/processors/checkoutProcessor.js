@@ -1,5 +1,5 @@
 import BaseProcessor from './baseProcessor';
-import * as InputProcessor from '../InputProcessor';
+import CheckoutService from '../../../../services/supreme/CheckoutService';
 import { timeout } from '../helpers';
 
 
@@ -14,23 +14,16 @@ export default class CheckoutProcessor extends BaseProcessor {
     this.processCheckout();
   }
 
-
   /**
    * This function should be called when the user is on the 'checkout' page, it will fill
    * the checkout form with the values defined by the user in the options and then checkout after a delay
-   * @param  {Object} preferencesStore Object that stores the preference options
-   * @param  {Object} billingStore Object that stores the billings options
    */
   processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
     const inputs = [...document.querySelectorAll('input, textarea, select')]
       .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
-    InputProcessor.processFields(inputs, this.billing);
-    const terms = document.getElementsByName('order[terms]');
-    if (terms.length) {
-      terms[0].click();
-    }
-
+    CheckoutService.processFields(inputs, this.billing);
+    document.querySelectorAll('[name="order[terms]"]').forEach(x => x.click());
     if (this.preferences.captchaBypass) {
       const captcha = document.querySelector('.g-recaptcha');
       if (captcha) {

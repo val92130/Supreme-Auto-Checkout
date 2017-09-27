@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Tab from 'material-ui/Tabs/Tab';
 import { connect } from 'react-redux';
 import FontIcon from 'material-ui/FontIcon';

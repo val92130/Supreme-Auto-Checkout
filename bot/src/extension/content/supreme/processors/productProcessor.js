@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import { notify } from '../notification';
 import * as Helpers from '../helpers';
 import BaseProcessor from './baseProcessor';
@@ -70,6 +71,18 @@ export default class ProductProcessor extends BaseProcessor {
     return [...sizes.options];
   }
 
+  static getAvailableColors() {
+    const colors = Array.from(document.querySelectorAll('[data-style-name]')).map(x => ({ name: x.attributes['data-style-name'].value, node: x }));
+    const data = [];
+    // remove dups
+    for (let i = 0; i < colors.length; i += 1) {
+      if (!data.find(x => x.name === colors[i].name)) {
+        data.push(colors[i]);
+      }
+    }
+    return data;
+  }
+
     /**
    * This function should be called when the user is on a product page, it will
    * try to figure out if the product is sold out or not, and if not, it will find the best available size
@@ -86,17 +99,23 @@ export default class ProductProcessor extends BaseProcessor {
       }
     }
     if (atcColor) {
-      const nodes = Array.from(document.querySelectorAll('[data-style-name]'));
-      if (nodes[0] && atcColor === 'any') {
-        nodes[0].click();
+      const colors = ProductProcessor.getAvailableColors();
+      const availableColor = colors.find(x => {
+        const soldOutAttr = x.node.attributes['data-sold-out'];
+        if (soldOutAttr) {
+          return soldOutAttr.value === 'false';
+        }
+        return true;
+      });
+      if (availableColor && atcColor === 'any') {
+        availableColor.node.click();
         return;
       }
-      for (let i = 0; i < nodes.length; i += 1) {
-        const styleName = nodes[i].attributes['data-style-name'];
-        if (styleName && styleName.value.toLowerCase().trim() === atcColor.toLowerCase().trim()) {
-          nodes[i].click();
-          return;
-        }
+      const fuse = new Fuse(colors, { keys: ['name'] });
+      const matches = fuse.search(atcColor);
+      if (matches.length) {
+        matches[0].node.click();
+        return;
       }
     }
     if (!ProductProcessor.isSoldOut()) {
@@ -104,17 +123,16 @@ export default class ProductProcessor extends BaseProcessor {
       const minPrice = this.preferences.minPrice;
       const itemPrice = document.querySelector('[itemprop=price]');
 
-
       if (itemPrice !== null) {
         const price = +(itemPrice.innerHTML.replace(/\D/g, ''));
         if (!isNaN(price)) {
           if (maxPrice !== undefined && price > maxPrice) {
-            notify('Product price is too high, not checking out');
+            notify('Product price is too high, not checking out', true);
             return;
           }
 
           if (minPrice !== undefined && price < minPrice) {
-            notify('Product price is too low, not checking out');
+            notify('Product price is too low, not checking out', true);
             return;
           }
         }
@@ -128,14 +146,14 @@ export default class ProductProcessor extends BaseProcessor {
       if (sizesOptions.length) {
         const categorySize = this.sizings[productCategory];
         if (categorySize === undefined) {
-          notify(`Unknown category "${productCategory}", cannot process`);
+          notify(`Unknown category "${productCategory}", cannot process`, true);
           return;
         }
         let targetOption = sizesOptions.find(x => ProductProcessor.sizeMatch(categorySize, x.text, productCategory));
 
         if (!targetOption) {
           if (this.preferences.strictSize && categorySize !== 'Any') {
-            notify('The desired size is not available');
+            notify('The desired size is not available', true);
             return;
           }
           targetOption = sizesOptions[0];
