@@ -40,10 +40,7 @@ export default class StorageService {
 
   static async loadSavedState() {
     const state = await this.getItem('state') || {};
-    if (state.version === version) {
-      return state.value;
-    }
-    return null;
+    return state.value || null;
   }
 
   static async saveState(state) {
