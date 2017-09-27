@@ -1,14 +1,13 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import Fuse from 'fuse.js';
 import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
-import { Card, CardActions, CardMedia, CardText } from 'material-ui/Card';
+import { Card, CardMedia, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import Layout from '../../../../containers/Layout';
 import ProductsService from '../../../../../services/supreme/ProductsService';
-import StorageService from '../../../../../services/StorageService';
 import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
 
 export default class Products extends Component {
@@ -109,7 +108,11 @@ export default class Products extends Component {
         allProducts.push(products[j]);
       }
     }
-    allProducts = allProducts.filter(x => x.name.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1);
+    if (this.state.filter) {
+      const fuse = new Fuse(allProducts, { keys: ['name'] });
+      allProducts = fuse.search(this.state.filter);
+    }
+
     const cards = allProducts.map(x => this.getProductCard(x, () => this.handleClickBuyNow(x)));
     const style = {
       display: 'flex',

@@ -65,7 +65,7 @@ const Options = props => {
   const { handleSubmit, pristine, submitting, atcEnabled, change } = props;
   return (
     <div>
-      <h3 style={{ textAlign: 'center' }}>Configure options and features of the bot</h3>
+      <p style={{ textAlign: 'center', fontSize: '1.2em' }}>Configure options and features of the bot</p>
       <Divider />
       <form onSubmit={handleSubmit} id="options-form">
         <div>
