@@ -100,8 +100,15 @@ export default class ProductProcessor extends BaseProcessor {
     }
     if (atcColor) {
       const colors = ProductProcessor.getAvailableColors();
-      if (colors[0] && atcColor === 'any') {
-        colors[0].node.click();
+      const availableColor = colors.find(x => {
+        const soldOutAttr = x.node.attributes['data-sold-out'];
+        if (soldOutAttr) {
+          return soldOutAttr.value === 'false';
+        }
+        return true;
+      });
+      if (availableColor && atcColor === 'any') {
+        availableColor.node.click();
         return;
       }
       const fuse = new Fuse(colors, { keys: ['name'] });
