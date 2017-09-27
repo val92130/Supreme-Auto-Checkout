@@ -35,11 +35,11 @@ export default class CheckoutProcessor extends BaseProcessor {
     let match = null;
     const keywords = queryString.split(';');
     const kwColor = Helpers.getQueryStringValue('atc-color');
-    const innerArticles = CheckoutProcessor.findArticles();
+    const innerArticles = CheckoutProcessor.findArticles().filter(x => !x.soldOut);
     const fuse = new Fuse(innerArticles, { keys: ['name'] });
     const bestMatches = fuse.search(keywords.join(' '));
     if (kwColor) {
-      const fuseColor = new Fuse(bestMatches, { keys: ['color'] });
+      const fuseColor = new Fuse(bestMatches, { keys: ['color'], threshold: 0.2 });
       const matchesColor = fuseColor.search(kwColor);
       if (matchesColor.length) {
         match = matchesColor[0];
