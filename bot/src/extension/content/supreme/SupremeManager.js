@@ -34,7 +34,7 @@ export default class SupremeManager {
 
     // if stores are not configured yet..
     if (!this.isConfigured()) {
-      notify('Bot not yet configured');
+      notify('Bot not yet configured', true);
       return;
     }
     Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), x => x.style.display = 'block');

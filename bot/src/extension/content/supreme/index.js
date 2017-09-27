@@ -4,7 +4,7 @@ import { notify } from './notification';
 export default class SupremeExtension {
   start(profile) {
     if (!profile || !profile.Supreme) {
-      notify('Open the extension to configure the bot');
+      notify('Open the extension to configure the bot', true);
       return;
     }
     const settings = profile.Supreme;

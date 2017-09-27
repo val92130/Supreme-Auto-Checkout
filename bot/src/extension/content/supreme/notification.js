@@ -4,7 +4,6 @@ function createNotificationBar() {
   notificationBar.style.marginLeft = 'auto';
   notificationBar.style.marginRight = 'auto';
   notificationBar.style.textAlign = 'center';
-  notificationBar.style.backgroundColor = 'rgba(255, 58, 58, 0.42)';
   notificationBar.style.lineHeight = '60px';
   notificationBar.style.height = '60px';
   notificationBar.style.fontSize = '1.6em';
@@ -23,7 +22,12 @@ export function getOrCreateNotificationBar() {
   return document.getElementById('sup-notif-bar');
 }
 
-export function notify(text) {
+export function notify(text, danger = false) {
   const notificationBar = getOrCreateNotificationBar();
+  if (danger) {
+    notificationBar.style.backgroundColor = 'rgba(255, 58, 58, 0.42)';
+  } else {
+    notificationBar.style.backgroundColor = 'rgba(58, 255, 91, 0.42)';
+  }
   notificationBar.textContent = text;
 }

@@ -127,12 +127,12 @@ export default class ProductProcessor extends BaseProcessor {
         const price = +(itemPrice.innerHTML.replace(/\D/g, ''));
         if (!isNaN(price)) {
           if (maxPrice !== undefined && price > maxPrice) {
-            notify('Product price is too high, not checking out');
+            notify('Product price is too high, not checking out', true);
             return;
           }
 
           if (minPrice !== undefined && price < minPrice) {
-            notify('Product price is too low, not checking out');
+            notify('Product price is too low, not checking out', true);
             return;
           }
         }
@@ -146,14 +146,14 @@ export default class ProductProcessor extends BaseProcessor {
       if (sizesOptions.length) {
         const categorySize = this.sizings[productCategory];
         if (categorySize === undefined) {
-          notify(`Unknown category "${productCategory}", cannot process`);
+          notify(`Unknown category "${productCategory}", cannot process`, true);
           return;
         }
         let targetOption = sizesOptions.find(x => ProductProcessor.sizeMatch(categorySize, x.text, productCategory));
 
         if (!targetOption) {
           if (this.preferences.strictSize && categorySize !== 'Any') {
-            notify('The desired size is not available');
+            notify('The desired size is not available', true);
             return;
           }
           targetOption = sizesOptions[0];
