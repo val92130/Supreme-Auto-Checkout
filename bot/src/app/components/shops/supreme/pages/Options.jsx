@@ -218,7 +218,7 @@ const Options = props => {
                 }}
               />
             }
-            title="Enable AutoCop (Autocheckout required)"
+            title="Enable AutoCop timer (need Autocheckout)"
             helperText={
               <div>
                 <p>
