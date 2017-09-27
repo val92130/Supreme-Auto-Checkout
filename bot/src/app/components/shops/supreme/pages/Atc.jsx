@@ -40,7 +40,7 @@ class Atc extends Component {
   }
 
   updateTimer() {
-    if (!this.props.atcStartTime) return;
+    if (!this.props.atcStartTime || this.state.createModalOpen) return;
     const now = new Date().getTime();
 
     const time = Helpers.timeToDate(this.props.atcStartTime);
