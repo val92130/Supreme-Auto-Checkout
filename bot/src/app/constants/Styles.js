@@ -35,9 +35,9 @@ const styles = {
     lineHeight: `${spacing.desktopKeylineIncrement}px`,
     fontWeight: typography.fontWeightLight,
     backgroundColor: 'rgb(72, 72, 72)',
-    marginBottom: 8,
     height: 64,
     textAlign: 'center',
+    cursor: 'pointer',
   },
   fields: {
     text: {

@@ -18,10 +18,6 @@ html, body, #app {
   height: 100%;
 }
 
-#app {
-  overflow-y: scroll;
-}
-
 /* Fonts */
 /* roboto-300 - latin */
 @font-face {

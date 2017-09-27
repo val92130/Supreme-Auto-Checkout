@@ -76,9 +76,9 @@ export default class Products extends Component {
     return (
       <Card style={style} onTouchTap={onTouchTap}>
         <div style={{ textAlign: 'center' }}>
-          <h4>
+          <p style={{ fontSize: '0.9em' }}>
             {product.name}
-          </h4>
+          </p>
           <CardMedia>
             <img style={imgStyle} src={product.image_url_hi.replace('//', 'https://')} alt={product.name} />
           </CardMedia>
@@ -140,6 +140,7 @@ export default class Products extends Component {
           open={this.state.buyModalOpen}
           autoScrollBodyContent
         >
+          <p>Click on an option to buy</p>
           {
             (() => {
               if (this.state.selectedProduct) {
@@ -159,7 +160,7 @@ export default class Products extends Component {
           }
         </Dialog>
         <div style={{ textAlign: 'center' }}>
-          <p>Click on a product to check availability</p>
+          <p>Click on a product to check availability and quick buy an item</p>
           <TextField
             hintText="filter..."
             floatingLabelText="Filter"
