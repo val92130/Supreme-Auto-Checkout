@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import { List, ListItem, makeSelectable } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 import Subheader from 'material-ui/Subheader';
-import CodeIcon from 'material-ui/svg-icons/action/code';
 import ShopIcon from 'material-ui/svg-icons/action/shop';
 import SettingsIcon from 'material-ui/svg-icons/action/add-shopping-cart';
 import CartIcon from 'material-ui/svg-icons/action/settings';
@@ -57,7 +56,7 @@ class AppDrawer extends Component {
     const page = subPage ? `${currentPage}/${subPage}` : currentPage;
     return (
       <Drawer open={open}>
-        <div style={Styles.logo}>
+        <div style={Styles.logo} onClick={() => openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout')}>
           Supreme Auto Checkout
           <span> { version }</span>
         </div>
@@ -103,12 +102,6 @@ class AppDrawer extends Component {
             leftIcon={<AccountIcon />}
           />
           <Subheader>Other</Subheader>
-          <ListItem
-            value="about"
-            primaryText="Github"
-            onTouchTap={() => openUrlInNewTab('https://github.com/val92130/Supreme-Auto-Checkout')}
-            leftIcon={<CodeIcon />}
-          />
           <ListItem
             value="donation"
             primaryText="Donation"

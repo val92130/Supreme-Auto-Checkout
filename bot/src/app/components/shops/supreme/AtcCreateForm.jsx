@@ -10,7 +10,7 @@ import {
 } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import * as Validators from '../../../constants/FormValidators';
+import * as Validators from '../../../utils/FormValidators';
 import Styles from '../../../constants/Styles';
 import { categories } from '../../../constants/Utils';
 
@@ -50,14 +50,17 @@ class AtcCreateForm extends Component {
       formValidators.push(Validators.unique(atcProducts.map(x => x.name)));
     }
     return (
+      <div>
+        <p style={{ fontSize: '0.8em' }}>ATC Product description is only used to differentiate different ATC products, it doesn't have any effect on the Autocop process.</p>
+        <p style={{ fontSize: '0.8em' }}>Keywords is the most important information to find a product for Autocop, make sure to add detailed keywords. For example for a Box Logo add the following keywords: box, logo, hoodie.</p>
         <form onSubmit={handleSubmit} id="atc-form">
           <div>
             <Field
               name="name"
               validate={formValidators}
               component={TextField}
-              floatingLabelText="Name"
-              hintText="Name"
+              floatingLabelText="ATC Product description"
+              hintText="ATC Product description"
               style={Styles.fields.text}
             />
           </div>
@@ -129,6 +132,7 @@ class AtcCreateForm extends Component {
             />
           </div>
         </form>
+      </div>
     );
   }
 }

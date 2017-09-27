@@ -22,7 +22,7 @@ const DefinePlugin = new webpack.DefinePlugin({
 
 const extConfig = {
   entry: [
-    './src/extension/index.js',
+    './src/extension/content/index.js',
   ],
   output: {
     path: path.resolve('build'),
