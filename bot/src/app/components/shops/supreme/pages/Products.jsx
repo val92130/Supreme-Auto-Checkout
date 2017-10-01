@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Fuse from 'fuse.js';
 import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
 import { Card, CardMedia, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
+import FuzzyStringMatcher from '../../../../utils/FuzzyStringMatcher';
 import Layout from '../../../../containers/Layout';
 import ProductsService from '../../../../../services/supreme/ProductsService';
 import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
@@ -109,7 +109,7 @@ export default class Products extends Component {
       }
     }
     if (this.state.filter) {
-      const fuse = new Fuse(allProducts, { keys: ['name'] });
+      const fuse = new FuzzyStringMatcher(allProducts, { keys: ['name'] });
       allProducts = fuse.search(this.state.filter);
     }
 
