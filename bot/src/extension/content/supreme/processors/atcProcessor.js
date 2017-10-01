@@ -1,6 +1,6 @@
-import Fuse from 'fuse.js';
 import BaseProcessor from './baseProcessor';
 import * as Helpers from '../helpers';
+import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
 
 
 export default class CheckoutProcessor extends BaseProcessor {
@@ -36,10 +36,10 @@ export default class CheckoutProcessor extends BaseProcessor {
     const keywords = queryString.split(';');
     const kwColor = Helpers.getQueryStringValue('atc-color');
     const innerArticles = CheckoutProcessor.findArticles().filter(x => !x.soldOut);
-    const fuse = new Fuse(innerArticles, { keys: ['name'] });
+    const fuse = new FuzzyStringMatcher(innerArticles, { keys: ['name'] });
     const bestMatches = fuse.search(keywords.join(' '));
     if (kwColor) {
-      const fuseColor = new Fuse(bestMatches, { keys: ['color'], threshold: 0.2 });
+      const fuseColor = new FuzzyStringMatcher(bestMatches, { keys: ['color'] });
       const matchesColor = fuseColor.search(kwColor);
       if (matchesColor.length) {
         match = matchesColor[0];
