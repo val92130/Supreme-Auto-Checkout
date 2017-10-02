@@ -22,7 +22,7 @@ import { addAtcProduct, removeAtcProduct, setAtcProductEnabled, editAtcProduct }
 import AtcCreateForm from '../AtcCreateForm';
 import StorageService from '../../../../../services/StorageService';
 import AtcService from '../../../../../services/supreme/AtcService';
-import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
+import ProductsService from '../../../../../services/supreme/ProductsService';
 import version from '../../../../version';
 import addNotification from '../../../../actions/notification';
 import * as Helpers from '../../../../utils/Helpers';
@@ -116,7 +116,7 @@ class Atc extends Component {
     if (!useMonitor) {
       return AtcService.openAtcTab(atcCategory, keywords, color);
     }
-    const monitorProducts = await ProductWatcherService.getProducts();
+    const monitorProducts = await ProductsService.fetchProducts();
     if (!monitorProducts) {
       return false;
     }

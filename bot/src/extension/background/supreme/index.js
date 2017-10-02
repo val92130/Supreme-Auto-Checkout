@@ -2,8 +2,7 @@ import * as menus from '../../../app/constants/Menus';
 import * as Helpers from '../../../app/utils/Helpers';
 import StorageService from '../../../services/StorageService';
 import AtcService from '../../../services/supreme/AtcService';
-import ProductWatcherService from '../../../services/supreme/ProductWatcherService';
-import ProductMonitorWorker from './productMonitorWorker';
+import ProductsService from '../../../services/supreme/ProductsService';
 
 
 async function sleep(ms) {
@@ -52,11 +51,10 @@ async function processProducts(products) {
 }
 
 async function processByMonitor(atcProducts) {
-  const monitorProducts = await ProductWatcherService.getProducts();
+  const monitorProducts = await ProductsService.fetchProducts();
   if (!monitorProducts) {
     return;
   }
-  console.log(atcProducts);
   for (let i = 0; i < atcProducts.length; i += 1) {
     const product = atcProducts[i];
     const keywords = product.keywords;
@@ -121,7 +119,5 @@ async function loop() {
 
 
 export default async function start() {
-  const worker = new ProductMonitorWorker();
-  worker.start();
   await loop();
 }
