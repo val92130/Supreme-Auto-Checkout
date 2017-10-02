@@ -22,6 +22,7 @@ Supreme Auto Checkout provides many features such as:
   - **Easy configuration.**
   - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
   - **Product Monitor**
+  - **Profile Export** - Export your profiles and securely import them onto another computer (Your data will be encrypted using AES).
 
 # Coming soon
 Features that will be added in the future:

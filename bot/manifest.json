@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Supreme Auto-Checkout bot",
   "description": "Supreme Open-Source add to cart bot",
-  "version": "2.5.1",
+  "version": "2.6",
   "background": {
     "scripts": ["background.js"]
   },
@@ -27,7 +27,9 @@
     "webRequest",
     "webRequestBlocking",
     "*://*.supremenewyork.com/*",
-    "http://www.supremenewyork.com/mobile_stock.json"
+    "http://www.supremenewyork.com/mobile_stock.json",
+    "downloads",
+    "fileBrowserHandler"
   ],
   "content_scripts": [
     {

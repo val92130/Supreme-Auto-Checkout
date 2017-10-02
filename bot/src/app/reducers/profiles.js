@@ -13,7 +13,7 @@ export default function profiles(state = {
     list.push({
       name: action.name,
       description: action.description,
-      settings: {},
+      settings: action.settings || {},
     });
     return Object.assign({}, state, { profiles: list });
   } else if (action.type === types.PROFILE_SET_ENABLED) {
