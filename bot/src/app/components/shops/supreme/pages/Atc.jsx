@@ -97,6 +97,14 @@ class Atc extends Component {
     this.props.setAtcProductEnabled(name, enabled);
   }
 
+  async runAll() {
+    const atcProducts = this.props.atcProducts;
+    for (let i = 0; i < atcProducts.length; i += 1) {
+      const product = atcProducts[i];
+      setTimeout(async () => await this.runNow(product.category, product.keywords, product.color), i * 400);
+    }
+  }
+
   async runNow(category, keywords, color) {
     let atcCategory = category;
     const profile = await StorageService.getCurrentProfileSettings(version);
@@ -116,6 +124,7 @@ class Atc extends Component {
     if (!hasFound) {
       this.props.notify('No matching product found');
     }
+    return hasFound;
   }
 
   render() {
@@ -141,6 +150,7 @@ class Atc extends Component {
           <h3>Autocop starting in: {this.state.remainingTimeAtc}</h3>
           }
           <RaisedButton label="Add new" onTouchTap={() => this.requestModalOpen()} primary />
+          <RaisedButton label="Run all" onTouchTap={() => this.runAll()} />
         </div>
         <Divider />
         <Table selectable={false}>
@@ -164,7 +174,7 @@ class Atc extends Component {
                     <TableRow key={x.name}>
                       <TableRowColumn>{x.name}</TableRowColumn>
                       <TableRowColumn>
-                        <Toggle toggled={x.enabled} onToggle={() => this.toggleAtc(x.name, !x.enabled)} />
+                        <Toggle toggled={x.enabled} onToggle={async () => await this.toggleAtc(x.name, !x.enabled)} />
                       </TableRowColumn>
                       <TableRowColumn>
                         <IconButton onTouchTap={async () => await this.runNow(x.category, x.keywords, x.color)}>

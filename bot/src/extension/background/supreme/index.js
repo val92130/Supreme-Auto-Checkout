@@ -6,6 +6,17 @@ import ProductWatcherService from '../../../services/supreme/ProductWatcherServi
 import ProductMonitorWorker from './productMonitorWorker';
 
 
+async function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
+
+async function timeout(ms, callback) {
+  await sleep(ms);
+  callback();
+}
+
 async function getEnabledAtcProducts() {
   try {
     return await AtcService.getEnabledAtcProducts();
@@ -36,6 +47,7 @@ async function processProducts(products) {
     const keywords = product.keywords;
     const color = product.color;
     AtcService.openAtcTab(category, keywords, color);
+    await sleep(400);
   }
 }
 
@@ -50,10 +62,11 @@ async function processByMonitor(atcProducts) {
     const keywords = product.keywords;
     const color = product.color;
     let category = product.category;
-    if (category === 'tops-sweaters'){
+    if (category === 'tops-sweaters') {
       category = 'Tops/Sweaters';
     }
     await AtcService.openAtcTabMonitor(monitorProducts, category, keywords, color);
+    await sleep(400);
   }
 }
 
@@ -76,17 +89,6 @@ function getAtcStartTime(settings) {
   currDate.setMinutes(time.getMinutes());
   currDate.setSeconds(time.getSeconds());
   return currDate;
-}
-
-async function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(), ms);
-  });
-}
-
-async function timeout(ms, callback) {
-  await sleep(ms);
-  callback();
 }
 
 async function loop() {
