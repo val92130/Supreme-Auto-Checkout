@@ -36,10 +36,10 @@ export default class CheckoutProcessor extends BaseProcessor {
     const keywords = queryString.split(';');
     const kwColor = Helpers.getQueryStringValue('atc-color');
     const innerArticles = CheckoutProcessor.findArticles().filter(x => !x.soldOut);
-    const fuse = new FuzzyStringMatcher(innerArticles, { keys: ['name'] });
+    const fuse = new FuzzyStringMatcher(innerArticles, { key: 'name' });
     const bestMatches = fuse.search(keywords.join(' '));
     if (kwColor) {
-      const fuseColor = new FuzzyStringMatcher(bestMatches, { keys: ['color'] });
+      const fuseColor = new FuzzyStringMatcher(bestMatches, { key: 'color' });
       const matchesColor = fuseColor.search(kwColor);
       if (matchesColor.length) {
         match = matchesColor[0];

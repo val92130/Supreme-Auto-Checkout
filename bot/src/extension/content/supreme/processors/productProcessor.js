@@ -111,7 +111,7 @@ export default class ProductProcessor extends BaseProcessor {
         availableColor.node.click();
         return;
       }
-      const fuse = new FuzzyStringMatcher(colors, { keys: ['name'] });
+      const fuse = new FuzzyStringMatcher(colors, { key: 'name' });
       const matches = fuse.search(atcColor);
       if (matches.length) {
         matches[0].node.click();

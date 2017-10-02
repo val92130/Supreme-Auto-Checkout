@@ -22,6 +22,7 @@ Supreme Auto Checkout provides many features such as:
   - **Easy configuration.**
   - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
   - **Product Monitor**
+  - **Profile Export** - Export your profiles and securely import them onto another computer (Your data will be encrypted using AES).
 
 # Coming soon
 Features that will be added in the future:
@@ -131,7 +132,12 @@ First, you'll need to install the npm dependencies:
   $ yarn build
   ```
 
- Those commands will create a `build` folder containing the packaged application
+ Those commands will create a `build` folder containing the packaged application.
+
+ To run unit tests:
+ ```bash
+ $ yarn test
+ ```
 
 ## Donation
 This project will always be supported for free but any donation would be greatly appreciated!

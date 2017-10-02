@@ -1,13 +1,14 @@
 import * as types from '../constants/ActionTypes';
 import addNotification from '../actions/notification';
 
-export function createProfile(name, description) {
+export function createProfile(name, description, settings = {}) {
   return function(dispatch) {
     dispatch(addNotification('Profile created'));
     dispatch({
       type: types.PROFILE_CREATE,
       name,
       description,
+      settings,
     });
   };
 }
@@ -24,7 +25,7 @@ export function setProfileEnabled(name) {
 
 export function removeProfile(name) {
   return function(dispatch) {
-    dispatch(addNotification('Profile created'));
+    dispatch(addNotification('Profile deleted'));
     dispatch({
       type: types.PROFILE_REMOVE,
       name,

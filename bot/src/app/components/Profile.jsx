@@ -10,20 +10,28 @@ import {
 } from 'material-ui/Table';
 import { red300 } from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
-import Toggle from 'material-ui/Toggle';
 import IconButton from 'material-ui/IconButton';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
+import DownloadButton from 'material-ui/svg-icons/action/backup';
 import RaisedButton from 'material-ui/RaisedButton';
 import { createProfile, setProfileEnabled, removeProfile } from '../actions/profiles';
+import addNotification from '../actions/notification';
 import Layout from '../containers/Layout';
 import ProfileCreateForm from './ProfileCreateForm';
+import ProfileExportForm from './ProfileExportForm';
+import ProfileImportForm from './ProfileImportForm';
 import ProfileToggle from './ProfileToggle';
+import CryptoService from '../../services/CryptoService';
+import { slugify } from '../utils/Helpers';
 
 class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       createModalOpen: false,
+      exportModalOpen: false,
+      importModalOpen: false,
+      exportingProfile: null,
     };
   }
 
@@ -43,6 +51,32 @@ class Profile extends Component {
     });
   }
 
+  requestExportModalOpen(profile) {
+    this.setState({
+      exportModalOpen: true,
+      exportingProfile: profile,
+    });
+  }
+
+  requestCloseExportModal() {
+    this.setState({
+      exportModalOpen: false,
+      exportingProfile: null,
+    });
+  }
+
+  requestImportModalOpen() {
+    this.setState({
+      importModalOpen: true,
+    });
+  }
+
+  requestCloseImportModal() {
+    this.setState({
+      importModalOpen: false,
+    });
+  }
+
   onRequestDeleteProfile(name) {
     this.props.removeProfile(name);
   }
@@ -52,8 +86,55 @@ class Profile extends Component {
     this.requestCloseModal();
   }
 
+  handleExport(data) {
+    this.exportProfile(data.password, data.name);
+  }
+
+  async handleImport(data) {
+    const { file, password } = data;
+    const { notify, profiles } = this.props;
+    try {
+      const promise = new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsText(file);
+      });
+      const result = await promise;
+      const decrypted = CryptoService.decrypt(result, password);
+      const json = JSON.parse(decrypted);
+      if (!json.name || !json.profile) throw new Error('Malformed json data');
+      const existingNames = profiles.filter(x => x.name === json.name);
+      if (existingNames.length) {
+        json.name = `${json.name}(${existingNames.length})`;
+      }
+      this.props.createProfile(json.name, json.profile.description, json.profile.settings);
+      notify('Profile successfully imported');
+    } catch (e) {
+      console.error(e);
+      notify('Error while importing profile, corrupted data or invalid password');
+    } finally {
+      this.requestCloseImportModal();
+    }
+  }
+
+  exportProfile(password, name) {
+    const { exportingProfile } = this.state;
+    const data = {
+      name,
+      profile: exportingProfile,
+    };
+    const result = CryptoService.encrypt(JSON.stringify(data), password);
+    // Save as file
+    const url = `data:application/json,${result}`;
+    chrome.downloads.download({
+      url,
+      filename: slugify(name) + '.pfl',
+    });
+  }
+
   render() {
-    const { profiles, currentProfile } = this.props;
+    const { profiles } = this.props;
 
     return (
       <Layout title="Profiles">
@@ -68,13 +149,41 @@ class Profile extends Component {
             onRequestClose={() => this.requestCloseModal()}
           />
         </Dialog>
-        <RaisedButton label="Add new" onTouchTap={() => this.requestModalOpen()} primary />
+        <Dialog
+          open={this.state.exportModalOpen}
+          title="Export your profile"
+          modal={false}
+          onRequestClose={() => this.requestCloseExportModal()}
+        >
+          <ProfileExportForm
+            onSubmit={data => this.handleExport(data)}
+            onRequestClose={() => this.requestCloseExportModal()}
+          />
+        </Dialog>
+        <Dialog
+          open={this.state.importModalOpen}
+          title="Import a profile"
+          modal={false}
+          onRequestClose={() => this.requestCloseImportModal()}
+        >
+          <ProfileImportForm
+            onSubmit={async data => await this.handleImport(data)}
+            onRequestClose={() => this.requestCloseImportModal()}
+          />
+        </Dialog>
+        <div style={{ textAlign: 'center', marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+          <p>Create, import or export profiles to manage your different configurations.</p>
+          <p>Note: AutoCop products are independent of profiles.</p>
+          <RaisedButton label="Add new" onTouchTap={() => this.requestModalOpen()} primary />
+          <RaisedButton label="Import" onTouchTap={() => this.requestImportModalOpen()} />
+        </div>
         <Table selectable={false}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
               <TableHeaderColumn>Description</TableHeaderColumn>
               <TableHeaderColumn>Enabled</TableHeaderColumn>
+              <TableHeaderColumn>Export</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -87,6 +196,11 @@ class Profile extends Component {
                     <TableRowColumn>{x.description}</TableRowColumn>
                     <TableRowColumn>
                       <ProfileToggle profile={x} />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      <IconButton onTouchTap={() => this.requestExportModalOpen(x)}>
+                        <DownloadButton color={red300} />
+                      </IconButton>
                     </TableRowColumn>
                     <TableRowColumn>
                       <IconButton onTouchTap={() => this.onRequestDeleteProfile(x.name)} disabled={x.name === 'default'}>
@@ -113,9 +227,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createProfile: (name, description) => dispatch(createProfile(name, description)),
+    createProfile: (name, description, settings) => dispatch(createProfile(name, description, settings)),
     setProfileEnabled: name => dispatch(setProfileEnabled(name)),
     removeProfile: name => dispatch(removeProfile(name)),
+    notify: e => dispatch(addNotification(e)),
   };
 }
 
