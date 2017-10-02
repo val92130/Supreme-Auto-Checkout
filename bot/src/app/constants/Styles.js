@@ -2,6 +2,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { grey50 } from 'material-ui/styles/colors';
 import { spacing, typography } from 'material-ui/styles';
 
+const mainColor = 'rgb(247, 70, 70)';
 const styles = {
   paper: {
     margin: spacing.desktopGutter,
@@ -34,7 +35,7 @@ const styles = {
     color: typography.textFullWhite,
     lineHeight: `${spacing.desktopKeylineIncrement}px`,
     fontWeight: typography.fontWeightLight,
-    backgroundColor: 'rgb(72, 72, 72)',
+    backgroundColor: mainColor,
     height: 64,
     textAlign: 'center',
     cursor: 'pointer',
@@ -51,8 +52,8 @@ const styles = {
   },
   theme: {
     palette: {
-      primary1Color: 'rgb(72, 72, 72)',
-      primary2Color: 'rgb(72, 72, 72)',
+      primary1Color: mainColor,
+      primary2Color: mainColor,
     },
     drawer: {
       color: 'rgb(250, 250, 250)',

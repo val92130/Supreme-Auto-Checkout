@@ -131,7 +131,12 @@ First, you'll need to install the npm dependencies:
   $ yarn build
   ```
 
- Those commands will create a `build` folder containing the packaged application
+ Those commands will create a `build` folder containing the packaged application.
+
+ To run unit tests:
+ ```bash
+ $ yarn test
+ ```
 
 ## Donation
 This project will always be supported for free but any donation would be greatly appreciated!

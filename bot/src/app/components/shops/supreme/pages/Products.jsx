@@ -109,7 +109,7 @@ export default class Products extends Component {
       }
     }
     if (this.state.filter) {
-      const fuse = new FuzzyStringMatcher(allProducts, { keys: ['name'] });
+      const fuse = new FuzzyStringMatcher(allProducts, { key: 'name' });
       allProducts = fuse.search(this.state.filter);
     }
 
