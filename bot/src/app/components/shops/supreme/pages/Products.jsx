@@ -8,13 +8,12 @@ import Dialog from 'material-ui/Dialog';
 import FuzzyStringMatcher from '../../../../utils/FuzzyStringMatcher';
 import Layout from '../../../../containers/Layout';
 import ProductsService from '../../../../../services/supreme/ProductsService';
-import ProductWatcherService from '../../../../../services/supreme/ProductWatcherService';
 
 export default class Products extends Component {
   constructor(props) {
     super(props);
     const interval = setInterval(async () => {
-      const products = await ProductWatcherService.getProducts();
+      const products = await ProductsService.fetchProducts();
       this.setState({
         products,
       });
