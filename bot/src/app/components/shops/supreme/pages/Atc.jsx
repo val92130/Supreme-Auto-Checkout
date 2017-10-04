@@ -140,7 +140,7 @@ class Atc extends Component {
           onRequestClose={() => this.requestCloseModal()}
           autoScrollBodyContent
         >
-          <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} initialValues={this.state.editingAtc} />
+          <AtcCreateForm onRequestClose={() => this.requestCloseModal()} onSubmit={data => this.handleSubmit(data)} initialValues={this.state.editingAtc} editing={isEditing} />
         </Dialog>
         <div style={{ textAlign: 'center', marginBottom: 16 }}>
           <p>Each product you add will be automatically added to your cart by the AutoCop once the timer reaches its end.</p>

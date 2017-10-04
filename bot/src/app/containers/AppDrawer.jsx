@@ -7,6 +7,7 @@ import Subheader from 'material-ui/Subheader';
 import ShopIcon from 'material-ui/svg-icons/action/shop';
 import SettingsIcon from 'material-ui/svg-icons/action/add-shopping-cart';
 import CartIcon from 'material-ui/svg-icons/action/settings';
+import ShoppingCartIcon from 'material-ui/svg-icons/action/shopping-cart';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
 import AccountIcon from 'material-ui/svg-icons/action/account-circle';
 import PaymentIcon from 'material-ui/svg-icons/action/payment';
@@ -91,6 +92,13 @@ class AppDrawer extends Component {
                 containerElement={<Link to={'/supreme/products'} />}
                 primaryText="Product listing"
                 leftIcon={<ListIcon />}
+              />,
+              <ListItem
+                key={4}
+                value="supreme/drops"
+                containerElement={<Link to={'/supreme/drops'} />}
+                primaryText="Drops"
+                leftIcon={<ShoppingCartIcon />}
               />,
             ]}
           />

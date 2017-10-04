@@ -16,7 +16,7 @@ import { categories } from '../../../constants/Utils';
 
 class AtcCreateForm extends Component {
   render() {
-    const { handleSubmit, pristine, submitting, onRequestClose, atcProducts, isEditing } = this.props;
+    const { handleSubmit, pristine, submitting, onRequestClose, atcProducts, initialValues, editing } = this.props;
     const renderChip = ({input, hintText, floatingLabelText, meta: {touched, error} }) => (
       <ChipInput
         {...input}
@@ -45,9 +45,12 @@ class AtcCreateForm extends Component {
       float: 'right',
     };
 
+    const initialAtcName = initialValues.name;
     const formValidators = [Validators.required];
-    if (!isEditing) {
+    if (!editing) {
       formValidators.push(Validators.unique(atcProducts.map(x => x.name)));
+    } else {
+      formValidators.push(Validators.unique(atcProducts.filter(x => x.name !== initialAtcName).map(x => x.name)));
     }
     return (
       <div>
@@ -151,7 +154,6 @@ function mapStateToProps(state, ownProps) {
     initialValues: Object.assign({
       enabled: true,
     }, ownProps.initialValues),
-    isEditing: !!ownProps.initialValues,
   };
 }
 

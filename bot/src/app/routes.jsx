@@ -4,6 +4,8 @@ import App from './containers/App';
 import Configuration from './components/shops/supreme/Configuration';
 import Atc from './components/shops/supreme/pages/Atc';
 import Products from './components/shops/supreme/pages/Products';
+import Drops from './components/shops/supreme/pages/Drops';
+import DropProducts from './components/shops/supreme/pages/DropProducts';
 import Profile from './components/Profile';
 
 export default () => {
@@ -13,6 +15,9 @@ export default () => {
       <Route path="supreme/configuration" component={Configuration} />
       <Route path="supreme/autocop" component={Atc} />
       <Route path="supreme/products" component={Products} />
+      <Route path="supreme/drops" component={Drops}>
+        <Route path=":slug/" component={DropProducts} />
+      </Route>
       <Route path="profiles/" component={Profile} />
       <Redirect from="/" to="supreme/" />
     </Route>
