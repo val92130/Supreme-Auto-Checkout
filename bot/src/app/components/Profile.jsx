@@ -22,6 +22,7 @@ import ProfileExportForm from './ProfileExportForm';
 import ProfileImportForm from './ProfileImportForm';
 import ProfileToggle from './ProfileToggle';
 import CryptoService from '../../services/CryptoService';
+import ChromeService from '../../services/ChromeService';
 import { slugify } from '../utils/Helpers';
 
 class Profile extends Component {
@@ -66,6 +67,10 @@ class Profile extends Component {
   }
 
   requestImportModalOpen() {
+    if (ChromeService.isPopup()) {
+      ChromeService.openOptionsPage('profiles');
+      return;
+    }
     this.setState({
       importModalOpen: true,
     });
@@ -88,6 +93,7 @@ class Profile extends Component {
 
   handleExport(data) {
     this.exportProfile(data.password, data.name);
+    this.requestCloseExportModal();
   }
 
   async handleImport(data) {
