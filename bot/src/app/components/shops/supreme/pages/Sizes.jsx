@@ -181,6 +181,21 @@ class Sizes extends Component {
               }
             </Field>
           </div>
+
+          <div>
+            <Field
+              name="hats"
+              component={SelectField}
+              floatingLabelText="Hats"
+              hintText="Hats"
+              style={Styles.fields.text}
+              validate={[Validators.required]}
+            >
+              {
+                Utils.hatsSizes.map(x => <MenuItem key={x} value={x} primaryText={x} />)
+              }
+            </Field>
+          </div>
           <div>
             <RaisedButton
               label="Save"
