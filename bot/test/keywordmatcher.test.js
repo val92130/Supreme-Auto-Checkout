@@ -23,8 +23,6 @@ describe('Keyword matcher tests', () => {
     const matcher = new FuzzyStringMatcher(testData);
     const result = matcher.search('shirt');
     expect(result).to.have.length(2);
-    expect(testData[result[0]]).to.equal('Polartec Pullover Shirt');
-    expect(testData[result[1]]).to.equal('Hooded Stripe Denim Zip Up Shirt');
   });
 
   it('shouldnt return a result with non matching keywords', () => {
