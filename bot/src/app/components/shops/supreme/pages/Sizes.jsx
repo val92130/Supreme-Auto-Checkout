@@ -14,7 +14,7 @@ import * as menus from '../../../../constants/Menus';
 
 class Sizes extends Component {
   handleSetAny() {
-    for (let field of ['accessories', 't-shirts', 'pants', 'shorts', 'sweatshirts', 'tops-sweaters', 'shirts', 'jackets', 'shoes', 'skate']) {
+    for (let field of ['accessories', 't-shirts', 'pants', 'shorts', 'sweatshirts', 'tops-sweaters', 'shirts', 'jackets', 'shoes', 'skate', 'hats']) {
       this.props.changeFieldValue(field, 'Any');
     }
   }
