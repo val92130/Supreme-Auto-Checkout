@@ -77,14 +77,14 @@ class AppDrawer extends Component {
                 containerElement={<Link to={'/supreme/configuration'} />}
                 value="supreme/configuration"
                 primaryText="Configuration"
-                leftIcon={isIncomplete(settings, 'Supreme') ? <IncompleteIcon /> : <SettingsIcon />}
+                leftIcon={isIncomplete(settings, 'Supreme') ? <IncompleteIcon /> : <CartIcon />}
               />,
               <ListItem
                 key={2}
                 value="supreme/autocop"
                 containerElement={<Link to={'/supreme/autocop'} />}
                 primaryText="AutoCop"
-                leftIcon={<CartIcon />}
+                leftIcon={<SettingsIcon />}
               />,
               <ListItem
                 key={3}
