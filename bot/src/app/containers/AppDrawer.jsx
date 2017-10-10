@@ -100,6 +100,13 @@ class AppDrawer extends Component {
                 primaryText="Drops"
                 leftIcon={<ShoppingCartIcon />}
               />,
+              <ListItem
+                key={5}
+                value="supreme/restocks"
+                containerElement={<Link to={'/supreme/drops'} />}
+                primaryText="Restocks"
+                leftIcon={<ShoppingCartIcon />}
+              />,
             ]}
           />
           <Subheader>Settings</Subheader>
