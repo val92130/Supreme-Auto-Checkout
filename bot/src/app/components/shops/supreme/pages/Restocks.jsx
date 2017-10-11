@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { green300, red300 } from 'material-ui/styles/colors';
 import { List, ListItem } from 'material-ui/List';
 import RestockAction from 'material-ui/svg-icons/action/restore';
 import NewAction from 'material-ui/svg-icons/alert/add-alert';
-import ClearAction from 'material-ui/svg-icons/action/delete';
 import moment from 'moment';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -15,7 +13,7 @@ import StorageService from '../../../../../services/StorageService';
 import ChromeService from '../../../../../services/ChromeService';
 
 
-class Restocks extends Component {
+export default class Restocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,8 +21,16 @@ class Restocks extends Component {
       locale: 'eu',
     };
 
-    StorageService.getItem('restocks').then(restocks => this.setState({ restocks }));
-    StorageService.getItem('locale').then(locale => this.setState({ locale }));
+    StorageService.getItem('restocks').then((restocks) => {
+      if (restocks) {
+        this.setState({ restocks });
+      }
+    });
+    StorageService.getItem('locale').then((locale) => {
+      if (locale) {
+        this.setState({ locale });
+      }
+    });
   }
 
   handleLocaleChange(newLocale) {
@@ -36,6 +42,7 @@ class Restocks extends Component {
   }
 
   render() {
+    if (!this.state.restocks) return (<div>loading...</div>);
     const items = this.state.restocks.sort(function(a, b) {
       return new Date(b.timestamp) - new Date(a.timestamp);
     }).map((x, i) => {
@@ -78,12 +85,3 @@ class Restocks extends Component {
   }
 }
 
-function mapStateToProps() {
-
-}
-
-function mapDispatchToProps() {
-
-}
-
-export default connect()(Restocks);
