@@ -23,7 +23,7 @@ export default class RestockMonitor {
       await StorageService.setItem('stock', newStock);
       return;
     }
-    const newProducts = savedStock.filter(x => !newStock.find(z => z.url === x.url));
+    const newProducts = newStock.filter(x => !savedStock.find(z => z.url === x.url));
     if (newProducts.length) {
       for (const callback of this.onNewProductsCallbacks) callback(newProducts);
     }
