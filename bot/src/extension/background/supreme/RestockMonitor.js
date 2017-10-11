@@ -20,6 +20,7 @@ export default class RestockMonitor {
     const newStock = await RestocksService.fetchCurrentStock();
     const savedStock = await StorageService.getItem('stock');
     if (!savedStock) {
+      for (const callback of this.onNewProductsCallbacks) callback(newStock);
       await StorageService.setItem('stock', newStock);
       return;
     }
