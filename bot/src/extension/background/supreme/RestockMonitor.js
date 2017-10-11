@@ -4,12 +4,12 @@ import StorageService from '../../../services/StorageService';
 export default class RestockMonitor {
   constructor(intervalMs) {
     this.intervalMs = intervalMs;
-    this.onNewProductCallbacks = [];
+    this.onNewProductsCallbacks = [];
     this.onProductRestockCallbacks = [];
   }
 
-  addOnNewProductListener(func) {
-    this.onNewProductCallbacks.push(func);
+  addOnNewProductsListener(func) {
+    this.onNewProductsCallbacks.push(func);
   }
 
   addOnProductRestockListener(func) {
@@ -24,8 +24,8 @@ export default class RestockMonitor {
       return;
     }
     const newProducts = savedStock.filter(x => !newStock.find(z => z.url === x.url));
-    for (const newProd of newProducts) {
-      for (const callback of this.onNewProductCallbacks) callback(newProd);
+    if (newProducts.length) {
+      for (const callback of this.onNewProductsCallbacks) callback(newProducts);
     }
 
     for (let i = 0; i < newStock.length; i += 1) {
