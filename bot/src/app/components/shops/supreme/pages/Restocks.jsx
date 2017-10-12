@@ -87,13 +87,22 @@ class Restocks extends Component {
             <MenuItem value={'eu'} primaryText="EU" />
           </SelectField>
           <br />
-          <RaisedButton label="Clear all" onTouchTap={() => this.handleClearAll()} primary />
         </div>
-        <div style={style}>
-          <List>
-            {items}
-          </List>
-        </div>
+        {
+          !items.length && <p style={{ textAlign: 'center', fontSize: '1.5em' }}>No restocks yet</p>
+        }
+        {items.length > 0 && (
+          <div>
+            <div style={{ textAlign: 'center' }}>
+              <RaisedButton label="Clear all" onTouchTap={() => this.handleClearAll()} primary />
+            </div>
+            <div style={style}>
+              <List>
+                {items}
+              </List>
+            </div>
+          </div>
+        )}
       </Layout>
     );
   }
