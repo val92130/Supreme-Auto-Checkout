@@ -26,6 +26,18 @@ function getStatesForCountry(country) {
   }
 }
 
+function getCreditCardsForCountry(country) {
+  switch (country) {
+    case 'CANADA':
+    case 'USA':
+      return Utils.usCreditCards;
+    case 'JAPAN':
+      return Utils.japanCreditCards;
+    default:
+      return Utils.creditCards;
+  }
+}
+
 const Billing = props => {
   const { handleSubmit, pristine, submitting, country } = props;
   return (
@@ -146,7 +158,7 @@ const Billing = props => {
             validate={[Validators.required]}
           >
             {
-              (country === 'JAPAN' ? Utils.japanCreditCards : Utils.creditCards).map(x =>
+              getCreditCardsForCountry(country).map(x =>
                 <MenuItem value={x.value} primaryText={x.text} key={x.value} />,
               )
             }
