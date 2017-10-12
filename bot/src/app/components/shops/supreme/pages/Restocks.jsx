@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import { connect } from 'react-redux';
 import { green300, red300 } from 'material-ui/styles/colors';
 import { List, ListItem } from 'material-ui/List';
 import RestockAction from 'material-ui/svg-icons/action/restore';
@@ -11,9 +12,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Layout from '../../../../containers/Layout';
 import StorageService from '../../../../../services/StorageService';
 import ChromeService from '../../../../../services/ChromeService';
+import addNotification from '../../../../actions/notification';
 
 
-export default class Restocks extends Component {
+class Restocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,10 +48,12 @@ export default class Restocks extends Component {
 
   handleLocaleChange(newLocale) {
     if (this.state.locale === newLocale) return;
+    this.props.notify(`Store location changed to ${newLocale}`);
     StorageService.setItem('locale', newLocale).then(() => StorageService.setItem('stock', [])).then(() => this.setState({ locale: newLocale }));
   }
 
   handleClearAll() {
+    this.props.notify('Restock list cleared');
     StorageService.setItem('restocks', []).then(() => this.setState({ restocks: [] }));
   }
 
@@ -94,4 +98,12 @@ export default class Restocks extends Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    notify: msg => dispatch(addNotification(msg)),
+  };
+}
+
+export default connect(undefined, mapDispatchToProps)(Restocks);
 
