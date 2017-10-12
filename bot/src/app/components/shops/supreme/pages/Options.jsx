@@ -25,6 +25,7 @@ const defaultValues = {
   hideSoldOut: false,
   addToCartDelay: 200,
   checkoutDelay: 2000,
+  showNotifications: false,
 };
 
 class HelperField extends Component {
@@ -155,6 +156,26 @@ const Options = props => {
               <div>
                 <p>
                   This option will hide sold out products from the Supreme online shop.
+                </p>
+              </div>
+            }
+          />
+        </div>
+
+        <div>
+          <HelperField
+            field={
+              <Field
+                name="showNotifications"
+                component={Toggle}
+                style={{ width: 'auto' }}
+              />
+            }
+            title="Display restock notifications"
+            helperText={
+              <div>
+                <p>
+                  If this option is enabled you will receive a notification whenever a product restocks or land on the shop.
                 </p>
               </div>
             }

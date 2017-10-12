@@ -25,15 +25,38 @@ async function updateRestockList(products, type) {
   await StorageService.setItem('restocks', restockList);
 }
 
+async function getSettings() {
+  try {
+    const profile = await StorageService.getCurrentProfileSettings();
+    return profile.Supreme;
+  } catch(e) {
+    console.info('Restock monitor ---- Error while getting settings, bot is not yet configured');
+    console.info(e);
+    return null;
+  }
+}
+
+async function canDisplayNotifications() {
+  const settings = await getSettings();
+  if (!settings) return false;
+  return settings.Options && settings.Options.showNotifications;
+}
+
+async function createNotification(title, content, callback) {
+  if (await canDisplayNotifications()) {
+    ChromeService.createNotification(title, content, callback);
+  }
+}
+
 async function onNewProducts(products) {
   if(products.length > 3) {
-    ChromeService.createNotification('New products', `${products.length} new products just landed on the store!`, (notif) => {
+    await createNotification('New products', `${products.length} new products just landed on the store!`, (notif) => {
       window.open('http://supremenewyork.com/shop/new');
       notif.close();
     });
   } else {
     for (let product of products) {
-      ChromeService.createNotification('New product', `Product ${product.name} just landed on the store!`, (notif) => {
+      await createNotification('New product', `Product ${product.name} just landed on the store!`, (notif) => {
         window.open(`http://supremenewyork.com/${product.url}`);
         notif.close();
       });
@@ -44,7 +67,7 @@ async function onNewProducts(products) {
 }
 
 async function onProductRestock(product) {
-  ChromeService.createNotification('Restock alert', `${product.name} in ${product.color} is back in stock!`, (notif) => {
+  await createNotification('Restock alert', `${product.name} in ${product.color} is back in stock!`, (notif) => {
     window.open(`http://supremenewyork.com/${product.url}`);
     notif.close();
   });
