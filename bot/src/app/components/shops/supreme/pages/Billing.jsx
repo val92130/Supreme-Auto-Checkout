@@ -79,6 +79,16 @@ const Billing = props => {
 
         <div>
           <Field
+            name="oba3"
+            component={TextField}
+            floatingLabelText="Address 2"
+            hintText="Address 2"
+            style={Styles.fields.text}
+          />
+        </div>
+
+        <div>
+          <Field
             name="order_billing_city"
             component={TextField}
             floatingLabelText="City"
