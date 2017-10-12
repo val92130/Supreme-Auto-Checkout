@@ -23,7 +23,6 @@ const defaultValues = {
   autoPay: false,
   strictSize: true,
   hideSoldOut: false,
-  captchaBypass: false,
   addToCartDelay: 200,
   checkoutDelay: 2000,
 };
@@ -162,25 +161,6 @@ const Options = props => {
           />
         </div>
 
-        <div>
-          <HelperField
-            field={
-              <Field
-                name="captchaBypass"
-                component={Toggle}
-                style={{ width: 'auto' }}
-              />
-            }
-            title="Bypass captcha (beta)"
-            helperText={
-              <div>
-                <p>
-                  This option will remove the captcha during the checkout process, use with caution as they are high chances the bypass won't work.
-                </p>
-              </div>
-            }
-          />
-        </div>
         <div>
           <HelperField
             field={

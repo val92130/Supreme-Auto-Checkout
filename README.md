@@ -16,18 +16,17 @@ Supreme Auto Checkout provides many features such as:
   - **Multi profiles** - You can setup multiple profiles to quickly switch settings during drop day!
   - **Configurable delays for every steps of the checkout process.**
   - **Size choice for every category of product.**
-  - **Captcha bypass** (beta feature).
   - **Option to set a minimum/maximum price for a product.**
   - **Option to hide sold out products.**
   - **Easy configuration.**
   - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
   - **Product Monitor**
   - **Profile Export** - Export your profiles and securely import them onto another computer (Your data will be encrypted using AES).
+  - **Drop list**
 
 # Coming soon
 Features that will be added in the future:
   - **Proxies support**
-  - **Drop list**
 
 # Installation
 
@@ -102,14 +101,6 @@ This will open a form requesting the following informations:
    - **Enabled**
 
 You can manually trigger the AutoCop for a product by clicking on the `Run now` button in the Atc product list.
-
-# Captcha Bypass
-
-The **Captcha Bypass** feature works by deleting from the DOM the node containing the re-captcha input.
-
-This temporary works because Supreme doesn't seems to validate Google's Re-captcha on server-side.
-
-This option is **NOT** recommended, use with caution.
 
 # Development
 
