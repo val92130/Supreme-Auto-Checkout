@@ -21,20 +21,32 @@ export default class Restocks extends Component {
       locale: 'eu',
     };
 
-    StorageService.getItem('restocks').then((restocks) => {
-      if (restocks) {
-        this.setState({ restocks });
-      }
-    });
+    this.updateRestockList();
     StorageService.getItem('locale').then((locale) => {
       if (locale) {
         this.setState({ locale });
       }
     });
+
+    ChromeService.addMessageListener('productRestocked', () => {
+      this.updateRestockList();
+    });
+    ChromeService.addMessageListener('productsAdded', () => {
+      this.updateRestockList();
+    });
+  }
+
+  updateRestockList() {
+    StorageService.getItem('restocks').then((restocks) => {
+      if (restocks) {
+        this.setState({ restocks });
+      }
+    });
   }
 
   handleLocaleChange(newLocale) {
-    StorageService.setItem('locale', newLocale).then(() => this.setState({ locale: newLocale }));
+    if (this.state.locale === newLocale) return;
+    StorageService.setItem('locale', newLocale).then(() => StorageService.setItem('stock', [])).then(() => this.setState({ locale: newLocale }));
   }
 
   handleClearAll() {
@@ -43,9 +55,7 @@ export default class Restocks extends Component {
 
   render() {
     if (!this.state.restocks) return (<div>loading...</div>);
-    const items = this.state.restocks.sort(function(a, b) {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    }).map((x, i) => {
+    const items = this.state.restocks.map((x, i) => {
       const icon = x.type === 'new' ? <NewAction /> : <RestockAction />;
       const color = x.type === 'new' ? red300 : green300;
       const text = x.type === 'new' ? `${x.product.name} in ${x.product.color} dropped` : `${x.product.name} in ${x.product.color} restocked`;
@@ -64,7 +74,7 @@ export default class Restocks extends Component {
       <Layout>
         <div style={{ textAlign: 'center' }}>
           <SelectField
-            floatingLabelText="Country"
+            floatingLabelText="Supreme shop location"
             value={this.state.locale}
             style={{ textAlign: 'justify' }}
             onChange={(e, i, v) => this.handleLocaleChange(v)}

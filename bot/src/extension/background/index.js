@@ -4,7 +4,7 @@ import StorageService from '../../services/StorageService';
 import ChromeService from '../../services/ChromeService';
 
 async function updateRestockList(products, type) {
-  const restockList = await StorageService.getItem('restocks');
+  let restockList = await StorageService.getItem('restocks');
   const entries = [];
   for (const product of products) {
     entries.push({
@@ -19,6 +19,9 @@ async function updateRestockList(products, type) {
     return;
   }
   restockList.push(...entries);
+  restockList = restockList.sort((a, b) => {
+    return new Date(b.timestamp) - new Date(a.timestamp);
+  }).splice(0, 100);
   await StorageService.setItem('restocks', restockList);
 }
 
@@ -37,6 +40,7 @@ async function onNewProducts(products) {
     }
   }
   await updateRestockList(products, 'new');
+  ChromeService.sendMessage('productsAdded', { products });
 }
 
 async function onProductRestock(product) {
@@ -45,6 +49,7 @@ async function onProductRestock(product) {
     notif.close();
   });
   await updateRestockList([product], 'restock');
+  ChromeService.sendMessage('productRestocked', { product });
 }
 
 async function start() {
