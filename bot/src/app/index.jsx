@@ -11,6 +11,7 @@ import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import getRoutes from './routes';
 import StorageService from '../services/StorageService';
+import migrate from './migrations';
 
 
 injectTapEventPlugin();
@@ -20,7 +21,8 @@ if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
 async function init() {
-  const savedState = await StorageService.getOrCreateState();
+  let savedState = await StorageService.getOrCreateState();
+  savedState = migrate(savedState);
   const appReducer = combineReducers(Object.assign({}, reducers, {
     routing: routerReducer,
     form: formReducer,

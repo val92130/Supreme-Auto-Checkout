@@ -170,24 +170,25 @@ class Atc extends Component {
                   return (<p style={{ textAlign: 'center' }}>Click "Add new" to add a new Autocop Product"</p>);
                 }
                 return atcProducts.map((x) => {
+                  const product = x.product;
                   return (
-                    <TableRow key={x.name}>
-                      <TableRowColumn>{x.name}</TableRowColumn>
+                    <TableRow key={product.name}>
+                      <TableRowColumn>{product.name}</TableRowColumn>
                       <TableRowColumn>
-                        <Toggle toggled={x.enabled} onToggle={async () => await this.toggleAtc(x.name, !x.enabled)} />
+                        <Toggle toggled={product.enabled} onToggle={async () => await this.toggleAtc(product.name, !product.enabled)} />
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={async () => await this.runNow(x.category, x.keywords, x.color)}>
+                        <IconButton onTouchTap={async () => await this.runNow(product.category, product.keywords, product.color)}>
                           <LaunchIcon />
                         </IconButton>
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={() => this.requestModalOpen(x)}>
+                        <IconButton onTouchTap={() => this.requestModalOpen(product)}>
                           <EditIcon />
                         </IconButton>
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>
+                        <IconButton onTouchTap={() => this.onRequestDeleteAtc(product.name)}>
                           <DeleteButton color={red300} />
                         </IconButton>
                       </TableRowColumn>

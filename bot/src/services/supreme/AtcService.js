@@ -34,6 +34,6 @@ export default class AtcService {
 
   static async getEnabledAtcProducts() {
     const products = await this.getAtcProducts();
-    return products.atcProducts.filter(x => x.enabled)
+    return products.atcProducts.filter(x => x.product.enabled)
   }
 }
