@@ -52,10 +52,23 @@ export default class CheckoutProcessor extends BaseProcessor {
     } else if (bestMatches) {
       match = bestMatches[0];
     }
+    const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
 
     if (match && !match.soldOut) {
+      if (atcRunAll) {
+        match.url = `${match.url}?atc-run-all=true&atc-id=${atcId}`;
+      }
       window.location.href = match.url;
     } else {
+      if (!isNaN(atcId) && atcRunAll) {
+        const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
+        if (nextProduct) {
+          window.location.href = AtcService.getAtcUrl(nextProduct, true);
+        } else {
+          window.location.href = '/checkout';
+        }
+        return;
+      }
       setTimeout(() => {
         window.location.reload();
       }, 1000);

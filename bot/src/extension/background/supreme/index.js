@@ -36,13 +36,6 @@ async function getSettings() {
   }
 }
 
-async function processProducts(products) {
-  for (let i = 0; i < products.length; i += 1) {
-    await AtcService.openAtcTab(products[i]);
-    await sleep(400);
-  }
-}
-
 async function processByMonitor(atcProducts) {
   const monitorProducts = await ProductsService.fetchProducts();
   if (!monitorProducts) {
@@ -95,7 +88,7 @@ async function loop() {
     if (settings.Options.atcUseMonitor) {
       await processByMonitor(products);
     } else {
-      await processProducts(products);
+      await AtcService.runAll();
     }
     await timeout(4000, () => loop());
     return;

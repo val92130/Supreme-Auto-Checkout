@@ -2,20 +2,25 @@ import KeywordsService from '../KeywordsService';
 import StorageService from '../StorageService';
 
 export default class AtcService {
-  static async openAtcTab(product, runAll = false) {
-    if (!product) return false;
-    const category = product.product.category === 'tops-sweaters' ? 'tops_sweaters' : product.product.category;
-    let url = `http://supremenewyork.com/shop/all/${category}?atc-id=${product.id}`;
+  static getAtcUrl(atcProduct, runAll = false) {
+    const category = atcProduct.product.category === 'tops-sweaters' ? 'tops_sweaters' : atcProduct.product.category;
+    let url = `http://supremenewyork.com/shop/all/${category}?atc-id=${atcProduct.id}`;
     if (runAll) {
       url = url + '&atc-run-all=true';
     }
+    return url;
+  }
+
+  static async openAtcTab(product, runAll = false) {
+    if (!product) return false;
+    const url = this.getAtcUrl(product, runAll);
     const win = window.open(url, '_blank');
     win.focus();
   }
 
   static async openAtcTabById(atcId, runAll = false) {
     const product = await this.getAtcProductById(atcId);
-    return await this.openAtcTab(product);
+    return await this.openAtcTab(product, runAll);
   }
 
   static async openAtcTabMonitor(productList, product) {
@@ -40,7 +45,7 @@ export default class AtcService {
     const firstProduct = productList.sort((a, b) => a.id - b.id)[0];
     if (!firstProduct) return false;
 
-    await this.openAtcTabById(firstProduct.id);
+    await this.openAtcTab(firstProduct, true);
   }
 
   static async getAtcProductById(id) {

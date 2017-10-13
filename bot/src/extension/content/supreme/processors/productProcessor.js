@@ -2,6 +2,7 @@ import { notify } from '../notification';
 import * as Helpers from '../helpers';
 import BaseProcessor from './baseProcessor';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
+import AtcService from '../../../../services/supreme/AtcService';
 
 export default class ProductProcessor extends BaseProcessor {
   static start(preferences, sizings, billing) {
@@ -88,7 +89,7 @@ export default class ProductProcessor extends BaseProcessor {
    * try to figure out if the product is sold out or not, and if not, it will find the best available size
    * based on the user's preferences and then it will add the item to cart
    */
-  processProduct() {
+  async processProduct() {
     const atcStyleId = Helpers.getQueryStringValue('atc-style-id');
     const atcColor = Helpers.getQueryStringValue('atc-color');
     if (atcStyleId) {
@@ -141,11 +142,26 @@ export default class ProductProcessor extends BaseProcessor {
       const submitBtn = document.querySelector('[name=commit]');
       const productCategory = ProductProcessor.getProductCategory();
       const sizesOptions = ProductProcessor.getSizesOptions();
+      const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
+      const atcId = Number(Helpers.getQueryStringValue('atc-id'));
+      let nextUrl = null;
+      if (!isNaN(atcId) && atcRunAll) {
+        const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
+        if (nextProduct) {
+          nextUrl = AtcService.getAtcUrl(nextProduct, true);
+        }
+      }
 
       // If sizes options are available
       if (sizesOptions.length) {
         const categorySize = this.sizings[productCategory];
         if (categorySize === undefined) {
+          if (nextUrl) {
+            window.location.href = nextUrl;
+            Helpers.timeout(() => window.location.href = nextUrl, 500,
+              `Unknown category "${productCategory}", going to next atc product...`, true);
+            return;
+          }
           notify(`Unknown category "${productCategory}", cannot process`, true);
           return;
         }
@@ -153,6 +169,10 @@ export default class ProductProcessor extends BaseProcessor {
 
         if (!targetOption) {
           if (this.preferences.strictSize && categorySize !== 'Any') {
+            if (nextUrl) {
+              Helpers.timeout(() => window.location.href = nextUrl, 500, 'The desired size is not available', true);
+              return;
+            }
             notify('The desired size is not available', true);
             return;
           }
@@ -162,9 +182,15 @@ export default class ProductProcessor extends BaseProcessor {
       }
 
       const atcDelay = this.preferences.addToCartDelay;
+
       Helpers.timeout(() => {
-        const process = () => {
+        const process = async () => {
           if (document.querySelector('.in-cart') && document.getElementById('cart')) {
+            if (nextUrl) {
+              window.location.href = nextUrl;
+              Helpers.timeout(() => window.location.href = nextUrl, 200, 'Going to checkout...');
+              return;
+            }
             setTimeout(() => {
               window.location.href = '/checkout';
             }, 200);

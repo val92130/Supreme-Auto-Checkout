@@ -98,10 +98,7 @@ class Atc extends Component {
   }
 
   async runAll() {
-    const atcProducts = this.props.atcProducts;
-    for (let i = 0; i < atcProducts.length; i += 1) {
-      setTimeout(async () => await this.runNow(atcProducts[i]), i * 400);
-    }
+    await AtcService.runAll();
   }
 
   async runNow(atcProduct) {
@@ -206,7 +203,7 @@ function mapStateToProps(state) {
   const currentProfile = state.profiles.currentProfile;
   const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   let props = {
-    atcProducts: state.atc.atcProducts,
+    atcProducts: state.atc.atcProducts.sort((a, b) => a.id - b.id),
   };
   if (settings && settings.Supreme && settings.Supreme.Options) {
     props = Object.assign({}, props, {
