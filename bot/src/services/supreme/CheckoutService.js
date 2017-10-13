@@ -28,6 +28,7 @@ export default class CheckoutService {
   }
 
   static setInputValue(input, value, dispatchEvent=true) {
+    if (value === undefined) return input;
     input.value = value;
     if (dispatchEvent) {
       input.dispatchEvent(new Event('change'));
