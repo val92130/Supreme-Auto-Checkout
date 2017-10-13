@@ -6,11 +6,9 @@ import { Card, CardMedia, CardText } from 'material-ui/Card';
 import Dialog from 'material-ui/Dialog';
 import Layout from '../../../../containers/Layout';
 import DropsService from '../../../../../services/supreme/DropsService';
-import FuzzyStringMatcher from '../../../../utils/FuzzyStringMatcher';
 import addNotification from '../../../../actions/notification';
 import { addAtcProduct } from '../../../../actions/atc';
 import AtcCreateForm from '../AtcCreateForm';
-import { categories } from '../../../../constants/Utils';
 
 class DropProducts extends Component {
   constructor(props) {
