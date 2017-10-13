@@ -14,6 +14,15 @@ export default class AtcService {
     win.focus();
   }
 
+  static async openAtcTabById(atcId) {
+    const product = await this.getAtcProductById(atcId);
+    if (!product) return false;
+
+    const url = `http://supremenewyork.com/shop/all/${product.product.category}?atc-id=${atcId}`;
+    const win = window.open(url, '_blank');
+    win.focus();
+  }
+
   static openAtcTabMonitor(monitorProducts, category, keywords, color) {
     const bestMatch = KeywordsService.findBestMatch(monitorProducts, keywords, category);
     const atcColor = color || 'any';
@@ -22,6 +31,17 @@ export default class AtcService {
       return true;
     }
     return false;
+  }
+
+  static async getAtcProductById(id) {
+    const products = await this.getAtcProducts();
+    return products.atcProducts.find(x => x.id === id);
+  }
+
+  static async getNextEnabledAtcProduct(atcId) {
+    let products = await this.getEnabledAtcProducts();
+    products = products.sort((a, b) => a.id - b.id);
+    return products.find(x => x.id > atcId && x.id !== atcId);
   }
 
   static async getAtcProducts() {
@@ -34,6 +54,6 @@ export default class AtcService {
 
   static async getEnabledAtcProducts() {
     const products = await this.getAtcProducts();
-    return products.atcProducts.filter(x => x.product.enabled)
+    return products.atcProducts.filter(x => x.product.enabled);
   }
 }

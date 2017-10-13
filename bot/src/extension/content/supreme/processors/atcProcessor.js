@@ -1,6 +1,7 @@
 import BaseProcessor from './baseProcessor';
 import * as Helpers from '../helpers';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
+import AtcService from '../../../../services/supreme/AtcService';
 
 
 export default class CheckoutProcessor extends BaseProcessor {
@@ -27,14 +28,18 @@ export default class CheckoutProcessor extends BaseProcessor {
     }));
   }
 
-  processAtc() {
-    const queryString = Helpers.getQueryStringValue('atc-kw');
-    if (!queryString) {
+  async processAtc() {
+    const queryString = Helpers.getQueryStringValue('atc-id');
+    if (!queryString || isNaN(Number(queryString))) {
       return;
     }
+    const atcId = Number(queryString);
+    const atcProduct = await AtcService.getAtcProductById(atcId);
+    if (!atcProduct) return;
+
     let match = null;
-    const keywords = queryString.split(';');
-    const kwColor = Helpers.getQueryStringValue('atc-color');
+    const keywords = atcProduct.product.keywords;
+    const kwColor = atcProduct.product.color;
     const innerArticles = CheckoutProcessor.findArticles().filter(x => !x.soldOut);
     const fuse = new FuzzyStringMatcher(innerArticles, { key: 'name' });
     const bestMatches = fuse.search(keywords.join(' '));

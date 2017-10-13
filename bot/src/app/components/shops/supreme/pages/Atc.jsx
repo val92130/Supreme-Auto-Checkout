@@ -100,13 +100,11 @@ class Atc extends Component {
   async runAll() {
     const atcProducts = this.props.atcProducts;
     for (let i = 0; i < atcProducts.length; i += 1) {
-      const product = atcProducts[i];
-      setTimeout(async () => await this.runNow(product.category, product.keywords, product.color), i * 400);
+      setTimeout(async () => await this.runNow(atcProducts[i]), i * 400);
     }
   }
 
-  async runNow(category, keywords, color) {
-    let atcCategory = category;
+  async runNow(atcProduct) {
     const profile = await StorageService.getCurrentProfileSettings(version);
     if (!profile || !profile.Supreme) {
       this.props.notify('Please configure your bot before running ATC');
@@ -114,13 +112,13 @@ class Atc extends Component {
     }
     const useMonitor = profile.Supreme.Options.atcUseMonitor;
     if (!useMonitor) {
-      return AtcService.openAtcTab(atcCategory, keywords, color);
+      return AtcService.openAtcTabById(atcProduct.id);
     }
     const monitorProducts = await ProductsService.fetchProducts();
     if (!monitorProducts) {
       return false;
     }
-    const hasFound = AtcService.openAtcTabMonitor(monitorProducts, atcCategory, keywords, color);
+    const hasFound = AtcService.openAtcTabMonitor(monitorProducts, atcProduct.product.category, atcProduct.product.keywords, atcProduct.product.color);
     if (!hasFound) {
       this.props.notify('No matching product found');
     }
@@ -178,7 +176,7 @@ class Atc extends Component {
                         <Toggle toggled={product.enabled} onToggle={async () => await this.toggleAtc(product.name, !product.enabled)} />
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={async () => await this.runNow(product.category, product.keywords, product.color)}>
+                        <IconButton onTouchTap={async () => await this.runNow(x)}>
                           <LaunchIcon />
                         </IconButton>
                       </TableRowColumn>
