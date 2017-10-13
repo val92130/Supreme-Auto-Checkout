@@ -2,30 +2,21 @@ import KeywordsService from '../KeywordsService';
 import StorageService from '../StorageService';
 
 export default class AtcService {
-  static openAtcTab(category, keywords, color) {
-    if (category === 'tops-sweaters') {
-      category = 'tops_sweaters';
-    }
-    let url = `http://supremenewyork.com/shop/all/${category}?atc-kw=${keywords.join(';')}`;
-    if (color) {
-      url = `${url}&atc-color=${color}`;
-    }
-    const win = window.open(url, '_blank');
-    win.focus();
-  }
-
   static async openAtcTabById(atcId) {
     const product = await this.getAtcProductById(atcId);
     if (!product) return false;
-
-    const url = `http://supremenewyork.com/shop/all/${product.product.category}?atc-id=${atcId}`;
+    const category = product.product.category === 'tops-sweaters' ? 'tops_sweaters' : product.product.category;
+    const url = `http://supremenewyork.com/shop/all/${category}?atc-id=${atcId}`;
     const win = window.open(url, '_blank');
     win.focus();
   }
 
-  static openAtcTabMonitor(monitorProducts, category, keywords, color) {
-    const bestMatch = KeywordsService.findBestMatch(monitorProducts, keywords, category);
-    const atcColor = color || 'any';
+  static async openAtcTabMonitorById(productList, atcId) {
+    const product = await this.getAtcProductById(atcId);
+    if (!product) return false;
+
+    const bestMatch = KeywordsService.findBestMatch(productList, product.product.keywords, product.product.category);
+    const atcColor = product.product.color || 'any';
     if (bestMatch) {
       chrome.tabs.create({ url: `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${atcColor}` });
       return true;

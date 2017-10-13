@@ -38,14 +38,7 @@ async function getSettings() {
 
 async function processProducts(products) {
   for (let i = 0; i < products.length; i += 1) {
-    const product = products[i].product;
-    let category = product.category;
-    if (category === 'tops-sweaters') {
-      category = 'tops_sweaters';
-    }
-    const keywords = product.keywords;
-    const color = product.color;
-    AtcService.openAtcTab(category, keywords, color);
+    await AtcService.openAtcTabById(products[i].id);
     await sleep(400);
   }
 }
@@ -56,14 +49,7 @@ async function processByMonitor(atcProducts) {
     return;
   }
   for (let i = 0; i < atcProducts.length; i += 1) {
-    const product = atcProducts[i].product;
-    const keywords = product.keywords;
-    const color = product.color;
-    let category = product.category;
-    if (category === 'tops-sweaters') {
-      category = 'Tops/Sweaters';
-    }
-    await AtcService.openAtcTabMonitor(monitorProducts, category, keywords, color);
+    await AtcService.openAtcTabMonitorById(monitorProducts, atcProducts[i].id);
     await sleep(400);
   }
 }
