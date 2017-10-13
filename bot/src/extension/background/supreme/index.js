@@ -38,7 +38,7 @@ async function getSettings() {
 
 async function processProducts(products) {
   for (let i = 0; i < products.length; i += 1) {
-    await AtcService.openAtcTabById(products[i].id);
+    await AtcService.openAtcTab(products[i]);
     await sleep(400);
   }
 }
@@ -49,7 +49,7 @@ async function processByMonitor(atcProducts) {
     return;
   }
   for (let i = 0; i < atcProducts.length; i += 1) {
-    await AtcService.openAtcTabMonitorById(monitorProducts, atcProducts[i].id);
+    await AtcService.openAtcTabMonitor(monitorProducts, atcProducts[i]);
     await sleep(400);
   }
 }

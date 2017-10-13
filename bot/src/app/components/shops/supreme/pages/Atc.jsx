@@ -112,13 +112,13 @@ class Atc extends Component {
     }
     const useMonitor = profile.Supreme.Options.atcUseMonitor;
     if (!useMonitor) {
-      return await AtcService.openAtcTabById(atcProduct.id);
+      return await AtcService.openAtcTab(atcProduct);
     }
     const monitorProducts = await ProductsService.fetchProducts();
     if (!monitorProducts) {
       return false;
     }
-    const hasFound = await AtcService.openAtcTabMonitorById(monitorProducts, atcProduct.id);
+    const hasFound = await AtcService.openAtcTabMonitor(monitorProducts, atcProduct);
     if (!hasFound) {
       this.props.notify('No matching product found');
     }
