@@ -98,7 +98,20 @@ class Atc extends Component {
   }
 
   async runAll() {
-    await AtcService.runAll();
+    const profile = await StorageService.getCurrentProfileSettings(version);
+    if (!profile || !profile.Supreme) {
+      this.props.notify('Please configure your bot before running ATC');
+      return false;
+    }
+    const useMonitor = profile.Supreme.Options.atcUseMonitor;
+    if (!useMonitor) {
+      return await AtcService.runAll();
+    }
+    const hasFound = await AtcService.runAllMonitor();
+    if (!hasFound) {
+      this.props.notify('No matching product found');
+    }
+    return hasFound;
   }
 
   async runNow(atcProduct) {
@@ -111,11 +124,7 @@ class Atc extends Component {
     if (!useMonitor) {
       return await AtcService.openAtcTab(atcProduct);
     }
-    const monitorProducts = await ProductsService.fetchProducts();
-    if (!monitorProducts) {
-      return false;
-    }
-    const hasFound = await AtcService.openAtcTabMonitor(monitorProducts, atcProduct);
+    const hasFound = await AtcService.openAtcTabMonitor(atcProduct);
     if (!hasFound) {
       this.props.notify('No matching product found');
     }

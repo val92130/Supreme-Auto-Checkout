@@ -92,6 +92,10 @@ export default class ProductProcessor extends BaseProcessor {
   async processProduct() {
     const atcStyleId = Helpers.getQueryStringValue('atc-style-id');
     const atcColor = Helpers.getQueryStringValue('atc-color');
+    const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
+    const atcId = Number(Helpers.getQueryStringValue('atc-id'));
+    const atcMonitor = Helpers.getQueryStringValue('atc-monitor');
+
     if (atcStyleId) {
       const btn = document.querySelector(`[data-style-id="${atcStyleId}"]`);
       if (btn) {
@@ -109,12 +113,18 @@ export default class ProductProcessor extends BaseProcessor {
         return true;
       });
       if (availableColor && atcColor === 'any') {
+        if (atcId && atcRunAll) {
+          availableColor.node.href = `${availableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+        }
         availableColor.node.click();
         return;
       }
       const fuse = new FuzzyStringMatcher(colors, { key: 'name' });
       const matches = fuse.search(atcColor);
       if (matches.length) {
+        if (atcId && atcRunAll) {
+          matches[0].node.href = `${availableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+        }
         matches[0].node.click();
         return;
       }
@@ -142,13 +152,18 @@ export default class ProductProcessor extends BaseProcessor {
       const submitBtn = document.querySelector('[name=commit]');
       const productCategory = ProductProcessor.getProductCategory();
       const sizesOptions = ProductProcessor.getSizesOptions();
-      const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
-      const atcId = Number(Helpers.getQueryStringValue('atc-id'));
       let nextUrl = null;
       if (!isNaN(atcId) && atcRunAll) {
-        const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
-        if (nextProduct) {
-          nextUrl = AtcService.getAtcUrl(nextProduct, true);
+        if (atcMonitor) {
+          const nextProduct = await AtcService.getNextAtcMonitorProduct(atcId);
+          if (nextProduct) {
+            nextUrl = await AtcService.getAtcMonitorUrl(nextProduct, true);
+          }
+        } else {
+          const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
+          if (nextProduct) {
+            nextUrl = AtcService.getAtcUrl(nextProduct, true);
+          }
         }
       }
 
@@ -188,7 +203,7 @@ export default class ProductProcessor extends BaseProcessor {
           if (document.querySelector('.in-cart') && document.getElementById('cart')) {
             if (nextUrl) {
               window.location.href = nextUrl;
-              Helpers.timeout(() => window.location.href = nextUrl, 200, 'Going to checkout...');
+              Helpers.timeout(() => window.location.href = nextUrl, 200, 'Going to next step...');
               return;
             }
             setTimeout(() => {
