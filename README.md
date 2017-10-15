@@ -16,18 +16,17 @@ Supreme Auto Checkout provides many features such as:
   - **Multi profiles** - You can setup multiple profiles to quickly switch settings during drop day!
   - **Configurable delays for every steps of the checkout process.**
   - **Size choice for every category of product.**
-  - **Captcha bypass** (beta feature).
   - **Option to set a minimum/maximum price for a product.**
   - **Option to hide sold out products.**
   - **Easy configuration.**
   - **AutoCop** - You can set keywords for products and they will automatically be added to cart when they are available on the shop.
-  - **Product Monitor**
+  - **Product Monitor** - Be notified when a product goes back in stock!
   - **Profile Export** - Export your profiles and securely import them onto another computer (Your data will be encrypted using AES).
+  - **Drop list**
 
 # Coming soon
 Features that will be added in the future:
   - **Proxies support**
-  - **Drop list**
 
 # Installation
 
@@ -39,14 +38,6 @@ Once it's done, follow these steps:
   >- Extract the downloaded release to a folder of your choice.
   >- Open Google Chrome and type in your address bar **chrome://extensions/** and enable the **Developer** mode option at the top of the page.
   >- Drag the extracted folder containing the extension into Google Chrome.
-
-
-# Updating
-
-If you already have a previous version of the bot installed, I recommend you to **uninstall it before installing the new version**
-as it can cause issues if the new version introduced some changes in the way the data is saved to the local storage.
-
-Note: You'll have to reconfigure the bot when you reinstall it.
 
 # Configuration
 
@@ -83,7 +74,7 @@ You will have to set the time as a 24hour format (hh:mm:ss), note that it will b
 
 A recommended value would be **11:00:10** to make sure that the shop has updated before running the ATC.
 
-Once the ATC time is reached, the bot will automatically open tabs to add to cart matching products.
+Once the ATC time is reached, the bot will automatically open a tab to add to cart matching products.
 
 The product who matches the most the keywords will be added to the cart.
 
@@ -94,22 +85,15 @@ The product who matches the most the keywords will be added to the cart.
 To setup AutoCop products, you need to go in the **AutoCop** tab of your bot then click on the **Add new** button.
 
 This will open a form requesting the following informations:
-   - **Name** - A name to distinct your atc products, not really important
+   - **Name** - A name to distinct your atc products, not really important.
    - **Product keywords** - This field is a multi-selectable input, you can add keywords by pressing the Enter key,
    thoses keywords are **case insensitive** and white-spaces at the end and start of the keyword will be removed.
-   - **Color** (optional) - If set, the ATC will try to checkout the product matching this color, also **case insensitive**
-   - **Product category** - The category of the product
+   - **Color** (optional) - If set, the ATC will try to checkout the product matching this color, also **case insensitive**.
+   - **Product category** - The category of the product.
+   - **Retry count if not found** - If the product is not found during an Autocop, the page will tryo to find the product again for N times before skipping to the next Autocop product.
    - **Enabled**
 
 You can manually trigger the AutoCop for a product by clicking on the `Run now` button in the Atc product list.
-
-# Captcha Bypass
-
-The **Captcha Bypass** feature works by deleting from the DOM the node containing the re-captcha input.
-
-This temporary works because Supreme doesn't seems to validate Google's Re-captcha on server-side.
-
-This option is **NOT** recommended, use with caution.
 
 # Development
 

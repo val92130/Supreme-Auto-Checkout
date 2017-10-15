@@ -56,4 +56,19 @@ describe('Keyword matcher tests', () => {
     expect(result).to.have.length(1);
     expect(result[0]).to.equal(data[0]);
   });
+
+  it('should work with negative keywords', () => {
+    const testData = ['Hooded Stripe Denim Zip Up Shirt', 'Polartec Pullover Shirt', '100 Dollar Bill Overalls', 'Hanes Boxer Briefs', 'Hanes Tagless Tees', 'Hanes Socks'];
+    const matcher = new FuzzyStringMatcher(testData);
+    const result = matcher.search('hanes !boxer !tee');
+    expect(result).to.have.length(1);
+    expect(testData[result[0]]).to.equal('Hanes Socks');
+  });
+
+  it('should return no result with negative keywords', () => {
+    const testData = ['Hooded Stripe Denim Zip Up Shirt', 'Polartec Pullover Shirt', '100 Dollar Bill Overalls', 'Hanes Boxer Briefs', 'Hanes Tagless Tees', 'Hanes Socks'];
+    const matcher = new FuzzyStringMatcher(testData);
+    const result = matcher.search('hanes !boxer !tee !socks');
+    expect(result).to.have.length(0);
+  });
 });

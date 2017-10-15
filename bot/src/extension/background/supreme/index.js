@@ -16,15 +16,6 @@ async function timeout(ms, callback) {
   callback();
 }
 
-async function getEnabledAtcProducts() {
-  try {
-    return await AtcService.getEnabledAtcProducts();
-  } catch (e) {
-    console.error(e);
-    return [];
-  }
-}
-
 async function getSettings() {
   try {
     const profile = await StorageService.getCurrentProfileSettings();
@@ -36,36 +27,8 @@ async function getSettings() {
   }
 }
 
-async function processProducts(products) {
-  for (let i = 0; i < products.length; i += 1) {
-    const product = products[i];
-    let category = product.category;
-    if (category === 'tops-sweaters') {
-      category = 'tops_sweaters';
-    }
-    const keywords = product.keywords;
-    const color = product.color;
-    AtcService.openAtcTab(category, keywords, color);
-    await sleep(400);
-  }
-}
-
-async function processByMonitor(atcProducts) {
-  const monitorProducts = await ProductsService.fetchProducts();
-  if (!monitorProducts) {
-    return;
-  }
-  for (let i = 0; i < atcProducts.length; i += 1) {
-    const product = atcProducts[i];
-    const keywords = product.keywords;
-    const color = product.color;
-    let category = product.category;
-    if (category === 'tops-sweaters') {
-      category = 'Tops/Sweaters';
-    }
-    await AtcService.openAtcTabMonitor(monitorProducts, category, keywords, color);
-    await sleep(400);
-  }
+async function processByMonitor() {
+  await AtcService.runAllMonitor();
 }
 
 function isEnabled(settings) {
@@ -105,11 +68,10 @@ async function loop() {
   console.log(`ATC starting in ${diffTime} seconds...`);
 
   if (diffTime <= 0 && Math.abs(diffTime) < 3) {
-    const products = await getEnabledAtcProducts();
     if (settings.Options.atcUseMonitor) {
-      await processByMonitor(products);
+      await processByMonitor();
     } else {
-      await processProducts(products);
+      await AtcService.runAll();
     }
     await timeout(4000, () => loop());
     return;

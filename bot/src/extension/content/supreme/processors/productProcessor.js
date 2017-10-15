@@ -2,6 +2,7 @@ import { notify } from '../notification';
 import * as Helpers from '../helpers';
 import BaseProcessor from './baseProcessor';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
+import AtcService from '../../../../services/supreme/AtcService';
 
 export default class ProductProcessor extends BaseProcessor {
   static start(preferences, sizings, billing) {
@@ -88,9 +89,31 @@ export default class ProductProcessor extends BaseProcessor {
    * try to figure out if the product is sold out or not, and if not, it will find the best available size
    * based on the user's preferences and then it will add the item to cart
    */
-  processProduct() {
+  async processProduct() {
     const atcStyleId = Helpers.getQueryStringValue('atc-style-id');
     const atcColor = Helpers.getQueryStringValue('atc-color');
+    const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
+    const atcId = Number(Helpers.getQueryStringValue('atc-id'));
+    const atcMonitor = Helpers.getQueryStringValue('atc-monitor');
+    let nextUrl = null;
+    if (!isNaN(atcId) && atcRunAll) {
+      if (atcMonitor) {
+        const nextProduct = await AtcService.getNextAtcMonitorProduct(atcId);
+        if (nextProduct) {
+          nextUrl = await AtcService.getAtcMonitorUrl(nextProduct, true);
+        } else {
+          nextUrl = '/checkout';
+        }
+      } else {
+        const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
+        if (nextProduct) {
+          nextUrl = AtcService.getAtcUrl(nextProduct, true);
+        } else {
+          nextUrl = '/checkout';
+        }
+      }
+    }
+
     if (atcStyleId) {
       const btn = document.querySelector(`[data-style-id="${atcStyleId}"]`);
       if (btn) {
@@ -100,24 +123,32 @@ export default class ProductProcessor extends BaseProcessor {
     }
     if (atcColor) {
       const colors = ProductProcessor.getAvailableColors();
-      const availableColor = colors.find(x => {
+      const firstAvailableColor = colors.find(x => {
         const soldOutAttr = x.node.attributes['data-sold-out'];
         if (soldOutAttr) {
           return soldOutAttr.value === 'false';
         }
         return true;
       });
-      if (availableColor && atcColor === 'any') {
-        availableColor.node.click();
+      if (firstAvailableColor && atcColor === 'any') {
+        if (atcId && atcRunAll) {
+          firstAvailableColor.node.href = `${firstAvailableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+        }
+        firstAvailableColor.node.click();
         return;
       }
       const fuse = new FuzzyStringMatcher(colors, { key: 'name' });
       const matches = fuse.search(atcColor);
       if (matches.length) {
-        matches[0].node.click();
+        if (atcId && atcRunAll) {
+          window.location.href = `${matches[0].node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+        } else {
+          window.location.href = matches[0].node.href;
+        }
         return;
       }
     }
+
     if (!ProductProcessor.isSoldOut()) {
       const maxPrice = this.preferences.maxPrice;
       const minPrice = this.preferences.minPrice;
@@ -128,11 +159,23 @@ export default class ProductProcessor extends BaseProcessor {
         if (!isNaN(price)) {
           if (maxPrice !== undefined && price > maxPrice) {
             notify('Product price is too high, not checking out', true);
+            if (nextUrl) {
+              window.location.href = nextUrl;
+              Helpers.timeout(() => window.location.href = nextUrl, 500,
+                'Product price is too high, not checking out...', true);
+              return;
+            }
             return;
           }
 
           if (minPrice !== undefined && price < minPrice) {
             notify('Product price is too low, not checking out', true);
+            if (nextUrl) {
+              window.location.href = nextUrl;
+              Helpers.timeout(() => window.location.href = nextUrl, 500,
+                'Product price is too low, not checking out...', true);
+              return;
+            }
             return;
           }
         }
@@ -146,6 +189,12 @@ export default class ProductProcessor extends BaseProcessor {
       if (sizesOptions.length) {
         const categorySize = this.sizings[productCategory];
         if (categorySize === undefined) {
+          if (nextUrl) {
+            window.location.href = nextUrl;
+            Helpers.timeout(() => window.location.href = nextUrl, 500,
+              `Unknown category "${productCategory}", going to next atc product...`, true);
+            return;
+          }
           notify(`Unknown category "${productCategory}", cannot process`, true);
           return;
         }
@@ -153,6 +202,10 @@ export default class ProductProcessor extends BaseProcessor {
 
         if (!targetOption) {
           if (this.preferences.strictSize && categorySize !== 'Any') {
+            if (nextUrl) {
+              Helpers.timeout(() => window.location.href = nextUrl, 500, 'The desired size is not available', true);
+              return;
+            }
             notify('The desired size is not available', true);
             return;
           }
@@ -162,9 +215,15 @@ export default class ProductProcessor extends BaseProcessor {
       }
 
       const atcDelay = this.preferences.addToCartDelay;
+
       Helpers.timeout(() => {
-        const process = () => {
+        const process = async () => {
           if (document.querySelector('.in-cart') && document.getElementById('cart')) {
+            if (nextUrl) {
+              window.location.href = nextUrl;
+              Helpers.timeout(() => window.location.href = nextUrl, 200, 'Going to next step...');
+              return;
+            }
             setTimeout(() => {
               window.location.href = '/checkout';
             }, 200);
@@ -176,6 +235,9 @@ export default class ProductProcessor extends BaseProcessor {
 
         process();
       }, atcDelay, 'Adding to cart');
+    } else if (nextUrl) {
+      window.location.href = nextUrl;
+      Helpers.timeout(() => window.location.href = nextUrl, 500, 'No sizes available, going to next atc product...', true);
     }
   }
 }

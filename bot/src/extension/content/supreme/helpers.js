@@ -6,7 +6,7 @@ import { notify } from './notification';
  * @param  {Number} ms Delay before calling the function
  * @param  {String} actionName Optional, an action name that will be displayed in the notification bar
 */
-export function timeout(fn, ms, actionName) {
+export function timeout(fn, ms, actionName, danger = false) {
   const now = new Date();
   let shouldAbort = false;
   const currentLocation = document.location.href;
@@ -19,7 +19,7 @@ export function timeout(fn, ms, actionName) {
     }
     const d = new Date();
     const diff = (d.getTime() - now.getTime());
-    notify((actionName || 'Action') + ' in : ' + ((ms - diff) / 1000));
+    notify((actionName || 'Action') + ' in : ' + ((ms - diff) / 1000), danger);
   }, 100);
 
   setTimeout(() => {

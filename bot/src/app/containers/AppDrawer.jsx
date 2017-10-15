@@ -8,6 +8,7 @@ import ShopIcon from 'material-ui/svg-icons/action/shop';
 import SettingsIcon from 'material-ui/svg-icons/action/add-shopping-cart';
 import CartIcon from 'material-ui/svg-icons/action/settings';
 import ShoppingCartIcon from 'material-ui/svg-icons/action/shopping-cart';
+import AlarmIcon from 'material-ui/svg-icons/action/alarm';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
 import AccountIcon from 'material-ui/svg-icons/action/account-circle';
 import PaymentIcon from 'material-ui/svg-icons/action/payment';
@@ -77,14 +78,14 @@ class AppDrawer extends Component {
                 containerElement={<Link to={'/supreme/configuration'} />}
                 value="supreme/configuration"
                 primaryText="Configuration"
-                leftIcon={isIncomplete(settings, 'Supreme') ? <IncompleteIcon /> : <SettingsIcon />}
+                leftIcon={isIncomplete(settings, 'Supreme') ? <IncompleteIcon /> : <CartIcon />}
               />,
               <ListItem
                 key={2}
                 value="supreme/autocop"
                 containerElement={<Link to={'/supreme/autocop'} />}
                 primaryText="AutoCop"
-                leftIcon={<CartIcon />}
+                leftIcon={<SettingsIcon />}
               />,
               <ListItem
                 key={3}
@@ -100,16 +101,22 @@ class AppDrawer extends Component {
                 primaryText="Drops"
                 leftIcon={<ShoppingCartIcon />}
               />,
+              <ListItem
+                key={5}
+                value="supreme/restocks"
+                containerElement={<Link to={'/supreme/restocks'} />}
+                primaryText="Restocks"
+                leftIcon={<AlarmIcon />}
+              />,
             ]}
           />
-          <Subheader>Settings</Subheader>
+          <Subheader>Other</Subheader>
           <ListItem
             value="profiles"
             primaryText={`Profiles (${currentProfile})`}
             containerElement={<Link to={'/profiles/'} />}
             leftIcon={<AccountIcon />}
           />
-          <Subheader>Other</Subheader>
           <ListItem
             value="donation"
             primaryText="Donation"

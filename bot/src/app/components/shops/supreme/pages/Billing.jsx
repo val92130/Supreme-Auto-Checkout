@@ -26,6 +26,18 @@ function getStatesForCountry(country) {
   }
 }
 
+function getCreditCardsForCountry(country) {
+  switch (country) {
+    case 'CANADA':
+    case 'USA':
+      return Utils.usCreditCards;
+    case 'JAPAN':
+      return Utils.japanCreditCards;
+    default:
+      return Utils.creditCards;
+  }
+}
+
 const Billing = props => {
   const { handleSubmit, pristine, submitting, country } = props;
   return (
@@ -79,6 +91,16 @@ const Billing = props => {
 
         <div>
           <Field
+            name="oba3"
+            component={TextField}
+            floatingLabelText="Address 2"
+            hintText="Address 2"
+            style={Styles.fields.text}
+          />
+        </div>
+
+        <div>
+          <Field
             name="order_billing_city"
             component={TextField}
             floatingLabelText="City"
@@ -124,6 +146,7 @@ const Billing = props => {
             component={TextField}
             floatingLabelText="Zip"
             style={Styles.fields.text}
+            validate={[Validators.required]}
           />
         </div>
 
@@ -136,7 +159,7 @@ const Billing = props => {
             validate={[Validators.required]}
           >
             {
-              (country === 'JAPAN' ? Utils.japanCreditCards : Utils.creditCards).map(x =>
+              getCreditCardsForCountry(country).map(x =>
                 <MenuItem value={x.value} primaryText={x.text} key={x.value} />,
               )
             }

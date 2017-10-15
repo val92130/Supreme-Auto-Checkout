@@ -56,6 +56,7 @@ class AtcCreateForm extends Component {
       <div>
         <p style={{ fontSize: '0.8em' }}>ATC Product description is only used to differentiate different ATC products, it doesn't have any effect on the Autocop process.</p>
         <p style={{ fontSize: '0.8em' }}>Keywords is the most important information to find a product for Autocop, make sure to add detailed keywords. For example for a Box Logo add the following keywords: box, logo, hoodie.</p>
+        <p style={{ fontSize: '0.8em' }}>You can also add negative keywords by prepending a <b>"!"</b> to a keyword, for example the keywords "<b>box logo !longsleeve tee</b>" will match a product like <b>"Box Logo Tee"</b> but not <b>"Box Logo Longsleeve tee"</b></p>
         <form onSubmit={handleSubmit} id="atc-form">
           <div>
             <Field
@@ -107,6 +108,18 @@ class AtcCreateForm extends Component {
               }
             </Field>
           </div>
+
+          <div>
+            <Field
+              name="retryCount"
+              validate={[Validators.number]}
+              component={TextField}
+              floatingLabelText="Retry count if not found"
+              hintText="Retry count if not found"
+              style={Styles.fields.text}
+            />
+          </div>
+
           <br />
           <div>
             <Field
@@ -153,6 +166,7 @@ function mapStateToProps(state, ownProps) {
     atcProducts: state.atc.atcProducts,
     initialValues: Object.assign({
       enabled: true,
+      retryCount: 3,
     }, ownProps.initialValues),
   };
 }

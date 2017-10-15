@@ -98,15 +98,6 @@ class Atc extends Component {
   }
 
   async runAll() {
-    const atcProducts = this.props.atcProducts;
-    for (let i = 0; i < atcProducts.length; i += 1) {
-      const product = atcProducts[i];
-      setTimeout(async () => await this.runNow(product.category, product.keywords, product.color), i * 400);
-    }
-  }
-
-  async runNow(category, keywords, color) {
-    let atcCategory = category;
     const profile = await StorageService.getCurrentProfileSettings(version);
     if (!profile || !profile.Supreme) {
       this.props.notify('Please configure your bot before running ATC');
@@ -114,13 +105,26 @@ class Atc extends Component {
     }
     const useMonitor = profile.Supreme.Options.atcUseMonitor;
     if (!useMonitor) {
-      return AtcService.openAtcTab(atcCategory, keywords, color);
+      return await AtcService.runAll();
     }
-    const monitorProducts = await ProductsService.fetchProducts();
-    if (!monitorProducts) {
+    const hasFound = await AtcService.runAllMonitor();
+    if (!hasFound) {
+      this.props.notify('No matching product found');
+    }
+    return hasFound;
+  }
+
+  async runNow(atcProduct) {
+    const profile = await StorageService.getCurrentProfileSettings(version);
+    if (!profile || !profile.Supreme) {
+      this.props.notify('Please configure your bot before running ATC');
       return false;
     }
-    const hasFound = AtcService.openAtcTabMonitor(monitorProducts, atcCategory, keywords, color);
+    const useMonitor = profile.Supreme.Options.atcUseMonitor;
+    if (!useMonitor) {
+      return await AtcService.openAtcTab(atcProduct);
+    }
+    const hasFound = await AtcService.openAtcTabMonitor(atcProduct);
     if (!hasFound) {
       this.props.notify('No matching product found');
     }
@@ -170,24 +174,25 @@ class Atc extends Component {
                   return (<p style={{ textAlign: 'center' }}>Click "Add new" to add a new Autocop Product"</p>);
                 }
                 return atcProducts.map((x) => {
+                  const product = x.product;
                   return (
-                    <TableRow key={x.name}>
-                      <TableRowColumn>{x.name}</TableRowColumn>
+                    <TableRow key={product.name}>
+                      <TableRowColumn>{product.name}</TableRowColumn>
                       <TableRowColumn>
-                        <Toggle toggled={x.enabled} onToggle={async () => await this.toggleAtc(x.name, !x.enabled)} />
+                        <Toggle toggled={product.enabled} onToggle={async () => await this.toggleAtc(product.name, !product.enabled)} />
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={async () => await this.runNow(x.category, x.keywords, x.color)}>
+                        <IconButton onTouchTap={async () => await this.runNow(x)}>
                           <LaunchIcon />
                         </IconButton>
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={() => this.requestModalOpen(x)}>
+                        <IconButton onTouchTap={() => this.requestModalOpen(product)}>
                           <EditIcon />
                         </IconButton>
                       </TableRowColumn>
                       <TableRowColumn>
-                        <IconButton onTouchTap={() => this.onRequestDeleteAtc(x.name)}>
+                        <IconButton onTouchTap={() => this.onRequestDeleteAtc(product.name)}>
                           <DeleteButton color={red300} />
                         </IconButton>
                       </TableRowColumn>
@@ -207,7 +212,7 @@ function mapStateToProps(state) {
   const currentProfile = state.profiles.currentProfile;
   const settings = state.profiles.profiles.filter(x => x.name === currentProfile)[0].settings;
   let props = {
-    atcProducts: state.atc.atcProducts,
+    atcProducts: state.atc.atcProducts.sort((a, b) => a.id - b.id),
   };
   if (settings && settings.Supreme && settings.Supreme.Options) {
     props = Object.assign({}, props, {

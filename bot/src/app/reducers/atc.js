@@ -8,22 +8,23 @@ export default function atc(state = {
       return state;
     }
     const atcList = state.atcProducts.map(x => Object.assign({}, x));
-    atcList.push(action.data);
+    const maxId = atcList.sort((a, b) => b.id - a.id)[0];
+    atcList.push({ product: action.data, id: maxId ? (maxId.id + 1) : 1 });
     return { atcProducts: atcList };
   } else if (action.type === types.ATC_PRODUCT_REMOVE) {
     if (!action.name) {
       return state;
     }
     return {
-      atcProducts: state.atcProducts.map(x => Object.assign({}, x)).filter(x => x.name !== action.name),
+      atcProducts: state.atcProducts.map(x => Object.assign({}, x)).filter(x => x.product.name !== action.name),
     };
   } else if (action.type === types.ATC_PRODUCT_EDIT) {
-    const atcProduct = state.atcProducts.filter(x => x.name === action.name)[0];
+    const atcProduct = state.atcProducts.filter(x => x.product.name === action.name)[0];
     if (!atcProduct) return state;
 
     const newList = state.atcProducts.map((x) => {
-      if (x.name === action.name) {
-        return Object.assign({}, x, action.data);
+      if (x.product.name === action.name) {
+        return Object.assign({}, x, { product: Object.assign({}, x.product, action.data) });
       }
       return Object.assign({}, x);
     });

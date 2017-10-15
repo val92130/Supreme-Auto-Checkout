@@ -23,9 +23,9 @@ const defaultValues = {
   autoPay: false,
   strictSize: true,
   hideSoldOut: false,
-  captchaBypass: false,
   addToCartDelay: 200,
   checkoutDelay: 2000,
+  showNotifications: true,
 };
 
 class HelperField extends Component {
@@ -166,21 +166,22 @@ const Options = props => {
           <HelperField
             field={
               <Field
-                name="captchaBypass"
+                name="showNotifications"
                 component={Toggle}
                 style={{ width: 'auto' }}
               />
             }
-            title="Bypass captcha (beta)"
+            title="Display restock notifications"
             helperText={
               <div>
                 <p>
-                  This option will remove the captcha during the checkout process, use with caution as they are high chances the bypass won't work.
+                  If this option is enabled you will receive a notification whenever a product restocks or land on the shop.
                 </p>
               </div>
             }
           />
         </div>
+
         <div>
           <HelperField
             field={

@@ -1,4 +1,4 @@
-const ignoredIds = ['g-recaptcha-response', 'number_v', 'oba3', 'order_billing_address_3'];
+const ignoredIds = ['g-recaptcha-response', 'number_v', 'order_billing_address_3'];
 
 export default class CheckoutService {
   static processFields(inputs, settings) {
@@ -28,6 +28,7 @@ export default class CheckoutService {
   }
 
   static setInputValue(input, value, dispatchEvent=true) {
+    if (value === undefined) return input;
     input.value = value;
     if (dispatchEvent) {
       input.dispatchEvent(new Event('change'));
@@ -62,6 +63,11 @@ export default class CheckoutService {
 
     if (input.name === 'order[billing_address]') {
       this.setInputValue(input, settings['bo']);
+      return true;
+    }
+
+    if (input.name === 'order[billing_address_2]') {
+      this.setInputValue(input, settings['oba3']);
       return true;
     }
 
@@ -153,6 +159,10 @@ export default class CheckoutService {
     }
     if (hasText(['address', 'adresse', 'addresse', '住所'])) {
       this.setInputValue(input, settings['bo']);
+      return true;
+    }
+    if (hasText(['address 2'])) {
+      this.setInputValue(input, settings['oba3']);
       return true;
     }
     if (hasText(['city', 'ville', '区市町村'])) {

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
 import { Card, CardMedia, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Layout from '../../../../containers/Layout';
 import DropsService from '../../../../../services/supreme/DropsService';
@@ -47,6 +46,7 @@ class DropProducts extends Component {
     return {
       name: product.name,
       keywords: product.keywords,
+      category: product.category,
     };
   }
 

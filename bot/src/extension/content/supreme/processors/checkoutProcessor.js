@@ -23,12 +23,6 @@ export default class CheckoutProcessor extends BaseProcessor {
     const inputs = [...document.querySelectorAll('input, textarea, select')]
       .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
     CheckoutService.processFields(inputs, this.billing);
-    if (this.preferences.captchaBypass) {
-      const captcha = document.querySelector('.g-recaptcha');
-      if (captcha) {
-        captcha.remove();
-      }
-    }
     const terms = document.querySelector('.terms');
     if (terms) terms.click();
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
