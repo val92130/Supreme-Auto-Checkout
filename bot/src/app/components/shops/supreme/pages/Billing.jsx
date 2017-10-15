@@ -146,6 +146,7 @@ const Billing = props => {
             component={TextField}
             floatingLabelText="Zip"
             style={Styles.fields.text}
+            validate={[Validators.required]}
           />
         </div>
 
