@@ -159,11 +159,23 @@ export default class ProductProcessor extends BaseProcessor {
         if (!isNaN(price)) {
           if (maxPrice !== undefined && price > maxPrice) {
             notify('Product price is too high, not checking out', true);
+            if (nextUrl) {
+              window.location.href = nextUrl;
+              Helpers.timeout(() => window.location.href = nextUrl, 500,
+                'Product price is too high, not checking out...', true);
+              return;
+            }
             return;
           }
 
           if (minPrice !== undefined && price < minPrice) {
             notify('Product price is too low, not checking out', true);
+            if (nextUrl) {
+              window.location.href = nextUrl;
+              Helpers.timeout(() => window.location.href = nextUrl, 500,
+                'Product price is too low, not checking out...', true);
+              return;
+            }
             return;
           }
         }
