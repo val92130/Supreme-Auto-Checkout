@@ -3,6 +3,16 @@ import * as Helpers from '../helpers';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
 import AtcService from '../../../../services/supreme/AtcService';
 
+function updateQueryStringParameter(uri, key, value) {
+  const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
+  const separator = uri.indexOf('?') !== -1 ? '&' : '?';
+  if (uri.match(re)) {
+    return uri.replace(re, `$1${key}=${value}$2`);
+  }
+  else {
+    return `${uri + separator + key}=${value}`;
+  }
+}
 
 export default class CheckoutProcessor extends BaseProcessor {
   static start(preferences, sizings, billing) {
@@ -30,6 +40,7 @@ export default class CheckoutProcessor extends BaseProcessor {
 
   async processAtc() {
     const queryString = Helpers.getQueryStringValue('atc-id');
+    const atcRetryCount = Math.abs(Number(Helpers.getQueryStringValue('atc-retry-count')));
     if (!queryString || isNaN(Number(queryString))) {
       return;
     }
@@ -43,6 +54,7 @@ export default class CheckoutProcessor extends BaseProcessor {
     const innerArticles = CheckoutProcessor.findArticles().filter(x => !x.soldOut);
     const fuse = new FuzzyStringMatcher(innerArticles, { key: 'name' });
     const bestMatches = fuse.search(keywords.join(' '));
+    const maxRetryCount = atcProduct.product.retryCount;
     if (kwColor) {
       const fuseColor = new FuzzyStringMatcher(bestMatches, { key: 'color' });
       const matchesColor = fuseColor.search(kwColor);
@@ -61,6 +73,15 @@ export default class CheckoutProcessor extends BaseProcessor {
       window.location.href = match.url;
     } else {
       if (!isNaN(atcId) && atcRunAll) {
+        if (!atcRetryCount && maxRetryCount > 0) {
+          window.location.href = `${window.location.href}&atc-retry-count=1`;
+          return;
+        } else if (atcRetryCount < maxRetryCount) {
+          setTimeout(() => {
+            window.location.href = updateQueryStringParameter(window.location.href, 'atc-retry-count', atcRetryCount + 1);
+          }, 600);
+          return;
+        }
         const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
         if (nextProduct) {
           window.location.href = AtcService.getAtcUrl(nextProduct, true);

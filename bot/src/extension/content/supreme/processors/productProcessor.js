@@ -95,6 +95,24 @@ export default class ProductProcessor extends BaseProcessor {
     const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
     const atcId = Number(Helpers.getQueryStringValue('atc-id'));
     const atcMonitor = Helpers.getQueryStringValue('atc-monitor');
+    let nextUrl = null;
+    if (!isNaN(atcId) && atcRunAll) {
+      if (atcMonitor) {
+        const nextProduct = await AtcService.getNextAtcMonitorProduct(atcId);
+        if (nextProduct) {
+          nextUrl = await AtcService.getAtcMonitorUrl(nextProduct, true);
+        } else {
+          nextUrl = '/checkout';
+        }
+      } else {
+        const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
+        if (nextProduct) {
+          nextUrl = AtcService.getAtcUrl(nextProduct, true);
+        } else {
+          nextUrl = '/checkout';
+        }
+      }
+    }
 
     if (atcStyleId) {
       const btn = document.querySelector(`[data-style-id="${atcStyleId}"]`);
@@ -129,6 +147,7 @@ export default class ProductProcessor extends BaseProcessor {
         return;
       }
     }
+
     if (!ProductProcessor.isSoldOut()) {
       const maxPrice = this.preferences.maxPrice;
       const minPrice = this.preferences.minPrice;
@@ -152,20 +171,6 @@ export default class ProductProcessor extends BaseProcessor {
       const submitBtn = document.querySelector('[name=commit]');
       const productCategory = ProductProcessor.getProductCategory();
       const sizesOptions = ProductProcessor.getSizesOptions();
-      let nextUrl = null;
-      if (!isNaN(atcId) && atcRunAll) {
-        if (atcMonitor) {
-          const nextProduct = await AtcService.getNextAtcMonitorProduct(atcId);
-          if (nextProduct) {
-            nextUrl = await AtcService.getAtcMonitorUrl(nextProduct, true);
-          }
-        } else {
-          const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
-          if (nextProduct) {
-            nextUrl = AtcService.getAtcUrl(nextProduct, true);
-          }
-        }
-      }
 
       // If sizes options are available
       if (sizesOptions.length) {
@@ -217,6 +222,9 @@ export default class ProductProcessor extends BaseProcessor {
 
         process();
       }, atcDelay, 'Adding to cart');
+    } else if (nextUrl) {
+      window.location.href = nextUrl;
+      Helpers.timeout(() => window.location.href = nextUrl, 500, 'No sizes available, going to next atc product...', true);
     }
   }
 }

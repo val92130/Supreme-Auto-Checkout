@@ -108,6 +108,18 @@ class AtcCreateForm extends Component {
               }
             </Field>
           </div>
+
+          <div>
+            <Field
+              name="retryCount"
+              validate={[Validators.number]}
+              component={TextField}
+              floatingLabelText="Retry count if not found"
+              hintText="Retry count if not found"
+              style={Styles.fields.text}
+            />
+          </div>
+
           <br />
           <div>
             <Field
@@ -154,6 +166,7 @@ function mapStateToProps(state, ownProps) {
     atcProducts: state.atc.atcProducts,
     initialValues: Object.assign({
       enabled: true,
+      retryCount: 3,
     }, ownProps.initialValues),
   };
 }

@@ -19,7 +19,7 @@ export default class AtcService {
     const bestMatch = KeywordsService.findBestMatch(productList, atcProduct.product.keywords, atcProduct.product.category);
     const atcColor = atcProduct.product.color || 'any';
     if (bestMatch) {
-      let url = `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${atcColor}&atc-id=${atcProduct.id}`;
+      let url = `http://supremenewyork.com/shop/${bestMatch.id}?atc-color=${atcColor}&atc-id=${atcProduct.id}&atc-monitor=true`;
       if (runAll) {
         url = `${url}&atc-run-all=true`;
       }
