@@ -123,27 +123,28 @@ export default class ProductProcessor extends BaseProcessor {
     }
     if (atcColor) {
       const colors = ProductProcessor.getAvailableColors();
-      const availableColor = colors.find(x => {
+      const firstAvailableColor = colors.find(x => {
         const soldOutAttr = x.node.attributes['data-sold-out'];
         if (soldOutAttr) {
           return soldOutAttr.value === 'false';
         }
         return true;
       });
-      if (availableColor && atcColor === 'any') {
+      if (firstAvailableColor && atcColor === 'any') {
         if (atcId && atcRunAll) {
-          availableColor.node.href = `${availableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+          firstAvailableColor.node.href = `${firstAvailableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
         }
-        availableColor.node.click();
+        firstAvailableColor.node.click();
         return;
       }
       const fuse = new FuzzyStringMatcher(colors, { key: 'name' });
       const matches = fuse.search(atcColor);
       if (matches.length) {
         if (atcId && atcRunAll) {
-          matches[0].node.href = `${availableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+          window.location.href = `${matches[0].node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+        } else {
+          window.location.href = matches[0].node.href;
         }
-        matches[0].node.click();
         return;
       }
     }
