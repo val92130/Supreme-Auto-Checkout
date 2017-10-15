@@ -25,7 +25,7 @@ const defaultValues = {
   hideSoldOut: false,
   addToCartDelay: 200,
   checkoutDelay: 2000,
-  showNotifications: false,
+  showNotifications: true,
 };
 
 class HelperField extends Component {
