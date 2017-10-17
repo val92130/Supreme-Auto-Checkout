@@ -2,7 +2,6 @@ import * as menus from '../../../app/constants/Menus';
 import * as Helpers from '../../../app/utils/Helpers';
 import StorageService from '../../../services/StorageService';
 import AtcService from '../../../services/supreme/AtcService';
-import ProductsService from '../../../services/supreme/ProductsService';
 
 
 async function sleep(ms) {

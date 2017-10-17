@@ -1,5 +1,6 @@
 import RestocksService from '../../../services/supreme/RestocksService';
 import StorageService from '../../../services/StorageService';
+import ChromeService from '../../../services/ChromeService';
 
 export default class RestockMonitor {
   constructor(intervalMs) {
@@ -37,6 +38,7 @@ export default class RestockMonitor {
       }
     }
     await StorageService.setItem('stock', newStock);
+    ChromeService.sendMessage('stockUpdated', newStock);
   }
 
   start() {
