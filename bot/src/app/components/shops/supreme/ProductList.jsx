@@ -103,6 +103,7 @@ class ProductList extends Component {
       const fuse = new FuzzyStringMatcher(allProducts, { key: 'name' });
       allProducts = fuse.search(this.state.filter);
     }
+    allProducts = allProducts.sort((a, b) => a.soldOut - b.soldOut);
     const cards = allProducts.map(x => this.getProductCard(x, () => this.handleClickProduct(x)));
     const style = {
       display: 'flex',
