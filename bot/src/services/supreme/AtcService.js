@@ -80,11 +80,17 @@ export default class AtcService {
 
   static async runAllMonitor() {
     const enabledAtcProducts = await this.getEnabledAtcProducts();
-    const productList = await ProductsService.fetchProducts();
-    const product = enabledAtcProducts.sort((a, b) => a.id - b.id)[0];
-    if (!product || !productList || !enabledAtcProducts) return false;
-
-    return await this.openAtcTabMonitor(product, true);
+    const products = enabledAtcProducts.sort((a, b) => a.id - b.id);
+    if (!enabledAtcProducts) return false;
+    let found = false;
+    for (let i = 0; i < products.length; i += 1) {
+      const product = products[i];
+      if (product && await this.openAtcTabMonitor(product, true)) {
+        found = true;
+        break;
+      }
+    }
+    return found;
   }
 
   static async getAtcProductById(id) {

@@ -16,6 +16,9 @@ export default class ChromeService {
     if (onClick) {
       notification.onclick = () => onClick(notification);
     }
+    setTimeout(() => {
+      notification.close();
+    }, 6000);
     return notification;
   }
 
