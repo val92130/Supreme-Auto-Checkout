@@ -65,7 +65,7 @@ class Restocks extends Component {
       const text = x.type === 'new' ? `${x.product.name} in ${x.product.color} dropped` : `${x.product.name} in ${x.product.color} restocked`;
       return (
         <ListItem
-          onClick={() => window.open(`http://supremenewyork.com/${x.product.url}`)}
+          onClick={() => window.open(x.product.url)}
           key={i}
           leftAvatar={<Avatar icon={icon} backgroundColor={color} />}
           primaryText={text}

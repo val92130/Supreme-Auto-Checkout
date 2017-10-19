@@ -24,7 +24,7 @@ export default class Products extends Component {
   }
 
   handleBuyProduct(product) {
-    chrome.tabs.create({ url: `http://supremenewyork.com/${product.url}` });
+    chrome.tabs.create({ url: product.url });
   }
 
   render() {
