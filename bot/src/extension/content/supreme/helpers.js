@@ -34,7 +34,7 @@ export function timeout(fn, ms, actionName, danger = false) {
 
 export function getQueryStringValue(key) {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(key);
+  return urlParams.get(key) || undefined;
 }
 
 export function pageHasNodeOfClass(className) {
