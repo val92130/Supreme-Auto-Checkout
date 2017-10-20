@@ -49,6 +49,7 @@ async function createNotification(title, content, callback) {
 }
 
 async function onNewProducts(products) {
+  await updateRestockList(products, 'new');
   if(products.length > 3) {
     await createNotification('New products', `${products.length} new products just landed on the store!`, (notif) => {
       window.open('http://supremenewyork.com/shop/new');
@@ -57,28 +58,30 @@ async function onNewProducts(products) {
   } else {
     for (let product of products) {
       await createNotification('New product', `Product ${product.name} just landed on the store!`, (notif) => {
-        window.open(`http://supremenewyork.com/${product.url}`);
+        window.open(product.url);
         notif.close();
       });
     }
   }
-  await updateRestockList(products, 'new');
   ChromeService.sendMessage('productsAdded', { products });
 }
 
-async function onProductRestock(product) {
-  await createNotification('Restock alert', `${product.name} in ${product.color} is back in stock!`, (notif) => {
-    window.open(`http://supremenewyork.com/${product.url}`);
-    notif.close();
-  });
-  await updateRestockList([product], 'restock');
-  ChromeService.sendMessage('productRestocked', { product });
+async function onProductsRestock(products) {
+  await updateRestockList(products, 'restock');
+  for (let i = 0; i < products.length; i += 1) {
+    const product = products[i];
+    ChromeService.sendMessage('productRestocked', { product });
+    await createNotification('Restock alert', `${product.name} in ${product.color} is back in stock!`, (notif) => {
+      window.open(product.url);
+      notif.close();
+    });
+  }
 }
 
 async function start() {
   const monitor = new RestockMonitor(10000);
   monitor.addOnNewProductsListener(async products => await onNewProducts(products));
-  monitor.addOnProductRestockListener(async product => await onProductRestock(product));
+  monitor.addOnProductsRestockListener(async products => await onProductsRestock(products));
   monitor.start();
   await SupremeBackground();
 }
