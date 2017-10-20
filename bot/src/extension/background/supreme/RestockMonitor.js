@@ -6,15 +6,15 @@ export default class RestockMonitor {
   constructor(intervalMs) {
     this.intervalMs = intervalMs;
     this.onNewProductsCallbacks = [];
-    this.onProductRestockCallbacks = [];
+    this.onProductsRestockCallbacks = [];
   }
 
   addOnNewProductsListener(func) {
     this.onNewProductsCallbacks.push(func);
   }
 
-  addOnProductRestockListener(func) {
-    this.onProductRestockCallbacks.push(func);
+  addOnProductsRestockListener(func) {
+    this.onProductsRestockCallbacks.push(func);
   }
 
   async update() {
@@ -30,12 +30,16 @@ export default class RestockMonitor {
       for (const callback of this.onNewProductsCallbacks) callback(newProducts);
     }
 
+    let restockedProducts = [];
     for (let i = 0; i < newStock.length; i += 1) {
       const product = newStock[i];
       const existingProduct = savedStock.find(x => x.url === product.url);
       if (existingProduct && !product.soldOut && existingProduct.soldOut) {
-        for (const callback of this.onProductRestockCallbacks) callback(product);
+        restockedProducts.push(product);
       }
+    }
+    if (restockedProducts.length) {
+      for (const callback of this.onProductsRestockCallbacks) callback(restockedProducts);
     }
     await StorageService.setItem('stock', newStock);
     ChromeService.sendMessage('stockUpdated', newStock);
