@@ -69,6 +69,8 @@ export default class CheckoutProcessor extends BaseProcessor {
     if (match && !match.soldOut) {
       if (atcRunAll) {
         match.url = `${match.url}?atc-run-all=true&atc-id=${atcId}`;
+      } else {
+        match.url = `${match.url}?atc-id=${atcId}`;
       }
       window.location.href = match.url;
     } else {

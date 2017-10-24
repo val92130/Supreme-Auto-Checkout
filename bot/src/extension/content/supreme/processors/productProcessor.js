@@ -133,7 +133,7 @@ export default class ProductProcessor extends BaseProcessor {
     return true;
   }
 
-  addToCart(nextUrl = null) {
+  addToCart(nextUrl) {
     const atcDelay = this.preferences.addToCartDelay;
     const submitBtn = document.querySelector('[name=commit]');
 
@@ -183,6 +183,8 @@ export default class ProductProcessor extends BaseProcessor {
       if (firstAvailableColor && atcColor === 'any') {
         if (atcRunAll) {
           firstAvailableColor.node.href = `${firstAvailableColor.node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
+        } else {
+          firstAvailableColor.node.href = `${firstAvailableColor.node.href}?atc-id=${atcId}&atc-monitor=true`;
         }
         firstAvailableColor.node.click();
         return false;
@@ -193,7 +195,7 @@ export default class ProductProcessor extends BaseProcessor {
         if (atcRunAll) {
           window.location.href = `${matches[0].node.href}?atc-id=${atcId}&atc-run-all=true&atc-monitor=true`;
         } else {
-          window.location.href = matches[0].node.href;
+          window.location.href = `${matches[0].node.href}?atc-id=${atcId}`;
         }
         return false;
       }
@@ -235,7 +237,7 @@ export default class ProductProcessor extends BaseProcessor {
     if (!isNaN(atcId) && atcMonitor) {
       return await this.processProductMonitor();
     }
-    let nextUrl = '/checkout';
+    let nextUrl =  atcRunAll ? '/checkout' : null;
     if (!isNaN(atcId) && atcRunAll) {
       const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
       if (nextProduct) {
@@ -256,11 +258,11 @@ export default class ProductProcessor extends BaseProcessor {
       if (nextUrl) {
         window.location.href = nextUrl;
         Helpers.timeout(() => window.location.href = nextUrl, 500, 'Continuing to next step...', true);
-        return false;
       }
+      return false;
     }
 
-    this.addToCart(nextUrl);
+    this.addToCart(nextUrl || '/checkout');
     return true;
   }
 }
