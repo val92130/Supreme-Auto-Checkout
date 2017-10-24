@@ -87,13 +87,13 @@ export default class ProductProcessor extends BaseProcessor {
     return data;
   }
 
-  trySelectProductSize() {
+  trySelectProductSize(desiredSize = null) {
     const productCategory = ProductProcessor.getProductCategory();
     const sizesOptions = ProductProcessor.getSizesOptions();
 
     // If sizes options are available
     if (sizesOptions.length) {
-      const categorySize = this.sizings[productCategory];
+      let categorySize = desiredSize || this.sizings[productCategory];
       if (categorySize === undefined) {
         notify(`Unknown category "${productCategory}", cannot process`, true);
         return false;
@@ -209,7 +209,7 @@ export default class ProductProcessor extends BaseProcessor {
       return false;
     }
 
-    const hasSelectedSize = this.trySelectProductSize();
+    const hasSelectedSize = this.trySelectProductSize(atcProduct.product.size);
     if (!this.isPriceInRange() || !hasSelectedSize) {
       if (nextUrl) {
         window.location.href = nextUrl;
@@ -253,7 +253,13 @@ export default class ProductProcessor extends BaseProcessor {
       return false;
     }
 
-    const hasSelectedSize = this.trySelectProductSize();
+    let desiredSize = null;
+    if (atcId) {
+      const atcProduct = await AtcService.getAtcProductById(atcId);
+      desiredSize = atcProduct.product.size;
+    }
+
+    const hasSelectedSize = this.trySelectProductSize(desiredSize);
     if (!this.isPriceInRange() || !hasSelectedSize) {
       if (nextUrl) {
         window.location.href = nextUrl;
