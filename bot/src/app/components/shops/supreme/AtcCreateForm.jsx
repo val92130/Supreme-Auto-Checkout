@@ -10,9 +10,12 @@ import {
 } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import { orange400 } from 'material-ui/styles/colors'
 import * as Validators from '../../../utils/FormValidators';
 import Styles from '../../../constants/Styles';
 import * as Utils from '../../../constants/Utils';
+import ProductsService from '../../../../services/supreme/ProductsService';
+import KeywordsService from '../../../../services/KeywordsService';
 
 
 function getSizeForCategory(category) {
@@ -39,11 +42,33 @@ function getSizeForCategory(category) {
 }
 
 class AtcCreateForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      category: null,
+      category: props.initialValues ? props.initialValues.category : null,
+      matchedProducts: [],
     };
+    if (props.initialValues && props.initialValues.category) {
+      this.onKeywordChange(props.initialValues.keywords);
+    }
+  }
+
+  async onKeywordChange(keywords) {
+    if (!this.state.category) {
+      return;
+    }
+    const monitoredProducts = await ProductsService.fetchProducts();
+    console.log(keywords);
+    const matches = KeywordsService.findMatches(monitoredProducts, keywords, this.state.category);
+    if (matches) {
+      this.setState({
+        matchedProducts: matches.map(x => x.name),
+      });
+      return;
+    }
+    this.setState({
+      matchedProducts: [],
+    });
   }
 
   render() {
@@ -89,6 +114,16 @@ class AtcCreateForm extends Component {
         <p style={{ fontSize: '0.8em' }}>Keywords is the most important information to find a product for Autocop, make sure to add detailed keywords. For example for a Box Logo add the following keywords: box, logo, hoodie.</p>
         <p style={{ fontSize: '0.8em' }}>You can also add negative keywords by prepending a <b>"!"</b> to a keyword, for example the keywords "<b>box logo !longsleeve tee</b>" will match a product like <b>"Box Logo Tee"</b> but not <b>"Box Logo Longsleeve tee"</b></p>
         <p style={{ fontSize: '0.8em' }}>If you do not select a size, AutoCop will choose the size you selected in the <b>"Sizings"</b> tab.</p>
+        {this.state.matchedProducts.length > 0 && (<p style={{ color: orange400, fontSize: '0.9em' }}>
+          Warning! Your keywords already matches with the following products from the store:
+          <ul>
+          {this.state.matchedProducts.map(x => {
+            return (
+              <li>{x}</li>
+            )
+          })}
+          </ul>
+        </p>)}
         <form onSubmit={handleSubmit} id="atc-form">
           <div>
             <Field
@@ -110,6 +145,9 @@ class AtcCreateForm extends Component {
               style={Styles.fields.text}
               labelStyle={Styles.fields.text}
               validate={[Validators.required, Validators.notEmpty]}
+              onChange={(v) => {
+                this.onKeywordChange(Object.values(v).filter(x => typeof x === 'string'));
+              }}
             />
           </div>
 
