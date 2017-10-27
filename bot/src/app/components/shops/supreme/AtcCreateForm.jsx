@@ -12,40 +12,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import * as Validators from '../../../utils/FormValidators';
 import Styles from '../../../constants/Styles';
-import * as Utils from '../../../constants/Utils';
-
-
-function getSizeForCategory(category) {
-  switch (category) {
-    case 'accessories':
-    case 't-shirts':
-    case 'sweatshirts':
-    case 'tops-sweaters':
-    case 'shirts':
-    case 'jackets':
-      return Utils.sizes;
-    case 'pants':
-    case 'shorts':
-      return Utils.sizesPants;
-    case 'shoes':
-      return Utils.shoeSizes;
-    case 'skate':
-      return Utils.skateSizes;
-    case 'hats':
-      return Utils.hatsSizes;
-    default:
-      return [];
-  }
-}
+import { categories } from '../../../constants/Utils';
 
 class AtcCreateForm extends Component {
-  constructor() {
-    super();
-    this.state = {
-      category: null,
-    };
-  }
-
   render() {
     const { handleSubmit, pristine, submitting, onRequestClose, atcProducts, initialValues, editing } = this.props;
     const renderChip = ({input, hintText, floatingLabelText, meta: {touched, error} }) => (
@@ -88,7 +57,6 @@ class AtcCreateForm extends Component {
         <p style={{ fontSize: '0.8em' }}>ATC Product description is only used to differentiate different ATC products, it doesn't have any effect on the Autocop process.</p>
         <p style={{ fontSize: '0.8em' }}>Keywords is the most important information to find a product for Autocop, make sure to add detailed keywords. For example for a Box Logo add the following keywords: box, logo, hoodie.</p>
         <p style={{ fontSize: '0.8em' }}>You can also add negative keywords by prepending a <b>"!"</b> to a keyword, for example the keywords "<b>box logo !longsleeve tee</b>" will match a product like <b>"Box Logo Tee"</b> but not <b>"Box Logo Longsleeve tee"</b></p>
-        <p style={{ fontSize: '0.8em' }}>If you do not select a size, AutoCop will choose the size you selected in the <b>"Sizings"</b> tab.</p>
         <form onSubmit={handleSubmit} id="atc-form">
           <div>
             <Field
@@ -130,33 +98,13 @@ class AtcCreateForm extends Component {
               floatingLabelText="Product category"
               style={Styles.fields.text}
               validate={[Validators.required]}
-              onChange={(i, v) => {
-                this.setState({ category: v });
-              }}
             >
               {
-                Utils.categories.map((x) => {
+                categories.map((x) => {
                   return (
                     <MenuItem key={x} value={x} primaryText={x} />
                   );
                 })
-              }
-            </Field>
-          </div>
-
-          <div>
-            <Field
-              name="size"
-              component={SelectField}
-              floatingLabelText="Product size"
-              style={Styles.fields.text}
-            >
-              {
-                [<MenuItem value={null} primaryText="" />, ...getSizeForCategory(this.state.category || initialValues.category).map((x) => {
-                  return (
-                    <MenuItem key={x} value={x} primaryText={x} />
-                  );
-                })]
               }
             </Field>
           </div>

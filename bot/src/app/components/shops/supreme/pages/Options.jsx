@@ -75,6 +75,11 @@ const Options = props => {
                 name="autoCheckout"
                 component={Toggle}
                 style={{ width: 'auto' }}
+                onChange={(e, v) => {
+                  if (!v) {
+                    change('atcEnabled', false);
+                  }
+                }}
               />
             }
             title="Enable Auto Checkout"
@@ -86,6 +91,9 @@ const Options = props => {
                   <br />
                   <br />
                   The product will be added to cart using the sizes you chose in the "Sizes" tab.
+                </p>
+                <p>
+                  Autocheckout is required to use Autocop.
                 </p>
               </div>
             }
@@ -204,9 +212,14 @@ const Options = props => {
                 name="atcEnabled"
                 component={Toggle}
                 style={{ width: 'auto' }}
+                onChange={(e, v) => {
+                  if (v) {
+                    change('autoCheckout', true);
+                  }
+                }}
               />
             }
-            title="Enable AutoCop timer"
+            title="Enable AutoCop timer (need Autocheckout)"
             helperText={
               <div>
                 <p>

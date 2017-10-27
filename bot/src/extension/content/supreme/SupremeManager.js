@@ -45,6 +45,7 @@ export default class SupremeManager {
     const autoCheckout = this.preferences.autoCheckout;
     const autoPay = this.preferences.autoPay;
     notify('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
+    if (!this.preferences.autoCheckout) return;
 
     if (Helpers.isProductPage()) {
       ProductProcessor.start(this.preferences, this.sizings, this.billing);
