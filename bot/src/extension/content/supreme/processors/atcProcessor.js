@@ -3,17 +3,6 @@ import * as Helpers from '../helpers';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
 import AtcService from '../../../../services/supreme/AtcService';
 
-function updateQueryStringParameter(uri, key, value) {
-  const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
-  const separator = uri.indexOf('?') !== -1 ? '&' : '?';
-  if (uri.match(re)) {
-    return uri.replace(re, `$1${key}=${value}$2`);
-  }
-  else {
-    return `${uri + separator + key}=${value}`;
-  }
-}
-
 export default class CheckoutProcessor extends BaseProcessor {
   static start(preferences, sizings, billing) {
     const processor = new CheckoutProcessor(preferences, sizings, billing);
@@ -86,7 +75,7 @@ export default class CheckoutProcessor extends BaseProcessor {
           return;
         } else if (atcRetryCount < maxRetryCount) {
           setTimeout(() => {
-            window.location.href = updateQueryStringParameter(window.location.href, 'atc-retry-count', atcRetryCount + 1);
+            window.location.href = Helpers.updateQueryStringParameter(window.location.href, 'atc-retry-count', atcRetryCount + 1);
           }, 600);
           return;
         }

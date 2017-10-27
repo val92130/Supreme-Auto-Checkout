@@ -160,6 +160,7 @@ export default class ProductProcessor extends BaseProcessor {
     const atcId = Number(Helpers.getQueryStringValue('atc-id'));
     const atcProduct = await AtcService.getAtcProductById(atcId);
     const atcColor = Helpers.getQueryStringValue('atc-color');
+    const atcRetryCount = Math.abs(Number(Helpers.getQueryStringValue('atc-retry-count')));
 
     if (!atcProduct) return notify('Invalid Autocop Product Id');
 
@@ -200,8 +201,21 @@ export default class ProductProcessor extends BaseProcessor {
         return false;
       }
     }
-
     if (ProductProcessor.isSoldOut()) {
+      const maxRetryCount = atcProduct.product.retryCount;
+      if (maxRetryCount === 'inf') {
+        window.location.reload();
+        return;
+      }
+      if (!atcRetryCount && maxRetryCount > 0) {
+        window.location.href = `${window.location.href}&atc-retry-count=1`;
+        return;
+      } else if (atcRetryCount < maxRetryCount) {
+        setTimeout(() => {
+          window.location.href = Helpers.updateQueryStringParameter(window.location.href, 'atc-retry-count', atcRetryCount + 1);
+        }, 600);
+        return;
+      }
       if (nextUrl) {
         window.location.href = nextUrl;
         Helpers.timeout(() => window.location.href = nextUrl, 500, 'No sizes available, going to next atc product...', true);

@@ -166,8 +166,8 @@ class AtcCreateForm extends Component {
               name="retryCount"
               validate={[Validators.required]}
               component={SelectField}
-              floatingLabelText="Retry count if not found"
-              hintText="Retry count if not found"
+              floatingLabelText="Retry count if not found or sold out"
+              hintText="Retry count if not found or sold out"
               style={Styles.fields.text}
             >
               <MenuItem value="inf" primaryText="Keep refreshing until the product is found" />
