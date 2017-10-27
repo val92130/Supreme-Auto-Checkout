@@ -13,6 +13,7 @@ import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import DeleteButton from 'material-ui/svg-icons/action/delete';
 import DownloadButton from 'material-ui/svg-icons/action/backup';
+import DuplicateButton from 'material-ui/svg-icons/content/content-copy';
 import RaisedButton from 'material-ui/RaisedButton';
 import { createProfile, setProfileEnabled, removeProfile } from '../actions/profiles';
 import addNotification from '../actions/notification';
@@ -139,6 +140,17 @@ class Profile extends Component {
     });
   }
 
+  duplicateProfile(profile) {
+    const { notify, profiles, createProfile } = this.props;
+    let profileName = `${profile.name} - copy`;
+    const existingNames = profiles.filter(x => x.name === profileName);
+    if (existingNames.length) {
+      profileName = `${profileName}(${existingNames.length})`;
+    }
+    createProfile(profileName, profile.description, profile.settings);
+    notify('Profile duplicated');
+  }
+
   render() {
     const { profiles } = this.props;
 
@@ -187,9 +199,10 @@ class Profile extends Component {
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Description</TableHeaderColumn>
+              {!ChromeService.isPopup() && <TableHeaderColumn>Description</TableHeaderColumn>}
               <TableHeaderColumn>Enabled</TableHeaderColumn>
               <TableHeaderColumn>Export</TableHeaderColumn>
+              <TableHeaderColumn>Duplicate</TableHeaderColumn>
               <TableHeaderColumn>Delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -199,13 +212,18 @@ class Profile extends Component {
                 return (
                   <TableRow key={i}>
                     <TableRowColumn>{x.name}</TableRowColumn>
-                    <TableRowColumn>{x.description}</TableRowColumn>
+                    {!ChromeService.isPopup() && <TableRowColumn>{x.description}</TableRowColumn>}
                     <TableRowColumn>
                       <ProfileToggle profile={x} />
                     </TableRowColumn>
                     <TableRowColumn>
                       <IconButton onTouchTap={() => this.requestExportModalOpen(x)}>
                         <DownloadButton color={red300} />
+                      </IconButton>
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      <IconButton onTouchTap={() => this.duplicateProfile(x)}>
+                        <DuplicateButton color={red300} />
                       </IconButton>
                     </TableRowColumn>
                     <TableRowColumn>
