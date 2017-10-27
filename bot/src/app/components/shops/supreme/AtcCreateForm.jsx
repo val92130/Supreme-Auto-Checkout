@@ -164,12 +164,19 @@ class AtcCreateForm extends Component {
           <div>
             <Field
               name="retryCount"
-              validate={[Validators.number]}
-              component={TextField}
+              validate={[Validators.required]}
+              component={SelectField}
               floatingLabelText="Retry count if not found"
               hintText="Retry count if not found"
               style={Styles.fields.text}
-            />
+            >
+              <MenuItem value="inf" primaryText="Keep refreshing until the product is found" />
+              {
+                Array.apply(null, new Array(10)).map((x, i) => {
+                  return <MenuItem key={i * 5} value={i * 5} primaryText={`Refresh ${i * 5} times`}/>;
+                })
+              }
+            </Field>
           </div>
 
           <br />
@@ -218,7 +225,7 @@ function mapStateToProps(state, ownProps) {
     atcProducts: state.atc.atcProducts,
     initialValues: Object.assign({
       enabled: true,
-      retryCount: 3,
+      retryCount: 'inf',
     }, ownProps.initialValues),
   };
 }

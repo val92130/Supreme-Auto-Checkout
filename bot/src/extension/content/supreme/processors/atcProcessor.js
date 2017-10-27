@@ -75,6 +75,12 @@ export default class CheckoutProcessor extends BaseProcessor {
       window.location.href = match.url;
     } else {
       if (!isNaN(atcId) && atcRunAll) {
+        if (maxRetryCount === 'inf') {
+          setTimeout(() => {
+            window.location.reload();
+          }, 600);
+          return;
+        }
         if (!atcRetryCount && maxRetryCount > 0) {
           window.location.href = `${window.location.href}&atc-retry-count=1`;
           return;
@@ -94,7 +100,7 @@ export default class CheckoutProcessor extends BaseProcessor {
       }
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 600);
     }
   }
 }
