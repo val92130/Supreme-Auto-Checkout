@@ -13,6 +13,10 @@ function migrateAtc(state) {
       if (newState.atc.atcProducts[i].product.retryCount === undefined) {
         newState.atc.atcProducts[i].product.retryCount = 3;
       }
+
+      if (newState.atc.atcProducts[i].product.soldOutAction === undefined) {
+        newState.atc.atcProducts[i].product.soldOutAction = 'skip';
+      }
     }
   }
   return newState;

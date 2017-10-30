@@ -155,6 +155,26 @@ export default class ProductProcessor extends BaseProcessor {
     }, atcDelay, 'Adding to cart');
   }
 
+  static async handleRetry(maxRetry, currentRetryCount, nextUrl = null) {
+    if (maxRetry === 'inf') {
+      Helpers.timeout(() => window.location.reload(), 500, 'Product is not available, refreshing...', true);
+      return;
+    }
+    if (!currentRetryCount && maxRetry > 0) {
+      window.location.href = `${window.location.href}&atc-retry-count=1`;
+      return;
+    } else if (currentRetryCount < maxRetry) {
+      setTimeout(() => {
+        window.location.href = Helpers.updateQueryStringParameter(window.location.href, 'atc-retry-count', currentRetryCount + 1);
+      }, 600);
+      return;
+    }
+    if (nextUrl) {
+      window.location.href = nextUrl;
+      Helpers.timeout(() => window.location.href = nextUrl, 500, 'Product is not available, going to next atc product...', true);
+    }
+  }
+
   async processProductMonitor() {
     const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
     const atcId = Number(Helpers.getQueryStringValue('atc-id'));
@@ -202,25 +222,8 @@ export default class ProductProcessor extends BaseProcessor {
       }
     }
     if (ProductProcessor.isSoldOut()) {
-      const maxRetryCount = atcProduct.product.retryCount;
-      if (maxRetryCount === 'inf') {
-        window.location.reload();
-        return;
-      }
-      if (!atcRetryCount && maxRetryCount > 0) {
-        window.location.href = `${window.location.href}&atc-retry-count=1`;
-        return;
-      } else if (atcRetryCount < maxRetryCount) {
-        setTimeout(() => {
-          window.location.href = Helpers.updateQueryStringParameter(window.location.href, 'atc-retry-count', atcRetryCount + 1);
-        }, 600);
-        return;
-      }
-      if (nextUrl) {
-        window.location.href = nextUrl;
-        Helpers.timeout(() => window.location.href = nextUrl, 500, 'No sizes available, going to next atc product...', true);
-      }
-      return false;
+      const soldOutRetryCount = atcProduct.product.soldOutAction;
+      return ProductProcessor.handleRetry(soldOutRetryCount, atcRetryCount, nextUrl);
     }
 
     const hasSelectedSize = this.trySelectProductSize(atcProduct.product.size);
@@ -245,13 +248,14 @@ export default class ProductProcessor extends BaseProcessor {
     const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
     const atcId = Number(Helpers.getQueryStringValue('atc-id'));
     const atcMonitor = Helpers.getQueryStringValue('atc-monitor');
+    const atcRetryCount = Math.abs(Number(Helpers.getQueryStringValue('atc-retry-count')));
 
     if (isNaN(atcId) && !this.preferences.autoCheckout) return false;
 
     if (!isNaN(atcId) && atcMonitor) {
       return await this.processProductMonitor();
     }
-    let nextUrl =  atcRunAll ? '/checkout' : null;
+    let nextUrl = atcRunAll ? '/checkout' : null;
     if (!isNaN(atcId) && atcRunAll) {
       const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
       if (nextProduct) {
@@ -260,9 +264,10 @@ export default class ProductProcessor extends BaseProcessor {
     }
 
     if (ProductProcessor.isSoldOut()) {
-      if (nextUrl) {
-        window.location.href = nextUrl;
-        Helpers.timeout(() => window.location.href = nextUrl, 500, 'No sizes available, going to next atc product...', true);
+      if (!isNaN(atcId)) {
+        const atcProduct = await AtcService.getAtcProductById(atcId);
+        const soldOutRetryCount = atcProduct.product.soldOutAction;
+        return ProductProcessor.handleRetry(soldOutRetryCount, atcRetryCount, nextUrl);
       }
       return false;
     }

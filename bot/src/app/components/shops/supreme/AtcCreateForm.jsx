@@ -45,6 +45,7 @@ class AtcCreateForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      keywords: [],
       category: props.initialValues ? props.initialValues.category : null,
       matchedProducts: [],
     };
@@ -58,7 +59,6 @@ class AtcCreateForm extends Component {
       return;
     }
     const monitoredProducts = await ProductsService.fetchProducts();
-    console.log(keywords);
     const matches = KeywordsService.findMatches(monitoredProducts, keywords, this.state.category);
     if (matches) {
       this.setState({
@@ -146,7 +146,10 @@ class AtcCreateForm extends Component {
               labelStyle={Styles.fields.text}
               validate={[Validators.required, Validators.notEmpty]}
               onChange={(v) => {
-                this.onKeywordChange(Object.values(v).filter(x => typeof x === 'string'));
+                const keywords = Object.values(v).filter(x => typeof x === 'string');
+                this.setState({ keywords }, () => {
+                  this.onKeywordChange(keywords);
+                });
               }}
             />
           </div>
@@ -169,7 +172,9 @@ class AtcCreateForm extends Component {
               style={Styles.fields.text}
               validate={[Validators.required]}
               onChange={(i, v) => {
-                this.setState({ category: v });
+                this.setState({ category: v }, () => {
+                  this.onKeywordChange(this.state.keywords);
+                });
               }}
             >
               {
@@ -204,14 +209,34 @@ class AtcCreateForm extends Component {
               name="retryCount"
               validate={[Validators.required]}
               component={SelectField}
-              floatingLabelText="Retry count if not found or sold out"
-              hintText="Retry count if not found or sold out"
+              floatingLabelText="Action if the product is not found"
+              hintText="Action if the product is not found"
               style={Styles.fields.text}
             >
               <MenuItem value="inf" primaryText="Keep refreshing until the product is found" />
+              <MenuItem value="skip" primaryText="Skip to next Autocop product" />
               {
-                Array.apply(null, new Array(10)).map((x, i) => {
-                  return <MenuItem key={i * 5} value={i * 5} primaryText={`Refresh ${i * 5} times`}/>;
+                Array.apply(null, new Array(5)).map((x, i) => {
+                  return <MenuItem key={(i + 1) * 5} value={(i + 1) * 5} primaryText={`Refresh ${(i + 1) * 5} times`} />;
+                })
+              }
+            </Field>
+          </div>
+
+          <div>
+            <Field
+              name="soldOutAction"
+              validate={[Validators.required]}
+              component={SelectField}
+              floatingLabelText="Action if the product is sold out"
+              hintText="Action if the product is sold out"
+              style={Styles.fields.text}
+            >
+              <MenuItem value="skip" primaryText="Skip to next Autocop product" />
+              <MenuItem value="inf" primaryText="Keep refreshing until the product restocks" />
+              {
+                Array.apply(null, new Array(5)).map((x, i) => {
+                  return <MenuItem key={(i + 1) * 5} value={(i + 1) * 5} primaryText={`Refresh ${(i + 1) * 5} times`} />;
                 })
               }
             </Field>
@@ -264,6 +289,7 @@ function mapStateToProps(state, ownProps) {
     initialValues: Object.assign({
       enabled: true,
       retryCount: 'inf',
+      soldOutAction: 'skip',
     }, ownProps.initialValues),
   };
 }
