@@ -173,10 +173,10 @@ class Atc extends Component {
                 if (!atcProducts || !atcProducts.length) {
                   return (<p style={{ textAlign: 'center' }}>Click "Add new" to add a new Autocop Product"</p>);
                 }
-                return atcProducts.map((x) => {
+                return atcProducts.map((x, i) => {
                   const product = x.product;
                   return (
-                    <TableRow key={product.name}>
+                    <TableRow key={`${i}-${product.name}`}>
                       <TableRowColumn>{product.name}</TableRowColumn>
                       <TableRowColumn>
                         <Toggle toggled={product.enabled} onToggle={async () => await this.toggleAtc(product.name, !product.enabled)} />

@@ -13,6 +13,7 @@ import Layout from '../../../../containers/Layout';
 import StorageService from '../../../../../services/StorageService';
 import ChromeService from '../../../../../services/ChromeService';
 import addNotification from '../../../../actions/notification';
+import LocalChangeSelect from '../LocalChangeSelect';
 
 
 class Restocks extends Component {
@@ -20,15 +21,9 @@ class Restocks extends Component {
     super(props);
     this.state = {
       restocks: [],
-      locale: 'eu',
     };
 
     this.updateRestockList();
-    StorageService.getItem('locale').then((locale) => {
-      if (locale) {
-        this.setState({ locale });
-      }
-    });
 
     ChromeService.addMessageListener('productRestocked', () => {
       this.updateRestockList();
@@ -44,12 +39,6 @@ class Restocks extends Component {
         this.setState({ restocks });
       }
     });
-  }
-
-  handleLocaleChange(newLocale) {
-    if (this.state.locale === newLocale) return;
-    this.props.notify(`Store location changed to ${newLocale}`);
-    StorageService.setItem('locale', newLocale).then(() => StorageService.setItem('stock', [])).then(() => this.setState({ locale: newLocale }));
   }
 
   handleClearAll() {
@@ -76,18 +65,8 @@ class Restocks extends Component {
     const style = ChromeService.isPopup() ? { maxWidth: '350px', marginLeft: 'auto', marginRight: 'auto' } : {};
     return (
       <Layout>
-        <div style={{ textAlign: 'center' }}>
-          <SelectField
-            floatingLabelText="Supreme shop location"
-            value={this.state.locale}
-            style={{ textAlign: 'justify' }}
-            onChange={(e, i, v) => this.handleLocaleChange(v)}
-          >
-            <MenuItem value={'us'} primaryText="US" />
-            <MenuItem value={'eu'} primaryText="EU" />
-          </SelectField>
-          <br />
-        </div>
+        <LocalChangeSelect />
+        <br />
         {
           !items.length && <p style={{ textAlign: 'center', fontSize: '1.5em' }}>No restocks yet</p>
         }

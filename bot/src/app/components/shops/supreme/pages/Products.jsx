@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import StorageService from '../../../../../services/StorageService';
 import ChromeService from '../../../../../services/ChromeService';
 import ProductList from '../ProductList';
+import LocalChangeSelect from '../LocalChangeSelect';
 
 
 export default class Products extends Component {
@@ -29,14 +30,23 @@ export default class Products extends Component {
 
   render() {
     return (
-      <ProductList
-        products={this.state.products.map(x => Object.assign(x, {
+      <div>
+        <ProductList
+          products={this.state.products.map(x => Object.assign(x, {
           keywords: x.name.split(' ').filter(z => !!z),
           category: x.category === 'tops_sweaters' ? 'tops-sweaters' : x.category,
         }))}
-        title={<p>Click on a product to buy</p>}
-        onProductClick={this.handleBuyProduct}
-      />
+          title={(
+            <div>
+              <LocalChangeSelect />
+              <p>Click on a product to buy</p>
+            </div>
+            )
+          }
+          onProductClick={this.handleBuyProduct}
+        />
+      </div>
+
     );
   }
 }

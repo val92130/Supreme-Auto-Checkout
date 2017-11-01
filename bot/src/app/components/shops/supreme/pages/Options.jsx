@@ -62,7 +62,7 @@ class HelperField extends Component {
 }
 
 const Options = props => {
-  const { handleSubmit, pristine, submitting, atcEnabled, change } = props;
+  const { handleSubmit, pristine, submitting, atcEnabled } = props;
   return (
     <div>
       <p style={{ textAlign: 'center', fontSize: '1.2em' }}>Configure options and features of the bot</p>
@@ -75,11 +75,6 @@ const Options = props => {
                 name="autoCheckout"
                 component={Toggle}
                 style={{ width: 'auto' }}
-                onChange={(e, v) => {
-                  if (!v) {
-                    change('atcEnabled', false);
-                  }
-                }}
               />
             }
             title="Enable Auto Checkout"
@@ -91,9 +86,6 @@ const Options = props => {
                   <br />
                   <br />
                   The product will be added to cart using the sizes you chose in the "Sizes" tab.
-                </p>
-                <p>
-                  Autocheckout is required to use Autocop.
                 </p>
               </div>
             }
@@ -212,14 +204,9 @@ const Options = props => {
                 name="atcEnabled"
                 component={Toggle}
                 style={{ width: 'auto' }}
-                onChange={(e, v) => {
-                  if (v) {
-                    change('autoCheckout', true);
-                  }
-                }}
               />
             }
-            title="Enable AutoCop timer (need Autocheckout)"
+            title="Enable AutoCop timer"
             helperText={
               <div>
                 <p>

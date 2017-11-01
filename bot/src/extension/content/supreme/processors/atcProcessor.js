@@ -3,20 +3,9 @@ import * as Helpers from '../helpers';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';
 import AtcService from '../../../../services/supreme/AtcService';
 
-function updateQueryStringParameter(uri, key, value) {
-  const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
-  const separator = uri.indexOf('?') !== -1 ? '&' : '?';
-  if (uri.match(re)) {
-    return uri.replace(re, `$1${key}=${value}$2`);
-  }
-  else {
-    return `${uri + separator + key}=${value}`;
-  }
-}
-
-export default class CheckoutProcessor extends BaseProcessor {
+export default class AtcProcessor extends BaseProcessor {
   static start(preferences, sizings, billing) {
-    const processor = new CheckoutProcessor(preferences, sizings, billing);
+    const processor = new AtcProcessor(preferences, sizings, billing);
     processor.beginProcess();
     return processor;
   }
@@ -38,6 +27,28 @@ export default class CheckoutProcessor extends BaseProcessor {
     }));
   }
 
+  static async handleRetry(atcId, maxRetry, currentRetryCount) {
+    if (maxRetry === 'inf') {
+      Helpers.timeout(() => window.location.reload(), 500, 'Product is not available, refreshing...', true);
+      return;
+    }
+    if (!currentRetryCount && maxRetry > 0) {
+      window.location.href = `${window.location.href}&atc-retry-count=1`;
+      return;
+    } else if (currentRetryCount < maxRetry) {
+      setTimeout(() => {
+        window.location.href = Helpers.updateQueryStringParameter(window.location.href, 'atc-retry-count', currentRetryCount + 1);
+      }, 600);
+      return;
+    }
+    const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
+    if (nextProduct) {
+      window.location.href = AtcService.getAtcUrl(nextProduct, true);
+    } else {
+      window.location.href = '/checkout';
+    }
+  }
+
   async processAtc() {
     const queryString = Helpers.getQueryStringValue('atc-id');
     const atcRetryCount = Math.abs(Number(Helpers.getQueryStringValue('atc-retry-count')));
@@ -51,7 +62,7 @@ export default class CheckoutProcessor extends BaseProcessor {
     let match = null;
     const keywords = atcProduct.product.keywords;
     const kwColor = atcProduct.product.color;
-    const innerArticles = CheckoutProcessor.findArticles().filter(x => !x.soldOut);
+    const innerArticles = AtcProcessor.findArticles();
     const fuse = new FuzzyStringMatcher(innerArticles, { key: 'name' });
     const bestMatches = fuse.search(keywords.join(' '));
     const maxRetryCount = atcProduct.product.retryCount;
@@ -62,37 +73,31 @@ export default class CheckoutProcessor extends BaseProcessor {
         match = matchesColor[0];
       }
     } else if (bestMatches) {
-      match = bestMatches[0];
+      match = bestMatches.find(x => !x.soldOut) || bestMatches[0];
     }
     const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
-
-    if (match && !match.soldOut) {
-      if (atcRunAll) {
-        match.url = `${match.url}?atc-run-all=true&atc-id=${atcId}`;
-      }
-      window.location.href = match.url;
-    } else {
+    if (!match) {
       if (!isNaN(atcId) && atcRunAll) {
-        if (!atcRetryCount && maxRetryCount > 0) {
-          window.location.href = `${window.location.href}&atc-retry-count=1`;
-          return;
-        } else if (atcRetryCount < maxRetryCount) {
-          setTimeout(() => {
-            window.location.href = updateQueryStringParameter(window.location.href, 'atc-retry-count', atcRetryCount + 1);
-          }, 600);
-          return;
-        }
-        const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
-        if (nextProduct) {
-          window.location.href = AtcService.getAtcUrl(nextProduct, true);
-        } else {
-          window.location.href = '/checkout';
-        }
-        return;
+        return await AtcProcessor.handleRetry(atcId, maxRetryCount, atcRetryCount);
       }
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 600);
+    } else if (match.soldOut) {
+      if (!isNaN(atcId) && atcRunAll) {
+        const soldOutAction = atcProduct.product.soldOutAction;
+        return await AtcProcessor.handleRetry(atcId, soldOutAction, atcRetryCount);
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 600);
+    } else {
+      if (atcRunAll) {
+        match.url = `${match.url}?atc-run-all=true&atc-id=${atcId}`;
+      } else {
+        match.url = `${match.url}?atc-id=${atcId}`;
+      }
+      window.location.href = match.url;
     }
   }
 }

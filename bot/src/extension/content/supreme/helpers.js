@@ -34,7 +34,7 @@ export function timeout(fn, ms, actionName, danger = false) {
 
 export function getQueryStringValue(key) {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(key);
+  return urlParams.get(key) || undefined;
 }
 
 export function pageHasNodeOfClass(className) {
@@ -84,4 +84,15 @@ export function getArticleName(articleNode) {
 export function getArticleColor(articleNode) {
   const colorNode = articleNode.querySelector('.sn') || articleNode.querySelector('.nl') || articleNode.querySelector('p .name-link');
   return colorNode ? colorNode.innerText.toLowerCase().trim() : null;
+}
+
+export function updateQueryStringParameter(uri, key, value) {
+  const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
+  const separator = uri.indexOf('?') !== -1 ? '&' : '?';
+  if (uri.match(re)) {
+    return uri.replace(re, `$1${key}=${value}$2`);
+  }
+  else {
+    return `${uri + separator + key}=${value}`;
+  }
 }
