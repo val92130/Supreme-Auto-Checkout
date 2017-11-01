@@ -9,7 +9,7 @@ export default class KeywordsService {
     const keys = Object.keys(products);
     const bestMatchingCategory = (new FuzzyStringMatcher(keys)).search(category)[0];
     if (bestMatchingCategory === undefined) {
-      return null;
+      return [];
     }
     const productsCategory = products[keys[bestMatchingCategory]];
     const fuse = new FuzzyStringMatcher(productsCategory, { key: 'name' });
