@@ -10,12 +10,16 @@ import {
 } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import { orange400 } from 'material-ui/styles/colors'
+import IconButton from 'material-ui/IconButton';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import { orange400, blue400, green400, red400 } from 'material-ui/styles/colors';
 import * as Validators from '../../../utils/FormValidators';
 import Styles from '../../../constants/Styles';
 import * as Utils from '../../../constants/Utils';
 import ProductsService from '../../../../services/supreme/ProductsService';
 import KeywordsService from '../../../../services/KeywordsService';
+import DropsService from '../../../../services/supreme/DropsService';
+import FuzzyStringMatcher from '../../../utils/FuzzyStringMatcher';
 
 
 function getSizeForCategory(category) {
@@ -45,9 +49,10 @@ class AtcCreateForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      keywords: [],
-      category: props.initialValues ? props.initialValues.category : null,
+      keywords: props.initialValues.keywords || [],
+      category: props.initialValues.category,
       matchedProducts: [],
+      matchedDropProducts: [],
     };
     if (props.initialValues && props.initialValues.category) {
       this.onKeywordChange(props.initialValues.keywords);
@@ -55,20 +60,34 @@ class AtcCreateForm extends Component {
   }
 
   async onKeywordChange(keywords) {
-    if (!this.state.category) {
+    if (!this.state.category || !this.state.keywords.length) {
       return;
     }
     const monitoredProducts = await ProductsService.fetchProducts();
-    const matches = KeywordsService.findMatches(monitoredProducts, keywords, this.state.category);
-    if (matches) {
-      this.setState({
-        matchedProducts: matches.map(x => x.name),
-      });
-      return;
-    }
+    const matches = KeywordsService.findMatches(monitoredProducts, keywords, this.state.category) || [];
     this.setState({
-      matchedProducts: [],
+      matchedProducts: matches.map(x => x.name),
     });
+    const dropProducts = (await DropsService.fetchLatestDropProducts()).filter(x => x.category === this.state.category);
+    const matcher = new FuzzyStringMatcher(dropProducts, { key: 'name' });
+    const dropMatches = matcher.search(keywords.join(' '));
+    this.setState({
+      matchedDropProducts: dropMatches.map(x => x.name),
+    });
+  }
+
+  addIgnoreKeyword(productName) {
+    const productKeywords = productName.split(' ').map(x => x.toLowerCase());
+    const keywords = this.state.keywords.map(x => x.toLowerCase());
+    const ignoringKeyword = productKeywords.find(x => keywords.indexOf(x) === -1);
+    if (ignoringKeyword) {
+      const newKeywords = [`!${ignoringKeyword}`, ...this.state.keywords];
+      this.props.change('keywords', newKeywords);
+      this.setState({
+        keywords: newKeywords,
+      });
+      this.onKeywordChange(newKeywords);
+    }
   }
 
   render() {
@@ -78,7 +97,7 @@ class AtcCreateForm extends Component {
         {...input}
         chipContainerStyle={Styles.fields.text}
         fullWidth
-        value = { input.value || []}
+        value={input.value || []}
         onRequestAdd={(addedChip) => {
           let values = input.value || [];
           values = values.slice();
@@ -104,10 +123,20 @@ class AtcCreateForm extends Component {
     const initialAtcName = initialValues.name;
     const formValidators = [Validators.required];
     if (!editing) {
-      formValidators.push(Validators.unique(atcProducts.map(x => x.name)));
+      formValidators.push(Validators.unique(atcProducts.map(x => x.product.name)));
     } else {
-      formValidators.push(Validators.unique(atcProducts.filter(x => x.name !== initialAtcName).map(x => x.name)));
+      formValidators.push(Validators.unique(atcProducts.filter(x => x.product.name !== initialAtcName).map(x => x.product.name)));
     }
+    const deleteIconStyle = {
+      width: 16,
+      height: 16,
+      color: red400,
+    };
+
+    const deleteStyle = {
+      width: 32,
+      height: 32,
+    };
     return (
       <div>
         <p style={{ fontSize: '0.8em' }}>ATC Product description is only used to differentiate different ATC products, it doesn't have any effect on the Autocop process.</p>
@@ -115,15 +144,52 @@ class AtcCreateForm extends Component {
         <p style={{ fontSize: '0.8em' }}>You can also add negative keywords by prepending a <b>"!"</b> to a keyword, for example the keywords "<b>box logo !longsleeve tee</b>" will match a product like <b>"Box Logo Tee"</b> but not <b>"Box Logo Longsleeve tee"</b></p>
         <p style={{ fontSize: '0.8em' }}>If you do not select a size, AutoCop will choose the size you selected in the <b>"Sizings"</b> tab.</p>
         {this.state.matchedProducts.length > 0 && (<p style={{ color: orange400, fontSize: '0.9em' }}>
-          Warning! Your keywords already matches with the following products from the store:
+          Warning! Your keywords already matches with the following products from the store, click on the bin to ignore unwanted products:
           <ul>
           {this.state.matchedProducts.map(x => {
             return (
-              <li>{x}</li>
-            )
+              <li>{x}
+                <IconButton
+                  style={deleteStyle}
+                  iconStyle={deleteIconStyle}
+                  onTouchTap={() => this.addIgnoreKeyword(x)}
+                  tooltip="Add negative keywords to ignore"
+                >
+                  <ActionDelete />
+                </IconButton>
+              </li>
+            );
           })}
           </ul>
         </p>)}
+        {this.state.matchedDropProducts.length > 1 && (<p style={{ color: blue400, fontSize: '0.9em' }}>
+          Warning! Your keywords matches with multiple products from the incoming drop, click on the bin to ignore unwanted products:
+          <ul>
+          {this.state.matchedDropProducts.map(x => {
+            return (
+              <li>{x}
+                <IconButton
+                  style={deleteStyle}
+                  iconStyle={deleteIconStyle}
+                  onTouchTap={() => this.addIgnoreKeyword(x)}
+                  tooltip="Add negative keywords to ignore"
+                >
+                  <ActionDelete />
+                </IconButton>
+              </li>
+            );
+          })}
+          </ul>
+        </p>)}
+        {this.state.matchedDropProducts.length === 1 && (
+          <div style={{ color: green400 }}>
+            <p>The keywords will match the following product from the incoming drop:</p>
+            <ul>
+              <li>{this.state.matchedDropProducts[0]}</li>
+            </ul>
+          </div>
+
+        )}
         <form onSubmit={handleSubmit} id="atc-form">
           <div>
             <Field

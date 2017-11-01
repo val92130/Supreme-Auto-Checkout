@@ -73,7 +73,7 @@ export default class AtcProcessor extends BaseProcessor {
         match = matchesColor[0];
       }
     } else if (bestMatches) {
-      match = bestMatches[0];
+      match = bestMatches.find(x => !x.soldOut) || bestMatches[0];
     }
     const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
     if (!match) {

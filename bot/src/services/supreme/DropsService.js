@@ -18,6 +18,17 @@ export default class DropsService {
     });
   }
 
+  static async fetchLatestDrop() {
+    const drops = await DropsService.fetchDrops();
+    return drops.find(x => x.slug === 'latest');
+  }
+
+  static async fetchLatestDropProducts() {
+    const drop = await DropsService.fetchLatestDrop();
+    if (!drop) return [];
+    return await DropsService.fetchProducts(drop.slug);
+  }
+
   static fetchProducts(dropSlug) {
     return new Promise((resolve, reject) => {
       request({ url: `https://api.openaio.com/drops/${dropSlug}/products/` }, (error, response, body) => {

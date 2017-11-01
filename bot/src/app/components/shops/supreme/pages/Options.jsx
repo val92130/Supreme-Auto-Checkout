@@ -62,7 +62,7 @@ class HelperField extends Component {
 }
 
 const Options = props => {
-  const { handleSubmit, pristine, submitting, atcEnabled, change } = props;
+  const { handleSubmit, pristine, submitting, atcEnabled } = props;
   return (
     <div>
       <p style={{ textAlign: 'center', fontSize: '1.2em' }}>Configure options and features of the bot</p>
