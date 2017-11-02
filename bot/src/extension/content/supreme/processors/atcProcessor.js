@@ -27,7 +27,7 @@ export default class AtcProcessor extends BaseProcessor {
     }));
   }
 
-  static async handleRetry(atcId, maxRetry, currentRetryCount) {
+  async handleRetry(atcId, maxRetry, currentRetryCount) {
     if (maxRetry === 'inf') {
       Helpers.timeout(() => window.location.reload(), 500, 'Product is not available, refreshing...', true);
       return;
@@ -45,7 +45,7 @@ export default class AtcProcessor extends BaseProcessor {
     if (nextProduct) {
       window.location.href = AtcService.getAtcUrl(nextProduct, true);
     } else {
-      window.location.href = '/checkout';
+      window.location.href = this.preferences.autoCheckout ? '/checkout' : '/shop/cart';
     }
   }
 
@@ -78,7 +78,7 @@ export default class AtcProcessor extends BaseProcessor {
     const atcRunAll = Helpers.getQueryStringValue('atc-run-all');
     if (!match) {
       if (!isNaN(atcId) && atcRunAll) {
-        return await AtcProcessor.handleRetry(atcId, maxRetryCount, atcRetryCount);
+        return await this.handleRetry(atcId, maxRetryCount, atcRetryCount);
       }
       setTimeout(() => {
         window.location.reload();
@@ -86,7 +86,7 @@ export default class AtcProcessor extends BaseProcessor {
     } else if (match.soldOut) {
       if (!isNaN(atcId) && atcRunAll) {
         const soldOutAction = atcProduct.product.soldOutAction;
-        return await AtcProcessor.handleRetry(atcId, soldOutAction, atcRetryCount);
+        return await this.handleRetry(atcId, soldOutAction, atcRetryCount);
       }
       setTimeout(() => {
         window.location.reload();

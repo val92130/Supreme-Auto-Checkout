@@ -20,6 +20,9 @@ export default class CartProcessor extends BaseProcessor {
    * to the checkout page after the delay configured in the options
    */
   processCart() {
+    if (!this.preferences.autoCheckout) {
+      return;
+    }
     const outOfStockItems = document.querySelectorAll('.out_of_stock');
     const outOfStockAction = this.preferences.onCartSoldOut;
     if (!outOfStockItems.length) {
