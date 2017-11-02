@@ -184,7 +184,7 @@ export default class ProductProcessor extends BaseProcessor {
 
     if (!atcProduct) return notify('Invalid Autocop Product Id');
 
-    let nextUrl = '/checkout';
+    let nextUrl = this.preferences.autoCheckout ? '/checkout' : '/shop/cart';
     if (atcRunAll) {
       const nextProduct = await AtcService.getNextAtcMonitorProduct(atcId);
       if (nextProduct) {
@@ -255,7 +255,10 @@ export default class ProductProcessor extends BaseProcessor {
     if (!isNaN(atcId) && atcMonitor) {
       return await this.processProductMonitor();
     }
-    let nextUrl = atcRunAll ? '/checkout' : null;
+    let nextUrl = null;
+    if (atcRunAll) {
+      nextUrl = this.preferences.autoCheckout ? '/checkout' : '/shop/cart';
+    }
     if (!isNaN(atcId) && atcRunAll) {
       const nextProduct = await AtcService.getNextEnabledAtcProduct(atcId);
       if (nextProduct) {
@@ -287,7 +290,7 @@ export default class ProductProcessor extends BaseProcessor {
       return false;
     }
 
-    this.addToCart(nextUrl || '/checkout');
+    this.addToCart(nextUrl || (this.preferences.autoCheckout ? '/checkout' : '/shop/cart'));
     return true;
   }
 }
