@@ -26,6 +26,7 @@ const defaultValues = {
   addToCartDelay: 200,
   checkoutDelay: 2000,
   showNotifications: false,
+  disableImages: false,
 };
 
 class HelperField extends Component {
@@ -192,6 +193,26 @@ const Options = props => {
                   <br />
                   <br />
                   This is required for countries where product's names aren't displayed on the Supreme website like Japan.
+                </p>
+              </div>
+            }
+          />
+        </div>
+
+        <div>
+          <HelperField
+            field={
+              <Field
+                name="disableImages"
+                component={Toggle}
+                style={{ width: 'auto' }}
+              />
+            }
+            title="Disable images loading"
+            helperText={
+              <div>
+                <p>
+                  If enabled, images will not be loaded on the Supreme website, this can improve speed.
                 </p>
               </div>
             }
