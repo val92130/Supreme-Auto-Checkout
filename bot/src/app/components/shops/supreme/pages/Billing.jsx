@@ -63,7 +63,7 @@ const Billing = props => {
             floatingLabelText="Email"
             hintText="Email"
             style={Styles.fields.text}
-            validate={[Validators.required, Validators.email]}
+            validate={[Validators.email]}
           />
         </div>
 
@@ -74,7 +74,6 @@ const Billing = props => {
             floatingLabelText="Phone number"
             hintText="Phone number"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           />
         </div>
 
@@ -85,7 +84,6 @@ const Billing = props => {
             floatingLabelText="Address"
             hintText="Address"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           />
         </div>
 
@@ -106,7 +104,6 @@ const Billing = props => {
             floatingLabelText="City"
             hintText="City"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           />
         </div>
 
@@ -117,7 +114,6 @@ const Billing = props => {
             floatingLabelText="Country"
             hintText="Country"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           >
             {
               Utils.countries.map(x => <MenuItem key={x.value} value={x.value} primaryText={x.text} />)
@@ -132,7 +128,6 @@ const Billing = props => {
             floatingLabelText="State"
             hintText="State"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           >
             {
               getStatesForCountry(country).map(x => <MenuItem key={x.value} value={x.value} primaryText={x.text} />)
@@ -146,7 +141,6 @@ const Billing = props => {
             component={TextField}
             floatingLabelText="Zip"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           />
         </div>
 
@@ -156,7 +150,6 @@ const Billing = props => {
             component={SelectField}
             floatingLabelText="Credit card type"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           >
             {
               getCreditCardsForCountry(country).map(x =>
@@ -173,7 +166,6 @@ const Billing = props => {
             floatingLabelText="Credit Card Number"
             hintText="Credit Card Number"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           />
         </div>
 
@@ -183,7 +175,6 @@ const Billing = props => {
             component={SelectField}
             floatingLabelText="Expiry month"
             hintText="Expiry month"
-            validate={[Validators.required]}
             style={Styles.fields.text}
           >
             {
@@ -202,12 +193,11 @@ const Billing = props => {
             floatingLabelText="Expiry year"
             hintText="Expiry year"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           >
             {
               Array.apply(null, new Array(10)).map((x, i) => {
                 const year = new Date().getFullYear() + i;
-                return <MenuItem key={year} value={year} primaryText={year}/>;
+                return <MenuItem key={year} value={year} primaryText={year} />;
               })
             }
           </Field>
@@ -220,7 +210,6 @@ const Billing = props => {
             hintText="CCV"
             floatingLabelText="CCV"
             style={Styles.fields.text}
-            validate={[Validators.required]}
           />
         </div>
         <div>

@@ -2,7 +2,7 @@ import * as Helpers from './Helpers';
 
 export function email(input) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(input) ? undefined : 'Please enter a valid email';
+  return (!input || re.test(input)) ? undefined : 'Please enter a valid email';
 }
 
 export function required(value) {
@@ -33,7 +33,7 @@ export function maxValue(max) {
 }
 
 export function fullName(value) {
-  return !value || value.split(' ').filter(x => x !== "").length < 2 ? 'Please enter a valid full name (firstname + lastname)' : undefined;
+  return value && value.split(' ').filter(x => x !== '').length < 2 ? 'Please enter a valid full name (firstname + lastname)' : undefined;
 }
 
 export function unique(candidates) {
