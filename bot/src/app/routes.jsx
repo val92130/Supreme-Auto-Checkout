@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router';
 import App from './containers/App';
 import Configuration from './components/shops/supreme/Configuration';
+import ConfigurationAdidas from './components/shops/adidas/Configuration';
 import Atc from './components/shops/supreme/pages/Atc';
 import Products from './components/shops/supreme/pages/Products';
 import Drops from './components/shops/supreme/pages/Drops';
@@ -20,6 +21,7 @@ export default () => {
       <Route path="supreme/drops" component={Drops}>
         <Route path=":slug/" component={DropProducts} />
       </Route>
+      <Route path="adidas/configuration" component={ConfigurationAdidas} />
       <Route path="profiles/" component={Profile} />
       <Redirect from="/" to="supreme/" />
     </Route>

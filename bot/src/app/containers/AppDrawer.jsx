@@ -41,12 +41,19 @@ class AppDrawer extends Component {
     super(props);
     this.state = {
       supremeMenuOpen: true,
+      adidasMenuOpen: true,
     };
   }
 
   toggleSupremeMenu() {
     this.setState({
       supremeMenuOpen: !this.state.supremeMenuOpen,
+    });
+  }
+
+  toggleAdidasMenu() {
+    this.setState({
+      adidasMenuOpen: !this.state.adidasMenuOpen,
     });
   }
 
@@ -107,6 +114,24 @@ class AppDrawer extends Component {
                 containerElement={<Link to={'/supreme/restocks'} />}
                 primaryText="Restocks"
                 leftIcon={<AlarmIcon />}
+              />,
+            ]}
+          />
+          <ListItem
+            value="adidas"
+            primaryText="Adidas"
+            containerElement={<Link to={'/adidas/configuration'} />}
+            leftIcon={getIconForShop(settings, 'Adidas')}
+            open={this.state.adidasMenuOpen}
+            onTouchTap={() => this.toggleAdidasMenu()}
+            onNestedListToggle={() => this.toggleAdidasMenu()}
+            nestedItems={[
+              <ListItem
+                key={1}
+                containerElement={<Link to={'/adidas/configuration'} />}
+                value="adidas/configuration"
+                primaryText="Configuration"
+                leftIcon={isIncomplete(settings, 'Adidas') ? <IncompleteIcon /> : <CartIcon />}
               />,
             ]}
           />
