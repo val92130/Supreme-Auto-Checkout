@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import * as SupremeUtils from '../../../../app/utils/SupremeUtils';
 import BaseProcessor from './baseProcessor';
-import { notify } from '../notification';
+import { notify } from '../../notification';
 import { timeout } from '../helpers';
 
 export default class CartProcessor extends BaseProcessor {

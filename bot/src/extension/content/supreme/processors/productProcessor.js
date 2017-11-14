@@ -1,4 +1,4 @@
-import { notify } from '../notification';
+import { notify } from '../../notification';
 import * as Helpers from '../helpers';
 import BaseProcessor from './baseProcessor';
 import FuzzyStringMatcher from '../../../../app/utils/FuzzyStringMatcher';

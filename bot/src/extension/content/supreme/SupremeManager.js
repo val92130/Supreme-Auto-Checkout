@@ -3,7 +3,7 @@ import ProductProcessor from './processors/productProcessor';
 import CartProcessor from './processors/cartProcessor';
 import CheckoutProcessor from './processors/checkoutProcessor';
 import AtcProcessor from './processors/atcProcessor';
-import { notify } from './notification';
+import { notify } from '../notification';
 
 export default class SupremeManager {
   constructor(preferences, sizings, billing) {

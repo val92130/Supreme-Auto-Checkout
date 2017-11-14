@@ -1,4 +1,4 @@
-import { notify } from './notification';
+import { notify } from '../notification';
 
 /**
  * Helper timeout function to add a timer in the notification bar

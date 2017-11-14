@@ -10,8 +10,11 @@ function createNotificationBar() {
   notificationBar.style.zIndex = '9999';
   notificationBar.style.left = 0;
   notificationBar.style.top = 0;
+  notificationBar.style.position = 'fixed';
   notificationBar.id = 'sup-notif-bar';
   document.body.prepend(notificationBar);
+
+  document.documentElement.style.marginTop = '60px';
   return notificationBar;
 }
 
