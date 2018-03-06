@@ -5,6 +5,12 @@ import { setProfileEnabled } from '../actions/profiles';
 
 class ProfileToggle extends Component {
   onSetProfile(profileName) {
+    const { currentProfile } = this.props; 
+    if (currentProfile === profileName) {
+      this.props.notify("Atleast 1 profile must be enabled");
+      return;
+    }
+
     this.props.setProfileEnabled(profileName);
   }
 
