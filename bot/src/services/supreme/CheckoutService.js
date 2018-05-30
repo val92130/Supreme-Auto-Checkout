@@ -27,9 +27,25 @@ export default class CheckoutService {
     return this.processUnknownField(input, settings);
   }
 
+  static type(input, value){
+    (function writer(i){
+      if(value.length <= i++){
+        input.value = value;
+        return;
+      }
+      input.value = value.substring(0,i);
+      setTimeout(function(){writer(i);},50);
+    })(0)
+  }
+
+
   static setInputValue(input, value, dispatchEvent=true) {
     if (value === undefined) return input;
-    input.value = value;
+    if (input.name != "order[billing_state]" && input.name != "credit_card[year]" && input.name != "credit_card[month]"){
+      this.type(input, value);
+    } else {
+      input.value = value;
+    }
     if (dispatchEvent) {
       input.dispatchEvent(new Event('change'));
     }
