@@ -22,7 +22,7 @@ export default class CheckoutProcessor extends BaseProcessor {
     const checkoutDelay = this.preferences.checkoutDelay;
     const inputs = [...document.querySelectorAll('input, textarea, select')]
       .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
-    CheckoutService.processFields(inputs, this.billing);
+    CheckoutService.processFields(inputs, this.billing, checkoutDelay);
     const terms = document.querySelector('.terms');
     if (terms) terms.click();
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
