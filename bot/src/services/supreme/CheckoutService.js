@@ -42,7 +42,7 @@ export default class CheckoutService{
   static async setInputValue(input, value, delay, dispatchEvent=true) {
     if (value === undefined) return input;
 
-    input.type === 'select-one' ? input.value = value : this.type(input, value, delay);
+    input.type === 'select-one' ? input.value = value : await this.type(input, value, delay);
 
     if (dispatchEvent) {
       input.dispatchEvent(new Event('change'));
