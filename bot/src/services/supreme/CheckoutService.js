@@ -3,7 +3,7 @@ const ignoredIds = ['g-recaptcha-response', 'number_v', 'order_billing_address_3
 export default class CheckoutService{
   static async processFields(inputs, settings, delay) {
     const successes = await Promise.all(inputs.map(x => this.processField(x, settings, delay)));
-    this.cleanup(inputs, settings);
+    await this.cleanup(inputs, settings);
     return successes.every(x => x === true);
   }
 
