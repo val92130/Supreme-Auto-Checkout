@@ -1,15 +1,8 @@
 const ignoredIds = ['g-recaptcha-response', 'number_v', 'order_billing_address_3'];
 
 export default class CheckoutService{
-  static processFields(inputs, settings, delay) {
-    const successes = [];
-    for (let i = 0; i < inputs.length; i += 1) {
-      const success = this.processField(inputs[i], settings, delay);
-      successes.push(success);
-      if (!success) {
-        console.info(`Unknown field id : ${inputs[i].id}`);
-      }
-    }
+  static async processFields(inputs, settings, delay) {
+    const successes = await Promise.all(inputs.map(x => this.processField(x, settings, delay)));
     this.cleanup(inputs, settings);
     return successes.every(x => x === true);
   }
@@ -31,6 +24,7 @@ export default class CheckoutService{
       (function writer(i){
         if(value.length <= i++){
           input.value = value;
+          resolve();
           return;
         }
         input.value = value.substring(0,i);

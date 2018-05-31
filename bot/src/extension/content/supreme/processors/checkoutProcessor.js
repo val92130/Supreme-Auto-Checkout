@@ -18,11 +18,11 @@ export default class CheckoutProcessor extends BaseProcessor {
    * This function should be called when the user is on the 'checkout' page, it will fill
    * the checkout form with the values defined by the user in the options and then checkout after a delay
    */
-  processCheckout() {
+  async processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
     const inputs = [...document.querySelectorAll('input, textarea, select')]
       .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
-    CheckoutService.processFields(inputs, this.billing, checkoutDelay);
+    await CheckoutService.processFields(inputs, this.billing, checkoutDelay);
     const terms = document.querySelector('.terms');
     if (terms) terms.click();
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
