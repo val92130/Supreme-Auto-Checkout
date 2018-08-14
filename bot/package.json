@@ -1,7 +1,7 @@
 {
-  "name": "react-started",
-  "version": "0.0.1",
-  "description": "Simple react starter project",
+  "name": "supreme-auto-checkout",
+  "version": "2.9.4",
+  "description": "Supreme Bot",
   "scripts": {
     "watch": "webpack --env=prod --progress --colors --config ./webpack.config.prod.js --watch",
     "build": "webpack --env=prod --progress --colors --config ./webpack.config.prod.js",
