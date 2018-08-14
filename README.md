@@ -5,6 +5,18 @@ Supreme Auto Checkout is a Google Chrome extension to automate the process of bu
 
 ![Bot](https://github.com/val92130/Supreme-Auto-Checkout/blob/develop/screenshot.jpg "Bot")
 
+# NEW
+
+Check out [RocketCop](https://rocketcop.io), our new AIO bot!
+
+Features of RocketCop includes:
+  - Faster checkout
+  - Browser simulation mode
+  - Run multiple tasks at the same time
+  - Captcha support
+  - Proxy support
+  - ...
+
 # Requirements
   - Chrome for desktop release 55
 

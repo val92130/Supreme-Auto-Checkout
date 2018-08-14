@@ -12,6 +12,7 @@ import AlarmIcon from 'material-ui/svg-icons/action/alarm';
 import ListIcon from 'material-ui/svg-icons/action/view-list';
 import AccountIcon from 'material-ui/svg-icons/action/account-circle';
 import PaymentIcon from 'material-ui/svg-icons/action/payment';
+import NewIcon from 'material-ui/svg-icons/av/new-releases';
 import IncompleteIcon from 'material-ui/svg-icons/alert/error';
 import Styles from '../constants/Styles';
 import * as Menus from '../constants/Menus';
@@ -122,6 +123,12 @@ class AppDrawer extends Component {
             primaryText="Donation"
             onTouchTap={() => openUrlInNewTab('https://www.paypal.me/vchatelain')}
             leftIcon={<PaymentIcon />}
+          />
+          <ListItem
+            value="new"
+            primaryText={<div style={{ color: 'red' }}>NEW! AIO Bot</div>}
+            onTouchTap={() => openUrlInNewTab('https://rocketcop.io')}
+            leftIcon={<NewIcon />}
           />
         </SelectableList>
       </Drawer>
