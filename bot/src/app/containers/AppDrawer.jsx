@@ -14,7 +14,7 @@ import AccountIcon from 'material-ui/svg-icons/action/account-circle';
 import PaymentIcon from 'material-ui/svg-icons/action/payment';
 import NewIcon from 'material-ui/svg-icons/av/new-releases';
 import IncompleteIcon from 'material-ui/svg-icons/alert/error';
-import TwitterIcon from 'material-ui/svg-icons/social/twitter'
+import TwitterIcon from 'material-ui/svg-icons/social/share';
 import Styles from '../constants/Styles';
 import * as Menus from '../constants/Menus';
 import version from '../version';
