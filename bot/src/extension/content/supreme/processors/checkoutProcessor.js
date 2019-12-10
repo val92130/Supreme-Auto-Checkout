@@ -20,16 +20,22 @@ export default class CheckoutProcessor extends BaseProcessor {
    */
   async processCheckout() {
     const checkoutDelay = this.preferences.checkoutDelay;
-    const inputs = [...document.querySelectorAll('input, textarea, select')]
-      .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1);
+    const querySelectorAll = (document.mockedQuerySelectorAll || document.querySelectorAll)
+      .bind(document);
+    const querySelector = (document.mockedQuerySelector || document.querySelector)
+      .bind(document);
+
+    const inputs = [...querySelectorAll('input, textarea, select')]
+      .filter(x => ['hidden', 'submit', 'button', 'checkbox'].indexOf(x.type) === -1
+        && (!x.value || x.type === 'select-one'));
     await CheckoutService.processFields(inputs, this.billing, checkoutDelay);
-    const terms = document.querySelector('.terms');
+    const terms = querySelector('.terms');
     if (terms) terms.click();
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const checkboxes = querySelectorAll('input[type="checkbox"]');
     if (checkboxes.length) checkboxes[checkboxes.length - 1].checked = true;
     if (this.preferences.autoPay) {
       timeout(() => {
-        const commitBtn = document.getElementsByName('commit')[0];
+        const commitBtn = querySelector('[name="commit"]');
         if (commitBtn) {
           commitBtn.click();
         }

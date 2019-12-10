@@ -26,6 +26,7 @@ import ProductsService from '../../../../../services/supreme/ProductsService';
 import version from '../../../../version';
 import addNotification from '../../../../actions/notification';
 import * as Helpers from '../../../../utils/Helpers';
+import { updateSupremeCookies } from '../../../../utils/SupremeUtils';
 
 class Atc extends Component {
   constructor(props) {
@@ -103,6 +104,8 @@ class Atc extends Component {
       this.props.notify('Please configure your bot before running ATC');
       return false;
     }
+
+    await updateSupremeCookies(profile.Supreme.Billing);
     const useMonitor = profile.Supreme.Options.atcUseMonitor;
     if (!useMonitor) {
       return await AtcService.runAll();
@@ -120,6 +123,8 @@ class Atc extends Component {
       this.props.notify('Please configure your bot before running ATC');
       return false;
     }
+
+    await updateSupremeCookies(profile.Supreme.Billing);
     const useMonitor = profile.Supreme.Options.atcUseMonitor;
     if (!useMonitor) {
       return await AtcService.openAtcTab(atcProduct);

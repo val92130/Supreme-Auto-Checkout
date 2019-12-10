@@ -20,6 +20,18 @@ export default class StorageService {
     });
   }
 
+  static setCookie(cookieObj) {
+    return new Promise((res, rej) => {
+      chrome.cookies.set(cookieObj, (cookie) => {
+        if (!cookie) {
+          return rej(new Error('Couldnt set cookie'));
+        }
+
+        return res(cookie);
+      });
+    });
+  }
+
   static initializeStorageState(initialState) {
     return this.setItem('state', { value: initialState || {}, version });
   }
