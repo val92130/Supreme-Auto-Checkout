@@ -4,7 +4,7 @@ export default class ProductsService {
   static fetchProducts() {
     return new Promise((resolve, reject) => {
       const time = (new Date()).getTime();
-      request({ url: `http://www.supremenewyork.com/mobile_stock.json?_=${time}` }, (error, response, body) => {
+      request({ url: `https://www.supremenewyork.com/mobile_stock.json?_=${time}` }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
           try {
             const data = JSON.parse(body);
@@ -23,7 +23,7 @@ export default class ProductsService {
   static fetchProductInfo(id) {
     return new Promise((resolve, reject) => {
       const time = (new Date()).getTime();
-      const url = `http://www.supremenewyork.com/shop/${id}.json`;
+      const url = `https://www.supremenewyork.com/shop/${id}.json`;
       request({ url: `${url}?_=${time}` }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
           try {
@@ -50,7 +50,7 @@ if (chrome && chrome.webRequest) {
       }
       return { requestHeaders: details.requestHeaders };
     },
-    { urls: ['*://*.supremenewyork.com/mobile/*', '*://*.supremenewyork.com/mobile_stock.json*', 'http://www.supremenewyork.com/shop/*.json'] },
+    { urls: ['*://*.supremenewyork.com/mobile/*', '*://*.supremenewyork.com/mobile_stock.json*', '*://*.supremenewyork.com/shop/*.json'] },
     ['blocking', 'requestHeaders'],
   );
 }

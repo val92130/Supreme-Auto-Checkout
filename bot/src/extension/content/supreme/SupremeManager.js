@@ -34,7 +34,7 @@ export default class SupremeManager {
 
     // if stores are not configured yet..
     if (!this.isConfigured()) {
-      notify('Bot not yet configured', true);
+      notify('Extension not configured', true);
       return;
     }
     Array.prototype.forEach.call(document.getElementsByClassName('sold_out_tag'), x => x.style.display = 'block');
@@ -44,7 +44,7 @@ export default class SupremeManager {
 
     const autoCheckout = this.preferences.autoCheckout;
     const autoPay = this.preferences.autoPay;
-    notify('AutoCheckout ' + (autoCheckout ? 'enabled' : 'disabled') + ', AutoPay ' + (autoPay ? 'enabled' : 'disabled'));
+    notify('Auto-checkout ' + (autoCheckout ? 'enabled' : 'disabled') + ', Auto-payment ' + (autoPay ? 'enabled' : 'disabled'));
 
     if (Helpers.isProductPage()) {
       ProductProcessor.start(this.preferences, this.sizings, this.billing);

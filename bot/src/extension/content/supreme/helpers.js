@@ -19,7 +19,7 @@ export function timeout(fn, ms, actionName, danger = false) {
     }
     const d = new Date();
     const diff = (d.getTime() - now.getTime());
-    notify((actionName || 'Action') + ' in : ' + ((ms - diff) / 1000), danger);
+    notify((actionName || 'Action') + ' in ' + ((ms - diff) / 1000), danger);
   }, 100);
 
   setTimeout(() => {
@@ -27,7 +27,7 @@ export function timeout(fn, ms, actionName, danger = false) {
     if (shouldAbort || currentLocation !== document.location.href) {
       return;
     }
-    notify('Done');
+    notify('Finished');
     fn();
   }, ms);
 }

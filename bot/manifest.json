@@ -27,7 +27,7 @@
     "webRequest",
     "webRequestBlocking",
     "*://*.supremenewyork.com/*",
-    "http://www.supremenewyork.com/mobile_stock.json",
+    "https://www.supremenewyork.com/mobile_stock.json",
     "downloads"
   ],
   "content_scripts": [
@@ -38,6 +38,15 @@
       "js": [
         "extension.js"
       ]
+    },
+    {
+      "matches": [
+        "*://*.supremenewyork.com/*"
+      ],
+      "js": [
+        "preload.js"
+      ],
+      "run_at": "document_start"
     }
   ]
 }

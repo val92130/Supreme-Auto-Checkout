@@ -47,7 +47,7 @@ async function init() {
         const newImageSettings = settings.Supreme.Options.disableImages ? 'block' : 'allow';
         if (newImageSettings !== imageSettings) {
           chrome.contentSettings.images.set({
-            primaryPattern: 'http://www.supremenewyork.com/*',
+            primaryPattern: 'https://www.supremenewyork.com/*',
             setting: newImageSettings,
           });
           imageSettings = newImageSettings;

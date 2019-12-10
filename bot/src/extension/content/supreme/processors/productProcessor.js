@@ -102,7 +102,7 @@ export default class ProductProcessor extends BaseProcessor {
 
       if (!targetOption) {
         if (this.preferences.strictSize && categorySize !== 'Any') {
-          notify('The desired size is not available', true);
+          notify('Size not available or sold out', true);
           return false;
         }
         targetOption = sizesOptions[0];
@@ -122,12 +122,12 @@ export default class ProductProcessor extends BaseProcessor {
     if (isNaN(price)) return false;
 
     if (maxPrice !== undefined && price > maxPrice) {
-      notify('Product price is too high, not checking out', true);
+      notify('Product price is too high, cancelling', true);
       return false;
     }
 
     if (minPrice !== undefined && price < minPrice) {
-      notify('Product price is too low, not checking out', true);
+      notify('Product price is too low, cancelling', true);
       return false;
     }
     return true;
@@ -182,7 +182,7 @@ export default class ProductProcessor extends BaseProcessor {
     const atcColor = Helpers.getQueryStringValue('atc-color');
     const atcRetryCount = Math.abs(Number(Helpers.getQueryStringValue('atc-retry-count')));
 
-    if (!atcProduct) return notify('Invalid Autocop Product Id');
+    if (!atcProduct) return notify('Invalid product id');
 
     let nextUrl = this.preferences.autoCheckout ? '/checkout' : '/shop/cart';
     if (atcRunAll) {
