@@ -10,16 +10,16 @@ function createNotificationBar() {
   notificationBar.style.zIndex = '9999';
   notificationBar.style.left = 0;
   notificationBar.style.top = 0;
-  notificationBar.id = 'sup-notif-bar';
+  notificationBar.id = 'notification-bar';
   document.body.prepend(notificationBar);
   return notificationBar;
 }
 
 export function getOrCreateNotificationBar() {
-  if (!document.getElementById('sup-notif-bar')) {
+  if (!document.getElementById('notification-bar')) {
     createNotificationBar();
   }
-  return document.getElementById('sup-notif-bar');
+  return document.getElementById('notification-bar');
 }
 
 export function notify(text, danger = false) {
@@ -27,7 +27,7 @@ export function notify(text, danger = false) {
   if (danger) {
     notificationBar.style.backgroundColor = 'rgba(255, 58, 58, 0.42)';
   } else {
-    notificationBar.style.backgroundColor = 'rgba(58, 255, 91, 0.42)';
+    notificationBar.style.backgroundColor = 'rgba(8, 107, 185, 0.42)';
   }
   notificationBar.textContent = text;
 }

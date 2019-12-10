@@ -52,7 +52,7 @@ async function onNewProducts(products) {
   await updateRestockList(products, 'new');
   if(products.length > 3) {
     await createNotification('New products', `${products.length} new products just landed on the store!`, (notif) => {
-      window.open('http://supremenewyork.com/shop/new');
+      window.open('https://www.supremenewyork.com/shop/new');
       notif.close();
     });
   } else {

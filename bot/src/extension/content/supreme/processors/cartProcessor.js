@@ -32,7 +32,7 @@ export default class CartProcessor extends BaseProcessor {
       return;
     }
     if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.STOP) {
-      notify('A product is sold out, aborting...', true);
+      notify('Product was sold out, aborting...', true);
     } else if (outOfStockAction === SupremeUtils.OnSoldOutCartActions.REMOVE_SOLD_OUT_PRODUCTS) {
       const promises = [];
       for (const product of outOfStockItems) {

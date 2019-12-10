@@ -34,27 +34,35 @@ async function init() {
     }
     return appReducer(state, action);
   };
+
   const store = createStore(rootReducer, savedState, applyMiddleware(...middleware));
 
   let imageSettings = 'allow';
+
 // Save state in localStorage automatically
   store.subscribe(async () => {
     const state = store.getState();
     if (state) {
-      await StorageService.saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc });
+      await StorageService
+        .saveState({ menu: state.menu, profiles: state.profiles, atc: state.atc });
+
       try {
         const settings = await StorageService.getCurrentProfileSettings();
+        if (!settings || !settings.Supreme || !settings.Supreme.Options) {
+          return;
+        }
+
         const newImageSettings = settings.Supreme.Options.disableImages ? 'block' : 'allow';
         if (newImageSettings !== imageSettings) {
           chrome.contentSettings.images.set({
-            primaryPattern: 'http://www.supremenewyork.com/*',
+            primaryPattern: 'https://www.supremenewyork.com/*',
             setting: newImageSettings,
           });
           imageSettings = newImageSettings;
         }
       } catch(e) {
-        console.error(e);
-        console.error('Error while trying to set image settings');
+        console.warn(e);
+        console.warn('Error while trying to set image settings');
       }
     }
   });
