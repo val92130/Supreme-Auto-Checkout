@@ -135,7 +135,9 @@ export default class ProductProcessor extends BaseProcessor {
 
   addToCart(nextUrl) {
     const atcDelay = this.preferences.addToCartDelay;
-    const submitBtn = document.querySelector('[name=commit]');
+    const forms = document.querySelectorAll('form');
+    const form = forms[forms.length - 1];
+    const submitBtn = document.querySelector(`#${form.id} [name="commit"]`);
 
     Helpers.timeout(() => {
       const process = () => {

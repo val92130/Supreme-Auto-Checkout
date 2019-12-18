@@ -1,6 +1,6 @@
 {
   "name": "supreme-auto-checkout",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "Supreme Bot",
   "scripts": {
     "watch": "webpack --env=prod --progress --colors --config ./webpack.config.prod.js --watch",
