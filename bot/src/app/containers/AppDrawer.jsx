@@ -14,6 +14,7 @@ import AccountIcon from 'material-ui/svg-icons/action/account-circle';
 import PaymentIcon from 'material-ui/svg-icons/action/payment';
 import NewIcon from 'material-ui/svg-icons/av/new-releases';
 import IncompleteIcon from 'material-ui/svg-icons/alert/error';
+import TwitterIcon from 'material-ui/svg-icons/social/share';
 import Styles from '../constants/Styles';
 import * as Menus from '../constants/Menus';
 import version from '../version';
@@ -70,7 +71,7 @@ class AppDrawer extends Component {
             primaryText="Supreme"
             containerElement={<Link to={'/supreme/configuration'} />}
             leftIcon={getIconForShop(settings, 'Supreme')}
-            open={this.state.supremeMenuOpen}
+            open={this.state.supremeMenuClose}
             onTouchTap={() => this.toggleSupremeMenu()}
             onNestedListToggle={() => this.toggleSupremeMenu()}
             nestedItems={[
@@ -126,9 +127,15 @@ class AppDrawer extends Component {
           />
           <ListItem
             value="new"
-            primaryText={<div style={{ color: 'red' }}>NEW! AIO Bot</div>}
+            primaryText={<div style={{ color: 'red' }}>Check our new bot!</div>}
             onTouchTap={() => openUrlInNewTab('https://rocketcop.io')}
             leftIcon={<NewIcon />}
+          />
+          <ListItem
+            value="twitter"
+            primaryText={<div style={{ color: 'blue' }}>Follow us on Twitter!</div>}
+            onTouchTap={() => openUrlInNewTab('https://twitter.com/rocketcopbot')}
+            leftIcon={<TwitterIcon />}
           />
         </SelectableList>
       </Drawer>
