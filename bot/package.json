@@ -49,7 +49,7 @@
     "proxy-middleware": "^0.15.0",
     "require-dir": "^0.3.2",
     "style-loader": "^0.18.2",
-    "underscore": "^1.7.0",
+    "underscore": "^1.12.1",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^3.6.1",
     "webpack": "^3.0.0",
